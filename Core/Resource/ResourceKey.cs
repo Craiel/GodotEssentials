@@ -1,7 +1,8 @@
 ﻿namespace Craiel.Essentials.Runtime.Resource;
 
 using System;
-using UnityEngine;
+using Godot;
+using Utils;
 
 public struct ResourceKey
 {
@@ -10,24 +11,16 @@ public struct ResourceKey
     // -------------------------------------------------------------------
     // Constructor
     // -------------------------------------------------------------------
-    public ResourceKey(BundleKey bundle, string path, Type type)
-        : this(path, type)
-    {
-        this.Bundle = bundle;
-    }
-
     public ResourceKey(string path, Type type)
         : this()
     {
         this.Path = path;
-        this.Type = type ?? TypeCache<UnityEngine.Object>.Value;
+        this.Type = type ?? TypeCache<Resource>.Value;
     }
 
     // -------------------------------------------------------------------
     // Public
     // -------------------------------------------------------------------
-    public BundleKey? Bundle { get; set; }
-
     public string Path { get; set; }
 
     public Type Type { get; set; }
@@ -37,11 +30,6 @@ public struct ResourceKey
         return !string.IsNullOrEmpty(this.Path);
     }
 
-    public static ResourceKey Create<T>(BundleKey bundle, string path)
-    {
-        return new ResourceKey(bundle, path, TypeCache<T>.Value);
-    }
-
     public static ResourceKey Create<T>(string path)
     {
         return new ResourceKey(path, TypeCache<T>.Value);
@@ -49,8 +37,7 @@ public struct ResourceKey
 
     public static bool operator ==(ResourceKey rhs, ResourceKey lhs)
     {
-        return rhs.Bundle == lhs.Bundle
-            && rhs.Path == lhs.Path
+        return rhs.Path == lhs.Path
             && rhs.Type == lhs.Type;
     }
 
@@ -59,14 +46,9 @@ public struct ResourceKey
         return !(rhs == lhs);
     }
 
-    public static ResourceKey GetFromString(string data)
-    {
-        return JsonUtility.FromJson<ResourceKey>(data);
-    }
-
     public override int GetHashCode()
     {
-        return HashUtils.GetSimpleCombinedHashCode(this.Bundle, this.Path);
+        return this.Path.GetHashCode();
     }
 
     public override bool Equals(object other)
@@ -82,11 +64,6 @@ public struct ResourceKey
 
     public override string ToString()
     {
-        return string.Format("{0}:>{1} ({2})", this.Bundle == null ? "default" : this.Bundle.Value.ToString(), this.Path, this.Type);
-    }
-
-    public string GetAsString()
-    {
-        return JsonUtility.ToJson(this);
+        return string.Format("{0} ({1})", this.Path, this.Type);
     }
 }

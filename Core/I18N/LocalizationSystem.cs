@@ -20,7 +20,7 @@ public class LocalizationSystem : GodotSingleton<LocalizationSystem>
 #if DEBUG
         if (Time.time > this.lastAutoSave + AutoSaveInterval)
         {
-            EssentialsCore.Logger.Info("Saving Localization: {0}", this.provider.Root);
+            EssentialsCore.Logger.Info($"Saving Localization: {this.provider.Root}");
 
             this.lastAutoSave = Time.time;
 

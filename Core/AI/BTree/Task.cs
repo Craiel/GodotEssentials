@@ -2,10 +2,11 @@ namespace Craiel.Essentials.Runtime.AI.BTree;
 
 using System;
 using System.Diagnostics.CodeAnalysis;
+using System.IO;
 using Contracts;
+using Data.SBT;
 using Enums;
 using Exceptions;
-using Runtime.Contracts;
 using Runtime.Enums;
 using Runtime.Exceptions;
 using Runtime.Utils;
@@ -15,13 +16,13 @@ using Runtime.Utils;
 /// </summary>
 /// <typeparam name="T">type of the blackboard object that tasks use to read or modify game state</typeparam>
 [SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1201:ElementsMustAppearInTheCorrectOrder", Justification = "Reviewed. Suppression is OK here.")]
-public abstract class Task<T> : IYamlSerializable
+public abstract class Task<T>
     where T : IBlackboard
 {
     public const ushort InvalidTaskId = 0;
     public const ushort FirstValidTaskId = 1;
 
-    private float lastRunTime;
+    private double lastRunTime;
 
     // -------------------------------------------------------------------
     // Public
@@ -159,12 +160,13 @@ public abstract class Task<T> : IYamlSerializable
     /// </summary>
     public virtual void Start()
     {
-        if (Math.Abs(this.lastRunTime - Time.time) < EssentialMathUtils.Epsilon)
+        double gameTime = EssentialsCore.GameTime.TotalMilliseconds;
+        if (Math.Abs(this.lastRunTime - gameTime) < EssentialMathUtils.Epsilon)
         {
             throw new IllegalStateException("Task was started multiple times in the same frame!");
         }
 
-        this.lastRunTime = Time.time;
+        this.lastRunTime = gameTime;
     }
 
     /// <summary>
@@ -335,31 +337,30 @@ public abstract class Task<T> : IYamlSerializable
         }
     }
 
-    public virtual void Serialize(YamlFluentSerializer serializer)
+    public virtual void Serialize(ISBTNodeSerializer serializer)
     {
-        serializer.Begin(YamlContainerType.Dictionary)
-            .Add("Id", this.Id.Value);
+        var data = new SBTDictionary();
+        data.Add("Id", this.Id.Value);
 
         if (this.Guard != TaskId.Invalid)
         {
-            serializer.Add("Guard", this.Guard.Value);
+            data.Add("Guard", this.Guard.Value);
         }
 
-        serializer.End();
+        serializer.Serialize(data);
     }
 
-    public virtual void Deserialize(YamlFluentDeserializer deserializer)
+    public virtual void Deserialize(ISBTNodeDeserializer deserializer)
     {
-        deserializer.BeginRead();
+        var root = deserializer.GetData<SBTDictionary>();
 
-        ushort id;
-        deserializer.Read("Id", out id);
+        ushort id = root.ReadUShort("Id");
         this.Id = new TaskId(id);
 
-        deserializer.Read("Guard", out id);
-        this.Guard = new TaskId(id);
-
-        deserializer.EndRead();
+        if (root.Contains("Guard"))
+        {
+            this.Guard = new TaskId(root.ReadUShort("Guard"));
+        }
     }
 
     // -------------------------------------------------------------------

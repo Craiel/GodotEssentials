@@ -93,17 +93,17 @@ public abstract class ThreadQueuedComponent : IThreadQueueComponent
 
         if (error > 0)
         {
-            EssentialsCore.Logger.Error("[{1}] {0} operations in {0} had errors!", error, this.GetType());
+            EssentialsCore.Logger.Error($"[{this.GetType()}] {error} operations in {error} had errors!");
         }
 
         if (slowError > 0)
         {
-            EssentialsCore.Logger.Error("[{1}] {0} operations in {0} took longer then expected!", slowError, this.GetType());
+            EssentialsCore.Logger.Error($"[{this.GetType()}] {slowError} operations in {slowError} took longer then expected!");
         }
 
         if (slowWarning > 0)
         {
-            EssentialsCore.Logger.Error("[{1}] Operation in {0} took more than 2 seconds to complete", slowWarning, this.GetType());
+            EssentialsCore.Logger.Error($"[{this.GetType()}] Operation in {slowWarning} took more than 2 seconds to complete");
         }
     }
 }

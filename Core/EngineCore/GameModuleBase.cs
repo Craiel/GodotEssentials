@@ -5,7 +5,7 @@ using Contracts;
 using Event;
 
 public class GameModuleBase<T> : IGameModule
-    where T: GameModuleCore<T>
+    where T: IGameModule
 {
     private readonly IList<BaseEventSubscriptionTicket> managedEventSubscriptions;
 
@@ -25,11 +25,7 @@ public class GameModuleBase<T> : IGameModule
     {
     }
 
-    public virtual void Update()
-    {
-    }
-
-    public virtual void FixedUpdate()
+    public virtual void Update(double delta)
     {
     }
 

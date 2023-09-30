@@ -82,7 +82,7 @@ public class ManagedDirectory : ManagedPath
         {
             if (filter.Directory == null || filter.Directory.IsNull || !filter.Directory.Exists)
             {
-                EssentialsCore.Logger.Warn("Specified directory is invalid: {0}", filter.Directory);
+                EssentialsCore.Logger.Warn($"Specified directory is invalid: {filter.Directory}");
                 continue;
             }
 
@@ -116,7 +116,7 @@ public class ManagedDirectory : ManagedPath
         {
             if (filter.Directory.IsNull || !filter.Directory.Exists)
             {
-                EssentialsCore.Logger.Warn("Specified directory is invalid: {0}", filter.Directory);
+                EssentialsCore.Logger.Warn($"Specified directory is invalid: {filter.Directory}");
                 continue;
             }
 
@@ -349,7 +349,7 @@ public class ManagedDirectory : ManagedPath
             }
             else
             {
-                EssentialsCore.Logger.Error("Can not move directory {0}, target exists: {1}", this, target);
+                EssentialsCore.Logger.Error($"Can not move directory {this}, target exists: {target}");
                 return false;
             }
         }
@@ -386,7 +386,7 @@ public class ManagedDirectory : ManagedPath
             ManagedFile targetFile = target.ToFile(file.Relative);
             if (targetFile.Exists && !overwrite)
             {
-                EssentialsCore.Logger.Error("Copy would fail, target file exist and overwrite is set to false ({0})", targetFile);
+                EssentialsCore.Logger.Error($"Copy would fail, target file exist and overwrite is set to false ({targetFile})");
                 return 0;
             }
         }

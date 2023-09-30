@@ -1,19 +1,10 @@
 namespace Craiel.Essentials.Runtime.I18N;
 
 using System;
-using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using Enums;
 using IO;
 using Resource;
-
-using UnityEngine;
-using YamlDotNet.Core;
-
-#if UNITY_EDITOR
-using UnityEditor;
-#endif
 
 public class LocalizationProvider : ILocalizationProvider
 {
@@ -79,7 +70,7 @@ public class LocalizationProvider : ILocalizationProvider
 
     public string GetString(string key)
     {
-        if (key.StartsWith(EssentialsConstants.LocalizationIgnoreString))
+        if (key.StartsWith(EssentialsCore.LocalizationIgnoreString))
         {
             return key;
         }
@@ -98,7 +89,7 @@ public class LocalizationProvider : ILocalizationProvider
 #if DEBUG
         if (this.currentDictionary.Values.Any(x => string.Equals(x, key)))
         {
-            EssentialsCore.Logger.Warn("Localization recursion where key = '{0}'", key);
+            EssentialsCore.Logger.Warn($"Localization recursion where key = '{key}'");
 
             return key;
         }
@@ -164,23 +155,16 @@ public class LocalizationProvider : ILocalizationProvider
     public string LoadDictionaryResource(CultureInfo customCulture = null)
     {
         ResourceKey key = LocaleConstants.GetLocalizationMasterFile(customCulture ?? Localization.CurrentCulture);
-        
-#if UNITY_EDITOR
-        if (!ResourceProvider.IsInstanceActive)
-        {
-            var asset = AssetDatabase.LoadAssetAtPath<TextAsset>(EssentialsCore.ResourcesPath.ToFile(key.Path + PoFileExtension).GetUnityPath());
-            return asset != null ? asset.text : null;
-        }
-#endif
 
-        var textAsset = key.LoadManaged<TextAsset>();
+        throw new NotImplementedException("Load Asset not implemented for Language Dictionary");
+        /*var textAsset = key.LoadManaged<TextAsset>();
         if (textAsset == null)
         {
             EssentialsCore.Logger.Warn("Could not load dictionary for {0}, file not found", customCulture ?? Localization.CurrentCulture);
             return null;
-        }
-        
-        return textAsset.text;
+        }*/
+
+        //return textAsset.text;
     }
 
     // -------------------------------------------------------------------
@@ -213,11 +197,11 @@ public class LocalizationProvider : ILocalizationProvider
 
         if (!file.Exists)
         {
-            EssentialsCore.Logger.Warn("Could not load dictionary for {0}, file not found: {1}", Localization.CurrentCulture, file);
+            EssentialsCore.Logger.Warn($"Could not load dictionary for {Localization.CurrentCulture}, file not found: {file}");
             return false;
         }
 
-        EssentialsCore.Logger.Info("Loading Dictionary {0} ({1})", Localization.CurrentCulture, file);
+        EssentialsCore.Logger.Info($"Loading Dictionary {Localization.CurrentCulture} ({file})");
         
         var localizationFile = new LocalizationFile();
         localizationFile.LoadFromPO(file);

@@ -20,8 +20,7 @@ public class UnitySynchronizationDispatcher : GodotSingleton<UnitySynchronizatio
         }
     }
 
-    [UsedImplicitly]
-    public void FixedUpdate()
+    public void Update(double delta)
     {
         TaskCache.Clear();
         lock (Tasks)

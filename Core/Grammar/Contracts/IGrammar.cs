@@ -2,7 +2,7 @@
 
 using System.Collections.Generic;
 
-using Craiel.UnityEssentials.Runtime.Grammar.Terms;
+using Terms;
 
 public interface IGrammar
 {

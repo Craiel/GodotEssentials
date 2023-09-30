@@ -4,6 +4,7 @@ using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using Contracts;
+using Utils;
 
 public class GaussianDoubleDistribution : DoubleDistribution
 {

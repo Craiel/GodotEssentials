@@ -3,8 +3,8 @@ namespace Craiel.Essentials.Runtime.Geometry;
 using System;
 using System.Collections.Generic;
 using Extensions;
+using Godot;
 using Spatial;
-using UnityEngine;
 using Utils;
 
 public static class MeshUtils
@@ -14,16 +14,16 @@ public static class MeshUtils
     // -------------------------------------------------------------------
     public static void BuildMinCoordinate(ref Vector3 target, Vector3 coordinate)
     {
-        if (coordinate.x < target.x) { target.x = coordinate.x; }
-        if (coordinate.y < target.y) { target.y = coordinate.y; }
-        if (coordinate.z < target.z) { target.z = coordinate.z; }
+        if (coordinate.X < target.X) { target.X = coordinate.X; }
+        if (coordinate.Y < target.Y) { target.Y = coordinate.Y; }
+        if (coordinate.Z < target.Z) { target.Z = coordinate.Z; }
     }
 
     public static void BuildMaxCoordinate(ref Vector3 target, Vector3 coordinate)
     {
-        if (coordinate.x > target.x) { target.x = coordinate.x; }
-        if (coordinate.y > target.y) { target.y = coordinate.y; }
-        if (coordinate.z > target.z) { target.z = coordinate.z; }
+        if (coordinate.X > target.X) { target.X = coordinate.X; }
+        if (coordinate.Y > target.Y) { target.Y = coordinate.Y; }
+        if (coordinate.Z > target.Z) { target.Z = coordinate.Z; }
     }
 
     public static void CleanOrphanVertices(IList<Vector3> vertices, IList<Triangle3Indexed> triangles, out IList<Vector3> cleanVertices, out IList<Triangle3Indexed> cleanTriangles)
@@ -88,7 +88,7 @@ public static class MeshUtils
 
         if (cleanVertices.Count != vertices.Count)
         {
-            EssentialsCore.Logger.Info("- {0} orphan vertices", vertices.Count - cleanVertices.Count);
+            EssentialsCore.Logger.Info($"- {vertices.Count - cleanVertices.Count} orphan vertices");
         }
     }
 
@@ -97,7 +97,7 @@ public static class MeshUtils
     // -------------------------------------------------------------------
     internal static bool IsVertexValid(Vector3 vertex)
     {
-        return Math.Abs(vertex.magnitude) < EssentialMathUtils.MaxFloat;
+        return Math.Abs(vertex.Length()) < EssentialMathUtils.MaxFloat;
     }
 
     internal static uint AddNewVertex(IList<Vector3> target, Vector3 vertex, Octree<MeshSpatialInfo> mergeTree)

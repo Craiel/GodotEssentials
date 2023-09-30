@@ -41,7 +41,7 @@ public class TweenLiteVector3 : TweenLiteNode
             return;
         }
 
-        Vector3 value = Vector3.Lerp(this.start, this.end, percent);
+        Vector3 value = this.start.Lerp(this.end, percent);
         this.callback?.Invoke(value);
     }
     

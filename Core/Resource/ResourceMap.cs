@@ -2,6 +2,7 @@
 
 using System;
 using System.Collections.Generic;
+using Utils;
 
 public class ResourceMap<T> where T : class
 {
@@ -70,7 +71,7 @@ public class ResourceMap<T> where T : class
             }
             else
             {
-                EssentialsCore.Logger.Error("Resource {0} was already linked to {1}, skipping link to {2}", source, this.linkToResource[source], target);
+                EssentialsCore.Logger.Error($"Resource {source} was already linked to {this.linkToResource[source]}, skipping link to {target}");
                 return;
             }
         }
@@ -92,7 +93,7 @@ public class ResourceMap<T> where T : class
         if (!this.links.Contains(source))
         {
             // Link was not registered
-            EssentialsCore.Logger.Warn("Unregister link called with non existing key {0}", source);
+            EssentialsCore.Logger.Warn($"Unregister link called with non existing key {source}");
             return;
         }
 
@@ -140,7 +141,7 @@ public class ResourceMap<T> where T : class
     {
         if (!this.data.ContainsKey(key))
         {
-            EssentialsCore.Logger.Warn("Unregister Resource called with non existing key {0}", key);
+            EssentialsCore.Logger.Warn($"Unregister Resource called with non existing key {key}");
             return;
         }
 

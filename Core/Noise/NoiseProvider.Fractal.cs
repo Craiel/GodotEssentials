@@ -1,7 +1,7 @@
 namespace Craiel.Essentials.Runtime.Noise;
 
 using Enums;
-using UnityEngine;
+using Godot;
 
 public partial class NoiseProvider
 {
@@ -27,9 +27,9 @@ public partial class NoiseProvider
 
         for (int i = 1; i < this.octaves; i++)
         {
-            point.x *= this.lacunarity;
-            point.y *= this.lacunarity;
-            point.z *= this.lacunarity;
+            point.X *= this.lacunarity;
+            point.Y *= this.lacunarity;
+            point.Z *= this.lacunarity;
 
             amp *= this.gain;
             sum += this.GetBaseValue(++seedLocal, point) * amp;
@@ -46,9 +46,9 @@ public partial class NoiseProvider
 
         for (int i = 1; i < this.octaves; i++)
         {
-            point.x *= this.lacunarity;
-            point.y *= this.lacunarity;
-            point.z *= this.lacunarity;
+            point.X *= this.lacunarity;
+            point.Y *= this.lacunarity;
+            point.Z *= this.lacunarity;
 
             amp *= this.gain;
             sum += (Mathf.Abs(this.GetBaseValue(++seedLocal, point)) * 2 - 1) * amp;
@@ -65,9 +65,9 @@ public partial class NoiseProvider
 
         for (int i = 1; i < this.octaves; i++)
         {
-            point.x *= this.lacunarity;
-            point.y *= this.lacunarity;
-            point.z *= this.lacunarity;
+            point.X *= this.lacunarity;
+            point.Y *= this.lacunarity;
+            point.Z *= this.lacunarity;
 
             amp *= this.gain;
             sum -= (1 - Mathf.Abs(this.GetBaseValue(++seedLocal, point))) * amp;

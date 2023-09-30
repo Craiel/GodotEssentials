@@ -3,6 +3,7 @@ namespace Craiel.Essentials.Runtime.Mathematics.Rnd;
 using System;
 using System.Collections.Generic;
 using Contracts;
+using Utils;
 
 public static class DistributionAdapters
 {

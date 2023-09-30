@@ -1,9 +1,10 @@
 ﻿namespace Craiel.Essentials.Runtime.Singletons;
 
 using Contracts;
+using Utils;
 
 public abstract class GodotSingleton<T> : IGodotSingleton
-    where T : class, IGodotSingleton, new()
+    where T : class, IGodotSingleton
 {
     // -------------------------------------------------------------------
     // Public
@@ -25,13 +26,14 @@ public abstract class GodotSingleton<T> : IGodotSingleton
         // Prevent accidential duplicate initialization
         if (Instance != null)
         {
+            EssentialsCore.Logger.Warn($"Prevented duplicate Singleton Instance: {TypeCache<T>.Value}");
             return;
         }
 
         Instance = new T();
 
 #if DEBUG
-        EssentialsCore.Logger.Info("Singleton.Instantiate: {0}", TypeCache<T>.Value);
+        EssentialsCore.Logger.Info($"Singleton.Instantiate: {TypeCache<T>.Value}");
 #endif
     }
 
@@ -50,7 +52,7 @@ public abstract class GodotSingleton<T> : IGodotSingleton
     public virtual void Initialize()
     {
 #if DEBUG
-        EssentialsCore.Logger.Info("Singleton.Initialize: {0}", this.GetType().Name);
+        EssentialsCore.Logger.Info($"Singleton.Initialize: {this.GetType().Name}");
 #endif
 
         this.IsInitialized = true;
@@ -67,7 +69,7 @@ public abstract class GodotSingleton<T> : IGodotSingleton
     public virtual void DestroySingleton()
     {
 #if DEBUG
-        EssentialsCore.Logger.Info("Singleton.Destroy: {0}", this.GetType().Name);
+        EssentialsCore.Logger.Info($"Singleton.Destroy: {this.GetType().Name}");
 #endif
 
         Instance = null;

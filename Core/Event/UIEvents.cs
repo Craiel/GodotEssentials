@@ -1,25 +1,17 @@
 namespace Craiel.Essentials.Runtime.Event;
 
 using System;
-using Enums;
-using Scene;
 using Singletons;
 
-public class UIEvents : UnitySingletonBehavior<UIEvents>
+public class UIEvents : GodotSingleton<UIEvents>
 {
     private BaseEventAggregate<IUIEvent> aggregate;
 
     // -------------------------------------------------------------------
     // Public
     // -------------------------------------------------------------------
-#if UNITY_EDITOR
-    public static Action<Type, BaseEventSubscriptionTicket[]> DebugEventSend;
-#endif
-    
     public override void Initialize()
     {
-        this.RegisterInController(SceneObjectController.Instance, SceneRootCategory.System, true);
-
         base.Initialize();
 
         this.aggregate = new BaseEventAggregate<IUIEvent>();

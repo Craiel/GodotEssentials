@@ -356,8 +356,8 @@ public class SBTTOMLSerializer : ISBTNodeSerializer
             {
                 var typed = (SBTNodeVector2) node;
                 string valueString = JoinArrayValues(
-                    typed.Data.x.ToString(CultureInfo.InvariantCulture), 
-                    typed.Data.y.ToString(CultureInfo.InvariantCulture));
+                    typed.Data.X.ToString(CultureInfo.InvariantCulture), 
+                    typed.Data.Y.ToString(CultureInfo.InvariantCulture));
                 this.data.Append(string.Concat("[ ", valueString, " ]"));
                 break;
             }
@@ -366,9 +366,9 @@ public class SBTTOMLSerializer : ISBTNodeSerializer
             {
                 var typed = (SBTNodeVector3) node;
                 string valueString = JoinArrayValues(
-                    typed.Data.x.ToString(CultureInfo.InvariantCulture), 
-                    typed.Data.y.ToString(CultureInfo.InvariantCulture),
-                    typed.Data.z.ToString(CultureInfo.InvariantCulture));
+                    typed.Data.X.ToString(CultureInfo.InvariantCulture), 
+                    typed.Data.Y.ToString(CultureInfo.InvariantCulture),
+                    typed.Data.Z.ToString(CultureInfo.InvariantCulture));
                 this.data.Append(string.Concat("[ ", valueString, " ]"));
                 break;
             }
@@ -377,10 +377,10 @@ public class SBTTOMLSerializer : ISBTNodeSerializer
             {
                 var typed = (SBTNodeQuaternion) node;
                 string valueString = JoinArrayValues(
-                    typed.Data.x.ToString(CultureInfo.InvariantCulture), 
-                    typed.Data.y.ToString(CultureInfo.InvariantCulture),
-                    typed.Data.z.ToString(CultureInfo.InvariantCulture),
-                    typed.Data.w.ToString(CultureInfo.InvariantCulture));
+                    typed.Data.X.ToString(CultureInfo.InvariantCulture), 
+                    typed.Data.Y.ToString(CultureInfo.InvariantCulture),
+                    typed.Data.Z.ToString(CultureInfo.InvariantCulture),
+                    typed.Data.W.ToString(CultureInfo.InvariantCulture));
                 this.data.Append(string.Concat("[ ", valueString, " ]"));
                 break;
             }
@@ -389,10 +389,10 @@ public class SBTTOMLSerializer : ISBTNodeSerializer
             {
                 var typed = (SBTNodeColor) node;
                 string valueString = JoinArrayValues(
-                    typed.Data.r.ToString(CultureInfo.InvariantCulture), 
-                    typed.Data.g.ToString(CultureInfo.InvariantCulture),
-                    typed.Data.b.ToString(CultureInfo.InvariantCulture),
-                    typed.Data.a.ToString(CultureInfo.InvariantCulture));
+                    typed.Data.R.ToString(CultureInfo.InvariantCulture), 
+                    typed.Data.G.ToString(CultureInfo.InvariantCulture),
+                    typed.Data.B.ToString(CultureInfo.InvariantCulture),
+                    typed.Data.A.ToString(CultureInfo.InvariantCulture));
                 this.data.Append(string.Concat("[ ", valueString, " ]"));
                 break;
             }

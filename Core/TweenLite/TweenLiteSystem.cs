@@ -31,10 +31,9 @@ public partial class TweenLiteSystem : GodotSingleton<TweenLiteSystem>
         ticket = TweenLiteTicket.Invalid;
     }
 
-    [UsedImplicitly]
-    public void Update()
+    public void Update(double delta)
     {
-        this.activeTweens.Update();
+        this.activeTweens.Update(delta);
     }
     
     // -------------------------------------------------------------------

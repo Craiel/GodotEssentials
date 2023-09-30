@@ -3,6 +3,7 @@
 using System;
 using System.Collections.Generic;
 using Scene;
+using Utils;
 
 public abstract partial class EssentialEngineCore<T, TSceneEnum>
 {

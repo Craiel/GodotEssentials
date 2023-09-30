@@ -2,10 +2,12 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using Enums;
+using Godot;
 using Singletons;
-using UnityEngine;
+using Utils;
 
 public delegate void OnResourceLoadingDelegate(ResourceLoadInfo info);
 public delegate void OnResourceLoadedDelegate(ResourceLoadInfo info, long loadTime);
@@ -21,7 +23,7 @@ public class ResourceProvider : GodotSingleton<ResourceProvider>
     private readonly IDictionary<ResourceKey, int> referenceCount;
 
     private readonly Queue<ResourceLoadInfo> currentPendingLoads;
-    private readonly IList<UnityEngine.Object> pendingInstantiations;
+    private readonly IList<Resource> pendingInstantiations;
 
     private readonly ResourceRequestPool<ResourceLoadRequest> requestPool;
 
@@ -38,7 +40,7 @@ public class ResourceProvider : GodotSingleton<ResourceProvider>
         this.referenceCount = new Dictionary<ResourceKey, int>();
 
         this.currentPendingLoads = new Queue<ResourceLoadInfo>();
-        this.pendingInstantiations = new List<UnityEngine.Object>();
+        this.pendingInstantiations = new List<Resource>();
 
         this.requestPool = new ResourceRequestPool<ResourceLoadRequest>(DefaultRequestPoolSize);
 
@@ -76,33 +78,26 @@ public class ResourceProvider : GodotSingleton<ResourceProvider>
     }
 
     public static T SingletonResource<T>()
-        where T : UnityEngine.Object
+        where T : Resource
     {
         IList<ResourceKey> resources = Instance.AcquireResourcesByType<T>();
         if (resources == null || resources.Count != 1)
         {
-            EssentialsCore.Logger.Warn("Expected 1 result for {0}", TypeCache<T>.Value);
+            EssentialsCore.Logger.Warn($"Expected 1 result for {TypeCache<T>.Value}");
             return null;
         }
 
         return Instance.AcquireResource<T>(resources.First()).Data;
     }
 
-    public static UnityEngine.Object LoadImmediate(ResourceKey key)
+    public static Resource LoadImmediate(ResourceKey key)
     {
-        if (key.Bundle != null)
-        {
-            AssetBundle bundle = BundleProvider.Instance.GetBundle(key.Bundle.Value);
-
-            return bundle.LoadAsset(key.Path, key.Type ?? TypeCache<UnityEngine.Object>.Value);
-        }
-
-        return Resources.Load(key.Path, key.Type ?? TypeCache<UnityEngine.Object>.Value);
+        return Resources.Load(key.Path, key.Type ?? TypeCache<Resource>.Value);
     }
 
     // Note: Use this only when we can not do an async loading, avoid if possible
     public static T LoadImmediate<T>(ResourceKey key)
-        where T : UnityEngine.Object
+        where T : Resource
     {
         return LoadImmediate(key) as T;
     }
@@ -117,7 +112,7 @@ public class ResourceProvider : GodotSingleton<ResourceProvider>
         return this.history;
     }
 
-    public void RegisterLoadedResource(ResourceKey key, UnityEngine.Object resource)
+    public void RegisterLoadedResource(ResourceKey key, Resource resource)
     {
         Debug.Assert(resource != null, "Registering a loaded resource with null data!");
 
@@ -149,7 +144,7 @@ public class ResourceProvider : GodotSingleton<ResourceProvider>
     {
         if (this.fallbackResources.ContainsKey(key.Type))
         {
-            EssentialsCore.Logger.Warn("Duplicate fallback resource registered for type {0}", key.Type);
+            EssentialsCore.Logger.Warn($"Duplicate fallback resource registered for type {key.Type}");
             return;
         }
 
@@ -173,7 +168,7 @@ public class ResourceProvider : GodotSingleton<ResourceProvider>
     }
 
     public ResourceReference<T> AcquireOrLoadResource<T>(ResourceKey key, ResourceLoadFlags flags = ResourceLoadFlags.Cache)
-        where T : UnityEngine.Object
+        where T : Resource
     {
         ResourceReference<T> result;
         if (!this.TryAcquireOrLoadResource(key, out result, flags))
@@ -187,18 +182,13 @@ public class ResourceProvider : GodotSingleton<ResourceProvider>
     public bool TryAcquireOrLoadResource<T>(
         ResourceKey key,
         out ResourceReference<T> reference,
-        ResourceLoadFlags flags = ResourceLoadFlags.Cache) where T : UnityEngine.Object
+        ResourceLoadFlags flags = ResourceLoadFlags.Cache) where T : Resource
     {
         reference = null;
         ResourceLoadRequest request = this.resourceMap.GetData(key);
-        UnityEngine.Object data = request != null ? request.GetAsset() : null;
+        Resource data = request != null ? request.GetAsset() : null;
         if (data == null)
         {
-            if (key.Bundle != null)
-            {
-                BundleProvider.Instance.LoadBundleImmediate(key.Bundle.Value);
-            }
-
             this.DoLoadImmediate(new ResourceLoadInfo(key, flags));
             request = this.resourceMap.GetData(key);
             data = request != null ? request.GetAsset() : null;
@@ -213,16 +203,16 @@ public class ResourceProvider : GodotSingleton<ResourceProvider>
     }
 
     public ResourceReference<T> AcquireResource<T>(ResourceKey key)
-        where T : UnityEngine.Object
+        where T : Resource
     {
         ResourceLoadRequest request = this.resourceMap.GetData(key);
-        UnityEngine.Object data = request != null ? request.GetAsset() : null;
+        Resource data = request != null ? request.GetAsset() : null;
         if (data == null)
         {
             data = this.AcquireFallbackResource<T>();
             if (data == null)
             {
-                EssentialsCore.Logger.Error("Resource was not loaded or registered: {0}", key);
+                EssentialsCore.Logger.Error($"Resource was not loaded or registered: {key}");
                 return null;
             }
         }
@@ -231,11 +221,11 @@ public class ResourceProvider : GodotSingleton<ResourceProvider>
     }
 
     public bool TryAcquireResource<T>(ResourceKey key, out ResourceReference<T> reference)
-        where T : UnityEngine.Object
+        where T : Resource
     {
         reference = null;
         ResourceLoadRequest request = this.resourceMap.GetData(key);
-        UnityEngine.Object data = request != null ? request.GetAsset() : null;
+        Resource data = request != null ? request.GetAsset() : null;
         if (data == null)
         {
             return false;
@@ -259,7 +249,7 @@ public class ResourceProvider : GodotSingleton<ResourceProvider>
     }
 
     public void ReleaseResource<T>(ResourceReference<T> reference)
-        where T : UnityEngine.Object
+        where T : Resource
     {
         this.DecreaseResourceRefCount(reference.Key);
     }
@@ -331,7 +321,7 @@ public class ResourceProvider : GodotSingleton<ResourceProvider>
             }
         }
 
-        EssentialsCore.Logger.Info("Immediate! Loaded {0} resources in {1}ms", resourceCount, -1);
+        EssentialsCore.Logger.Info($"Immediate! Loaded {resourceCount} resources in {-1}ms");
     }
 
     // -------------------------------------------------------------------
@@ -339,26 +329,16 @@ public class ResourceProvider : GodotSingleton<ResourceProvider>
     // -------------------------------------------------------------------
     private static ResourceLoadRequest DoLoad(ResourceLoadInfo info)
     {
-        if (info.Key.Bundle != null)
-        {
-            AssetBundle bundle = BundleProvider.Instance.GetBundle(info.Key.Bundle.Value);
-
-            AssetBundleRequest request = bundle.LoadAssetAsync(info.Key.Path, info.Key.Type);
-            return new ResourceLoadRequest(info, request);
-        }
-        else
-        {
-            ResourceRequest request = Resources.LoadAsync(info.Key.Path, info.Key.Type);
-            return new ResourceLoadRequest(info, request);
-        }
+        ResourceRequest request = Resources.LoadAsync(info.Key.Path, info.Key.Type);
+        return new ResourceLoadRequest(info, request);
     }
 
-    private ResourceReference<T> BuildReference<T>(ResourceKey key, UnityEngine.Object data)
-        where T : UnityEngine.Object
+    private ResourceReference<T> BuildReference<T>(ResourceKey key, Resource data)
+        where T : Resource
     {
         if (!(data is T))
         {
-            EssentialsCore.Logger.Error("Type requested {0} did not match the registered key type {1} for {2}", TypeCache<T>.Value, key.Type, key);
+            EssentialsCore.Logger.Error($"Type requested {TypeCache<T>.Value} did not match the registered key type {key.Type} for {key}");
             return null;
         }
 
@@ -374,7 +354,7 @@ public class ResourceProvider : GodotSingleton<ResourceProvider>
             this.ResourceLoading(info);
         }
 
-        UnityEngine.Object result = LoadImmediate(info.Key);
+        Resource result = LoadImmediate(info.Key);
 
         var request = new ResourceLoadRequest(info, result);
         this.FinalizeLoadResource(request);
@@ -406,11 +386,11 @@ public class ResourceProvider : GodotSingleton<ResourceProvider>
 
     private void FinalizeLoadResource(ResourceLoadRequest request)
     {
-        UnityEngine.Object data = request.GetAsset();
+        Resource data = request.GetAsset();
 
         if (data == null)
         {
-            EssentialsCore.Logger.Warn("Loading {0} returned null data", request.Info.Key);
+            EssentialsCore.Logger.Warn($"Loading {request.Info.Key} returned null data");
             return;
         }
 
@@ -430,12 +410,12 @@ public class ResourceProvider : GodotSingleton<ResourceProvider>
         {
             try
             {
-                var instance = UnityEngine.Object.Instantiate(data) as GameObject;
+                var instance = Resource.Instantiate(data) as GameObject;
                 this.pendingInstantiations.Add(instance);
             }
             catch (Exception e)
             {
-                EssentialsCore.Logger.Error("Failed to instantiate resource {0} on load: {1}", request.Info.Key, e);
+                EssentialsCore.Logger.Error($"Failed to instantiate resource {request.Info.Key} on load: {e}");
             }
         }
 
@@ -450,21 +430,21 @@ public class ResourceProvider : GodotSingleton<ResourceProvider>
 
     private void CleanupPendingInstantiations()
     {
-        foreach (UnityEngine.Object gameObject in this.pendingInstantiations)
+        foreach (Resource resource in this.pendingInstantiations)
         {
-            UnityEngine.Object.Destroy(gameObject);
+            Resource.Destroy(resource);
         }
 
         this.pendingInstantiations.Clear();
     }
 
-    private UnityEngine.Object AcquireFallbackResource<T>()
+    private Resource AcquireFallbackResource<T>()
     {
         ResourceKey fallbackKey;
         if (this.fallbackResources.TryGetValue(TypeCache<T>.Value, out fallbackKey))
         {
             ResourceLoadRequest request = this.resourceMap.GetData(fallbackKey);
-            UnityEngine.Object data = request != null ? request.GetAsset() : null;
+            Resource data = request != null ? request.GetAsset() : null;
             return data;
         }
 

@@ -2,7 +2,7 @@ namespace Craiel.Essentials.Runtime.Geometry;
 
 using System;
 using System.Collections.Generic;
-using UnityEngine;
+using Godot;
 
 public class StaticMesh : Mesh
 {
@@ -24,7 +24,7 @@ public class StaticMesh : Mesh
             throw new InvalidOperationException("Join attempted on Static Mesh with geometry data, call clear first before setting new data!");
         }
 
-        if (offset == Vector3.zero)
+        if (offset == Vector3.Zero)
         {
             Extensions.CollectionExtensions.AddRange(this.Vertices, vertices);
         }

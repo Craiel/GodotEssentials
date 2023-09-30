@@ -5,16 +5,12 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using Contracts;
 
-using Craiel.UnityEssentials.Runtime.Grammar.Contracts;
-using Craiel.UnityEssentials.Runtime.Grammar.Terms;
-
-using NLog;
+using Terms;
 
 public class Tokenizer : ITokenizer<Token>
 {
-    private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
-
     // -------------------------------------------------------------------
     // Constructor
     // -------------------------------------------------------------------
@@ -236,7 +232,7 @@ public class Tokenizer : ITokenizer<Token>
         
         if (potentialMatches.Count > 1)
         {
-            Logger.Error("Conflicting keyword: " + data.PendingContent);
+            EssentialsCore.Logger.Error("Conflicting keyword: " + data.PendingContent);
         }
         
         return false;

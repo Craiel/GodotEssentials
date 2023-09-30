@@ -1,6 +1,7 @@
 namespace Craiel.Essentials.Runtime;
 
 using System;
+using Utils;
 
 public static class EnumCache<T>
     where T : struct, IConvertible

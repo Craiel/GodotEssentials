@@ -2,10 +2,8 @@
 
 using System;
 using System.Collections.Generic;
-using System.IO;
-
-using Craiel.UnityEssentials.Runtime.Grammar.Contracts;
-using Craiel.UnityEssentials.Runtime.Grammar.Terms;
+using Contracts;
+using Terms;
 
 internal class TokenizeData<T>
         where T : IToken

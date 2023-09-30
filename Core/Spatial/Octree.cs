@@ -2,7 +2,7 @@ namespace Craiel.Essentials.Runtime.Spatial;
 
 using System;
 using System.Collections.Generic;
-using UnityEngine;
+using Godot;
 using Utils;
 
 internal static class OctreeConstants
@@ -24,7 +24,7 @@ public class Octree<T>
     {
         if (minNodeSize > initialSize)
         {
-            EssentialsCore.Logger.Info("Minimum node size must be bigger or equal initial size: {0} > {1}", minNodeSize, initialSize);
+            EssentialsCore.Logger.Info($"Minimum node size must be bigger or equal initial size: {minNodeSize} > {initialSize}");
             minNodeSize = initialSize;
         }
 
@@ -69,7 +69,7 @@ public class Octree<T>
     public bool Add(T obj, Vector3 objPos)
     {
 #if DEBUG
-        if (Math.Abs(objPos.magnitude) > EssentialMathUtils.MaxFloat)
+        if (Math.Abs(objPos.Length()) > EssentialMathUtils.MaxFloat)
         {
             EssentialsCore.Logger.Error("Add Operation failed, coordinates are outside of safe range");
             return false;
@@ -78,8 +78,8 @@ public class Octree<T>
 
         Vector3 positionVector = EssentialMathUtils.WithMaxPrecision(objPos, (int) OctreeConstants.OctreeFloatPrecision);
 
-        if (positionVector.x < this.root.Bounds.min.x || positionVector.y < this.root.Bounds.min.y ||
-            positionVector.z < this.root.Bounds.min.z)
+        if (positionVector.X < this.root.Bounds.Position.X || positionVector.Y < this.root.Bounds.Position.Y ||
+            positionVector.Z < this.root.Bounds.Position.Z)
         {
             EssentialsCore.Logger.Error("Object position outside of octree lower bounds!");
             return false;
@@ -137,7 +137,7 @@ public class Octree<T>
         return this.root.GetAt(EssentialMathUtils.WithMaxPrecision(position, (int) OctreeConstants.OctreeFloatPrecision), out result);
     }
 
-    public int GetNearby(Ray ray, float maxDistance, ref IList<OctreeResult<T>> results)
+    public int GetNearby(RayCast3D ray, float maxDistance, ref IList<OctreeResult<T>> results)
     {
         results.Clear();
         this.root.GetNearby(ref ray, ref maxDistance, ref results);

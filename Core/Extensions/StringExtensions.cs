@@ -5,6 +5,8 @@ using System.Text;
 
 public static class StringExtensions
 {
+    const string StringMaxLengthFormatExt = " ...";
+    
     // -------------------------------------------------------------------
     // Public
     // -------------------------------------------------------------------
@@ -85,5 +87,15 @@ public static class StringExtensions
     public static string GetAgnosticPath(this string sourcePath)
     {
         return sourcePath.Replace('/', System.IO.Path.DirectorySeparatorChar).Replace('\\', System.IO.Path.DirectorySeparatorChar);
+    }
+    
+    public static string FormatMaxLength(this string input, int maxLength)
+    {
+        if (input.Length <= maxLength || maxLength <= StringMaxLengthFormatExt.Length)
+        {
+            return input;
+        }
+
+        return string.Concat(input.Substring(0, maxLength - StringMaxLengthFormatExt.Length), StringMaxLengthFormatExt);
     }
 }

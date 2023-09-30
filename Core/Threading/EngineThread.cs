@@ -196,7 +196,7 @@ public class EngineThread
                     {
                         this.isRunning = false;
                         this.HadErrors = true;
-                        EssentialsCore.Logger.Error(e);
+                        EssentialsCore.Logger.Error("Thread Error", e);
                     }
                 }
             }
@@ -207,7 +207,7 @@ public class EngineThread
             this.IsThreadFinished = true;
             this.shutdownEvent.Set();
 
-            EssentialsCore.Logger.Warn("Engine Thread {0} ({1}) Ended", this.ThreadId, this.ThreadName);
+            EssentialsCore.Logger.Warn($"Engine Thread {this.ThreadId} ({this.ThreadName}) Ended");
         }
     }
 

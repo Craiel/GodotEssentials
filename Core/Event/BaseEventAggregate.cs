@@ -2,6 +2,7 @@
 
 using System;
 using System.Collections.Generic;
+using Utils;
 
 public class BaseEventAggregate<T> : IEventAggregate
     where T : class
@@ -95,10 +96,6 @@ public class BaseEventAggregate<T> : IEventAggregate
             {
                 targets.Send(eventData);
             }
-
-#if UNITY_EDITOR
-            GameEvents.DebugEventSend?.Invoke(eventData.GetType(), targets?.Targets);
-#endif
         }
     }
 }

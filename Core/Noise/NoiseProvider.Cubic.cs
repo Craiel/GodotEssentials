@@ -1,6 +1,6 @@
 namespace Craiel.Essentials.Runtime.Noise;
 
-using UnityEngine;
+using Godot;
 
 public partial class NoiseProvider
 {
@@ -8,8 +8,8 @@ public partial class NoiseProvider
     
     private static float GetCubic(int targetSeed, Vector2 point)
     {
-        int x1 = NoiseConstants.Floor(point.x);
-        int y1 = NoiseConstants.Floor(point.y);
+        int x1 = NoiseConstants.Floor(point.X);
+        int y1 = NoiseConstants.Floor(point.Y);
 
         int x0 = x1 - 1;
         int y0 = y1 - 1;
@@ -18,8 +18,8 @@ public partial class NoiseProvider
         int x3 = x1 + 2;
         int y3 = y1 + 2;
 
-        float xs = point.x - x1;
-        float ys = point.y - y1;
+        float xs = point.X - x1;
+        float ys = point.Y - y1;
 
         return NoiseConstants.CubicLerp(
                    NoiseConstants.CubicLerp(NoiseConstants.ValCoord2D(targetSeed, x0, y0), NoiseConstants.ValCoord2D(targetSeed, x1, y0), NoiseConstants.ValCoord2D(targetSeed, x2, y0), NoiseConstants.ValCoord2D(targetSeed, x3, y0),xs),
@@ -38,8 +38,8 @@ public partial class NoiseProvider
 
         while (++i < this.octaves)
         {
-            point.x *= this.lacunarity;
-            point.y *= this.lacunarity;
+            point.X *= this.lacunarity;
+            point.Y *= this.lacunarity;
 
             amp *= this.gain;
             sum += GetCubic(++localSeec, point) * amp;
@@ -57,8 +57,8 @@ public partial class NoiseProvider
 
         while (++i < this.octaves)
         {
-            point.x *= this.lacunarity;
-            point.y *= this.lacunarity;
+            point.X *= this.lacunarity;
+            point.Y *= this.lacunarity;
 
             amp *= this.gain;
             sum += (Mathf.Abs(GetCubic(++localSeed, point)) * 2 - 1) * amp;
@@ -76,8 +76,8 @@ public partial class NoiseProvider
 
         while (++i < this.octaves)
         {
-            point.x *= this.lacunarity;
-            point.y *= this.lacunarity;
+            point.X *= this.lacunarity;
+            point.Y *= this.lacunarity;
 
             amp *= this.gain;
             sum -= (1 - Mathf.Abs(GetCubic(++localSeed, point))) * amp;

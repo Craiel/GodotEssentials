@@ -3,7 +3,7 @@ namespace Craiel.Essentials.Runtime.Spatial;
 using System;
 using System.Collections.Generic;
 using Extensions;
-using UnityEngine;
+using Godot;
 using Utils;
 
 public class OctreeNode<T>
@@ -34,13 +34,13 @@ public class OctreeNode<T>
             throw new InvalidOperationException("Octree Node Exceeded safe float range!");
         }
 
-        var bounds = new Bounds();
-        bounds.SetMinMax(EssentialMathUtils.WithMaxPrecision(min, (int) OctreeConstants.OctreeFloatPrecision),
-            EssentialMathUtils.WithMaxPrecision((min + VectorExtensions.Fill(size)), (int) OctreeConstants.OctreeFloatPrecision));
+        var bounds = new Aabb(EssentialMathUtils.WithMaxPrecision(min, (int)OctreeConstants.OctreeFloatPrecision),
+            EssentialMathUtils.WithMaxPrecision((VectorExtensions.Fill(size)),
+                (int)OctreeConstants.OctreeFloatPrecision));
 
         this.Bounds = bounds;
 
-        this.Center = EssentialMathUtils.WithMaxPrecision((this.Bounds.min + (this.Bounds.max - this.Bounds.min) / 2), (int) OctreeConstants.OctreeFloatPrecision);
+        this.Center = EssentialMathUtils.WithMaxPrecision((this.Bounds.Position + (this.Bounds.Size) / 2), (int) OctreeConstants.OctreeFloatPrecision);
         
         this.objects = new T[objectLimit];
         this.objectPositions = new Vector3[objectLimit];
@@ -57,9 +57,9 @@ public class OctreeNode<T>
 
     public float MinSize { get; private set; }
 
-    public Bounds Bounds { get; private set; }
+    public Aabb Bounds { get; private set; }
 
-    public Bounds[] ChildBounds { get; private set; }
+    public Aabb[] ChildBounds { get; private set; }
 
     public bool AutoMerge { get; set; }
 
@@ -67,12 +67,12 @@ public class OctreeNode<T>
 
     public static int GetChildIndex(Vector3 center, Vector3 position)
     {
-        return (position.x <= center.x ? 0 : 1) + (position.y >= center.y ? 0 : 4) + (position.z <= center.z ? 0 : 2);
+        return (position.X <= center.X ? 0 : 1) + (position.Y >= center.Y ? 0 : 4) + (position.Z <= center.Z ? 0 : 2);
     }
     
     public bool Add(T obj, Vector3 position)
     {
-        if (!this.Bounds.Contains(position))
+        if (!this.Bounds.HasPoint(position))
         {
             return false;
         }
@@ -163,7 +163,7 @@ public class OctreeNode<T>
             if (this.objects[i].Equals(obj))
             {
                 this.objects[i] = default(T);
-                this.objectPositions[i] = Vector3.zero;
+                this.objectPositions[i] = Vector3.Zero;
                 this.nextFree = i;
                 this.Count--;
                 return true;
@@ -191,7 +191,7 @@ public class OctreeNode<T>
     {
         result = default(OctreeResult<T>);
 
-        if (!this.Bounds.Contains(position))
+        if (!this.Bounds.HasPoint(position))
         {
             return false;
         }
@@ -226,17 +226,17 @@ public class OctreeNode<T>
         return false;
     }
 
-    public void GetNearby(ref Ray ray, ref float maxDistance, ref IList<OctreeResult<T>> result)
+    public void GetNearby(ref RayCast3D ray, ref float maxDistance, ref IList<OctreeResult<T>> result)
     {
         // Does the ray hit this node at all?
         Vector3 area = VectorExtensions.Fill(maxDistance * 2);
-        Bounds expanded = new Bounds();
-        expanded.SetMinMax(this.Bounds.min - area, this.Bounds.max + area);
-        
-        if (!expanded.IntersectRay(ray))
+        Aabb expanded = new Aabb(this.Bounds.Position - area, this.Bounds.Size + (area * 2));
+
+        throw new NotImplementedException("GetNearby not full implemented for RayCast3D");
+        /*if (!expanded.IntersectRay(ray))
         {
             return;
-        }
+        }*/
 
         // Check children if any
         if (this.children != null)
@@ -352,9 +352,9 @@ public class OctreeNode<T>
     // -------------------------------------------------------------------
     // Private
     // -------------------------------------------------------------------
-    private static float RayDistance(Ray ray, Vector3 point)
+    private static float RayDistance(RayCast3D ray, Vector3 point)
     {
-        return Vector3.Cross(ray.direction, point - ray.origin).magnitude;
+        return ray.Direction().Cross(point - ray.Position).Length();
     }
     
     private void UpdateChildBounds()
@@ -362,21 +362,21 @@ public class OctreeNode<T>
         float quarter = this.Size / 4f;
         float childActualLength = this.Size / 2;
         Vector3 childActualSize = new Vector3(childActualLength, childActualLength, childActualLength);
-        this.ChildBounds = new Bounds[8];
-        this.ChildBounds[0] = BoundsExtensions.FromMinMax(this.Center + new Vector3(-quarter, quarter, -quarter), childActualSize);
-        this.ChildBounds[1] = BoundsExtensions.FromMinMax(this.Center + new Vector3(quarter, quarter, -quarter), childActualSize);
-        this.ChildBounds[2] = BoundsExtensions.FromMinMax(this.Center + new Vector3(-quarter, quarter, quarter), childActualSize);
-        this.ChildBounds[3] = BoundsExtensions.FromMinMax(this.Center + new Vector3(quarter, quarter, quarter), childActualSize);
-        this.ChildBounds[4] = BoundsExtensions.FromMinMax(this.Center + new Vector3(-quarter, -quarter, -quarter), childActualSize);
-        this.ChildBounds[5] = BoundsExtensions.FromMinMax(this.Center + new Vector3(quarter, -quarter, -quarter), childActualSize);
-        this.ChildBounds[6] = BoundsExtensions.FromMinMax(this.Center + new Vector3(-quarter, -quarter, quarter), childActualSize);
-        this.ChildBounds[7] = BoundsExtensions.FromMinMax(this.Center + new Vector3(quarter, -quarter, quarter), childActualSize);
+        this.ChildBounds = new Aabb[8];
+        this.ChildBounds[0] = new Aabb(this.Center + new Vector3(-quarter, quarter, -quarter), childActualSize);
+        this.ChildBounds[1] = new Aabb(this.Center + new Vector3(quarter, quarter, -quarter), childActualSize);
+        this.ChildBounds[2] = new Aabb(this.Center + new Vector3(-quarter, quarter, quarter), childActualSize);
+        this.ChildBounds[3] = new Aabb(this.Center + new Vector3(quarter, quarter, quarter), childActualSize);
+        this.ChildBounds[4] = new Aabb(this.Center + new Vector3(-quarter, -quarter, -quarter), childActualSize);
+        this.ChildBounds[5] = new Aabb(this.Center + new Vector3(quarter, -quarter, -quarter), childActualSize);
+        this.ChildBounds[6] = new Aabb(this.Center + new Vector3(-quarter, -quarter, quarter), childActualSize);
+        this.ChildBounds[7] = new Aabb(this.Center + new Vector3(quarter, -quarter, quarter), childActualSize);
     }
 
     private void DeleteObject(int index)
     {
         this.objects[index] = default(T);
-        this.objectPositions[index] = Vector3.zero;
+        this.objectPositions[index] = Vector3.Zero;
     }
 
     private void FindNextFreeSlot()
@@ -395,14 +395,14 @@ public class OctreeNode<T>
     {
         float half = this.Size / 2f;
         this.children = new OctreeNode<T>[8];
-        this.children[0] = new OctreeNode<T>(this.parent, half, this.MinSize, this.Bounds.min + new Vector3(0, half, 0)) { AutoMerge = this.AutoMerge };
-        this.children[1] = new OctreeNode<T>(this.parent, half, this.MinSize, this.Bounds.min + new Vector3(half, half, 0)) { AutoMerge = this.AutoMerge };
-        this.children[2] = new OctreeNode<T>(this.parent, half, this.MinSize, this.Bounds.min + new Vector3(0, half, half)) { AutoMerge = this.AutoMerge };
-        this.children[3] = new OctreeNode<T>(this.parent, half, this.MinSize, this.Bounds.min + new Vector3(half, half, half)) { AutoMerge = this.AutoMerge };
-        this.children[4] = new OctreeNode<T>(this.parent, half, this.MinSize, this.Bounds.min + new Vector3(0, 0, 0)) { AutoMerge = this.AutoMerge };
-        this.children[5] = new OctreeNode<T>(this.parent, half, this.MinSize, this.Bounds.min + new Vector3(half, 0, 0)) { AutoMerge = this.AutoMerge };
-        this.children[6] = new OctreeNode<T>(this.parent, half, this.MinSize, this.Bounds.min + new Vector3(0, 0, half)) { AutoMerge = this.AutoMerge };
-        this.children[7] = new OctreeNode<T>(this.parent, half, this.MinSize, this.Bounds.min + new Vector3(half, 0, half)) { AutoMerge = this.AutoMerge };
+        this.children[0] = new OctreeNode<T>(this.parent, half, this.MinSize, this.Bounds.Position + new Vector3(0, half, 0)) { AutoMerge = this.AutoMerge };
+        this.children[1] = new OctreeNode<T>(this.parent, half, this.MinSize, this.Bounds.Position + new Vector3(half, half, 0)) { AutoMerge = this.AutoMerge };
+        this.children[2] = new OctreeNode<T>(this.parent, half, this.MinSize, this.Bounds.Position + new Vector3(0, half, half)) { AutoMerge = this.AutoMerge };
+        this.children[3] = new OctreeNode<T>(this.parent, half, this.MinSize, this.Bounds.Position + new Vector3(half, half, half)) { AutoMerge = this.AutoMerge };
+        this.children[4] = new OctreeNode<T>(this.parent, half, this.MinSize, this.Bounds.Position + new Vector3(0, 0, 0)) { AutoMerge = this.AutoMerge };
+        this.children[5] = new OctreeNode<T>(this.parent, half, this.MinSize, this.Bounds.Position + new Vector3(half, 0, 0)) { AutoMerge = this.AutoMerge };
+        this.children[6] = new OctreeNode<T>(this.parent, half, this.MinSize, this.Bounds.Position + new Vector3(0, 0, half)) { AutoMerge = this.AutoMerge };
+        this.children[7] = new OctreeNode<T>(this.parent, half, this.MinSize, this.Bounds.Position + new Vector3(half, 0, half)) { AutoMerge = this.AutoMerge };
     }
 
     private bool ShouldMerge()

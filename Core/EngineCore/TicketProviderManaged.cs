@@ -50,17 +50,17 @@ public class TicketProviderManaged<T, TD> : IEnumerable<TD>
         return this.activeTickets.TryGetValue(ticket, out data);
     }
 
-    public void Update()
+    public void Update(double delta)
     {
         if (this.updateDataEntries)
         {
             for (var i = 0; i < this.dataEntries.Count; i++)
             {
-                this.dataEntries[i].Update();
+                this.dataEntries[i].Update(delta);
             }
         }
 
-        this.UpdateManagedTickets();
+        this.UpdateManagedTickets(delta);
     }
     
     public void Manage(T ticket)
@@ -124,7 +124,7 @@ public class TicketProviderManaged<T, TD> : IEnumerable<TD>
     // -------------------------------------------------------------------
     // Private
     // -------------------------------------------------------------------
-    private void UpdateManagedTickets()
+    private void UpdateManagedTickets(double delta)
     {
         this.ticketTempList.Clear();
         for (var i = 0; i < this.managedTickets.Count; i++)

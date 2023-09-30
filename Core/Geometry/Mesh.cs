@@ -5,7 +5,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using Extensions;
-using UnityEngine;
+using Godot;
 using Utils;
 
 public class Mesh : IEnumerable<Triangle3Indexed>
@@ -34,7 +34,7 @@ public class Mesh : IEnumerable<Triangle3Indexed>
 
     public IDictionary<uint, uint[]> NormalMapping { get; private set; }
 
-    public Bounds Bounds { get; private set; }
+    public Aabb Bounds { get; private set; }
 
     public IEnumerator<Triangle3Indexed> GetEnumerator()
     {
@@ -47,7 +47,7 @@ public class Mesh : IEnumerable<Triangle3Indexed>
         this.Vertices.Clear();
         this.Triangles.Clear();
         this.Normals.Clear();
-        this.Bounds = new Bounds();
+        this.Bounds = new Aabb();
     }
 
     IEnumerator IEnumerable.GetEnumerator()
@@ -61,9 +61,9 @@ public class Mesh : IEnumerable<Triangle3Indexed>
         int index = 0;
         for (var i = 0; i < this.Vertices.Count; i++)
         {
-            result[index++] = this.Vertices[i].x;
-            result[index++] = this.Vertices[i].y;
-            result[index++] = this.Vertices[i].z;
+            result[index++] = this.Vertices[i].X;
+            result[index++] = this.Vertices[i].Y;
+            result[index++] = this.Vertices[i].Z;
         }
 
         return result;
@@ -100,7 +100,7 @@ public class Mesh : IEnumerable<Triangle3Indexed>
 
     public void Join(Mesh other)
     {
-        this.Join(other.Vertices, other.Normals, other.NormalMapping, other.Triangles, Vector3.zero);
+        this.Join(other.Vertices, other.Normals, other.NormalMapping, other.Triangles, Vector3.Zero);
     }
 
     public void Join(IList<Vector3> vertices, IList<Triangle3Indexed> triangles, Vector3 offset)
@@ -169,7 +169,7 @@ public class Mesh : IEnumerable<Triangle3Indexed>
                 || triangle.B < 0 || triangle.B >= this.Vertices.Count
                 || triangle.C < 0 || triangle.C >= this.Vertices.Count)
             {
-                EssentialsCore.Logger.Error(" - Invalid Triangle {0} / {1}: {2}", i, this.Triangles.Count, triangle);
+                EssentialsCore.Logger.Error($" - Invalid Triangle {i} / {this.Triangles.Count}: {triangle}");
                 result = false;
             }
         }
@@ -187,7 +187,7 @@ public class Mesh : IEnumerable<Triangle3Indexed>
     // -------------------------------------------------------------------
     protected void RecalculateBounds(float padding)
     {
-        var newBounds = new Bounds();
+        var newBounds = new Aabb();
         newBounds.SetMinMax(VectorExtensions.Fill(float.MaxValue), VectorExtensions.Fill(float.MinValue));
 
         foreach (Triangle3Indexed triangle in this.Triangles)
@@ -210,7 +210,7 @@ public class Mesh : IEnumerable<Triangle3Indexed>
     // Private
     // -------------------------------------------------------------------
     [SuppressMessage("StyleCop.CSharp.LayoutRules", "SA1501:StatementMustNotBeOnSingleLine", Justification = "Reviewed. Suppression is OK here.")]
-    private static void ApplyVertexToBounds(ref Vector3 vertex, ref Bounds target)
+    private static void ApplyVertexToBounds(ref Vector3 vertex, ref Aabb target)
     {
         Vector3 min = target.min;
         Vector3 max = target.max;
@@ -225,7 +225,7 @@ public class Mesh : IEnumerable<Triangle3Indexed>
         target.SetMinMax(min, max);
     }
 
-    private static void ApplyPaddingToBounds(float padding, ref Bounds target)
+    private static void ApplyPaddingToBounds(float padding, ref Aabb target)
     {
         Vector3 paddingVector = VectorExtensions.Fill(padding);
         target.min += paddingVector;

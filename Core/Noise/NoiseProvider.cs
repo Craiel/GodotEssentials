@@ -1,7 +1,7 @@
 namespace Craiel.Essentials.Runtime.Noise;
 
 using Enums;
-using UnityEngine;
+using Godot;
 
 // Adapted for Unity from https://github.com/Auburns/FastNoise_CSharp
 public partial class NoiseProvider
@@ -84,8 +84,8 @@ public partial class NoiseProvider
 
     public float Get(Vector2 point)
     {
-        point.x *= this.frequency;
-        point.y *= this.frequency;
+        point.X *= this.frequency;
+        point.Y *= this.frequency;
         
         switch (this.noiseType)
         {
@@ -101,7 +101,7 @@ public partial class NoiseProvider
 
 	        default:
 	        {
-		        EssentialsCore.Logger.Warn("Get Noise not supported for Vector2 and {0}", this.noiseType);
+		        EssentialsCore.Logger.Warn($"Get Noise not supported for Vector2 and {this.noiseType}");
 		        return 0;
 	        }
         }
@@ -109,9 +109,9 @@ public partial class NoiseProvider
     
     public float Get(Vector3 point)
     {
-        point.x *= this.frequency;
-        point.y *= this.frequency;
-        point.z *= this.frequency;
+        point.X *= this.frequency;
+        point.Y *= this.frequency;
+        point.Z *= this.frequency;
 
         switch (this.noiseType)
         {
@@ -162,7 +162,7 @@ public partial class NoiseProvider
 
 	        default:
 	        {
-		        EssentialsCore.Logger.Warn("Get Noise not supported for Vector3 and {0}", this.noiseType);
+		        EssentialsCore.Logger.Warn($"Get Noise not supported for Vector3 and {this.noiseType}");
 		        return 0;
 	        }
         }
@@ -186,9 +186,9 @@ public partial class NoiseProvider
     
     private float GetBaseValue(int localSeed, Vector3 point)
     {
-        int x0 = NoiseConstants.Floor(point.x);
-        int y0 = NoiseConstants.Floor(point.y);
-        int z0 = NoiseConstants.Floor(point.z);
+        int x0 = NoiseConstants.Floor(point.X);
+        int y0 = NoiseConstants.Floor(point.Y);
+        int z0 = NoiseConstants.Floor(point.Z);
         int x1 = x0 + 1;
         int y1 = y0 + 1;
         int z1 = z0 + 1;
@@ -198,25 +198,25 @@ public partial class NoiseProvider
         {
             case NoiseInterpolation.Hermite:
             {
-                xs = NoiseConstants.InterpolateHermite(point.x - x0);
-                ys = NoiseConstants.InterpolateHermite(point.y - y0);
-                zs = NoiseConstants.InterpolateHermite(point.z - z0);
+                xs = NoiseConstants.InterpolateHermite(point.X - x0);
+                ys = NoiseConstants.InterpolateHermite(point.Y - y0);
+                zs = NoiseConstants.InterpolateHermite(point.Z - z0);
                 break;
             }
 
             case NoiseInterpolation.Quintic:
             {
-                xs = NoiseConstants.InterpolateQuintic(point.x - x0);
-                ys = NoiseConstants.InterpolateQuintic(point.y - y0);
-                zs = NoiseConstants.InterpolateQuintic(point.z - z0);
+                xs = NoiseConstants.InterpolateQuintic(point.X - x0);
+                ys = NoiseConstants.InterpolateQuintic(point.Y - y0);
+                zs = NoiseConstants.InterpolateQuintic(point.Z - z0);
                 break;
             }
 
             default:
             {
-                xs = point.x - x0;
-                ys = point.y - y0;
-                zs = point.z - z0;
+                xs = point.X - x0;
+                ys = point.Y - y0;
+                zs = point.Z - z0;
                 break;
             }
         }
@@ -234,9 +234,9 @@ public partial class NoiseProvider
     
     private float GetWhiteNoise(Vector3 point)
     {
-        int xi = NoiseConstants.FloatCast2Int(point.x);
-        int yi = NoiseConstants.FloatCast2Int(point.y);
-        int zi = NoiseConstants.FloatCast2Int(point.z);
+        int xi = NoiseConstants.FloatCast2Int(point.X);
+        int yi = NoiseConstants.FloatCast2Int(point.Y);
+        int zi = NoiseConstants.FloatCast2Int(point.Z);
 
         return NoiseConstants.ValCoord3D(this.seed, xi, yi, zi);
     }

@@ -1,20 +1,29 @@
 ﻿namespace Craiel.Essentials.Runtime.EngineCore;
 
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using Collections;
 using Event;
 using Events;
 using I18N;
+using Modules;
 using Resource;
 using Singletons;
+using Threading;
 using TweenLite;
 
 public abstract partial class EssentialEngineCore<T, TSceneEnum> : GodotSingleton<T>
     where T : EssentialEngineCore<T, TSceneEnum>
     where TSceneEnum: struct, IConvertible
 {
+    private IGameModule[] gameModules;
+    
     // -------------------------------------------------------------------
     // Public
     // -------------------------------------------------------------------
+    public ModuleSaveLoad SaveLoad { get; private set; }
+    
     public override void Initialize()
     {
         if (EssentialEngineState.IsInitialized)
@@ -26,7 +35,6 @@ public abstract partial class EssentialEngineCore<T, TSceneEnum> : GodotSingleto
 
         // System components next
         ResourceProvider.InstantiateAndInitialize();
-        ResourceStreamProvider.InstantiateAndInitialize();
 
         // Do localization fairly early so everything can run through it
         LocalizationSystem.InstantiateAndInitialize();
@@ -38,11 +46,18 @@ public abstract partial class EssentialEngineCore<T, TSceneEnum> : GodotSingleto
         GameEvents.InstantiateAndInitialize();
         // TODO: UIEvents.InstantiateAndInitialize();
         TweenLiteSystem.InstantiateAndInitialize();
+        UnitySynchronizationDispatcher.InstantiateAndInitialize();
 
         try
         {
-            // Initialize Game specific components
-            this.InitializeGameComponents();
+            // Initialize custom Engine Components
+            this.InitializeEngineComponents();
+            
+            // Initialize Game Modules
+            foreach (IGameModule module in this.gameModules)
+            {
+                module.Initialize();
+            }
 
             EssentialsCore.Logger.Warn("Essential Engine.Initialize() complete");
 
@@ -56,21 +71,31 @@ public abstract partial class EssentialEngineCore<T, TSceneEnum> : GodotSingleto
         }
     }
 
-    [UsedImplicitly]
-    public virtual void Update()
+    public virtual void Update(double delta)
     {
+        TweenLiteSystem.Instance.Update(delta);
+        UnitySynchronizationDispatcher.Instance.Update(delta);
+        
         if (this.transitioning)
         {
             this.UpdateSceneTransition();
         }
+        
+        for (var i = 0; i < this.gameModules.Length; i++)
+        {
+            this.gameModules[i].Update(delta);
+        }
     }
 
-#if UNITY_EDITOR
-    public IDictionary<ResourceKey, long> GetHistory()
+    public override void DestroySingleton()
     {
-        return ResourceProvider.Instance.GetHistory();
+        for (var i = 0; i < this.gameModules.Length; i++)
+        {
+            this.gameModules[i].Destroy();
+        }
+        
+        base.DestroySingleton();
     }
-#endif
 
     // -------------------------------------------------------------------
     // Protected
@@ -82,5 +107,45 @@ public abstract partial class EssentialEngineCore<T, TSceneEnum> : GodotSingleto
         ResourceProvider.Instance.LoadImmediate();
     }
 
-    protected abstract void InitializeGameComponents();
+    protected abstract void InitializeEngineComponents();
+    
+    protected void SetGameModules(bool includeDefaultModules = true, params IGameModule[] newModules)
+    {
+        using (TempList<IGameModule> moduleList = new TempList<IGameModule>())
+        {
+            if (includeDefaultModules)
+            {
+                moduleList.Add(this.SaveLoad);
+            }
+
+            if (newModules == null || newModules.Length == 0)
+            {
+                this.SetGameModules(moduleList.List);
+                return;
+            }
+
+            foreach (IGameModule module in newModules)
+            {
+                if (moduleList.Contains(module))
+                {
+                    continue;
+                }
+
+                moduleList.Add(module);
+            }
+
+            this.SetGameModules(moduleList.List);
+        }
+    }
+    
+    private void SetGameModules(IList<IGameModule> moduleList)
+    {
+        if (moduleList == null)
+        {
+            this.gameModules = Array.Empty<IGameModule>();
+            return;
+        }
+        
+        this.gameModules = moduleList.ToArray();
+    }
 }

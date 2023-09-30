@@ -2,7 +2,7 @@ namespace Craiel.Essentials.Runtime.Noise;
 
 using System;
 using System.Runtime.CompilerServices;
-using UnityEngine;
+using Godot;
 
 public static class NoiseConstants
 {
@@ -536,7 +536,7 @@ public static class NoiseConstants
 		hash = (hash >> 13) ^ hash;
 
 		Vector2 g = Grad2D[hash & 7];
-		return xd * g.x + yd * g.y;
+		return xd * g.X + yd * g.Y;
 	}
 
 	[MethodImplAttribute(InlineOption)]
@@ -551,7 +551,7 @@ public static class NoiseConstants
 		hash = (hash >> 13) ^ hash;
 
 		Vector3 g = Grad3D[hash & 15];
-		return xd * g.x + yd * g.y + zd * g.z;
+		return xd * g.X + yd * g.Y + zd * g.Z;
 	}
 
 	[MethodImplAttribute(InlineOption)]

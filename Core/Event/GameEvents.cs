@@ -1,10 +1,7 @@
 ﻿namespace Craiel.Essentials.Runtime.Event;
 
 using System;
-using System.Runtime.CompilerServices;
 using Contracts;
-using Enums;
-using Scene;
 using Singletons;
 
 public class GameEvents : GodotSingleton<GameEvents>
@@ -14,14 +11,8 @@ public class GameEvents : GodotSingleton<GameEvents>
     // -------------------------------------------------------------------
     // Public
     // -------------------------------------------------------------------
-#if UNITY_EDITOR
-    public static Action<Type, BaseEventSubscriptionTicket[]> DebugEventSend;
-#endif
-    
     public override void Initialize()
     {
-        this.RegisterInController(SceneObjectController.Instance, SceneRootCategory.System, true);
-
         base.Initialize();
 
         this.aggregate = new BaseEventAggregate<IGameEvent>();

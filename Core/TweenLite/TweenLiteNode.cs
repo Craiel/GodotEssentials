@@ -19,20 +19,18 @@ public abstract class TweenLiteNode : ITicketData
     // -------------------------------------------------------------------
     
     // Fields for performance
-    public bool IgnoreTimeScale;
     public float Duration;
     public TweenLiteEasingMode Easing;
     
     public TweenLiteTicket Ticket { get; }
     public bool IsFinished { get; protected set; }
-    public float Runtime { get; protected set; }
+    public double Runtime { get; protected set; }
 
-    public void Update()
+    public void Update(double delta)
     {
-        float elapsed = this.IgnoreTimeScale ? Time.unscaledDeltaTime : Time.deltaTime;
-        this.Runtime += elapsed;
+        this.Runtime += delta;
         
-        float percentage = TweenLiteSystem.ApplyEasing(this.Easing, elapsed, 0, 1, this.Duration);
+        float percentage = TweenLiteSystem.ApplyEasing(this.Easing, delta, 0, 1, this.Duration);
         this.DoUpdate(percentage);
 
         if (this.Runtime >= this.Duration)

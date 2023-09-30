@@ -1,8 +1,7 @@
 ﻿namespace Craiel.Essentials.Runtime.Grammar.Tokenize;
 
 using System.Diagnostics;
-
-using Craiel.UnityEssentials.Runtime.Grammar.Contracts;
+using Contracts;
 
 [DebuggerDisplay("Term = {Term}, Content = {Contents}")]
 public class Token : IToken

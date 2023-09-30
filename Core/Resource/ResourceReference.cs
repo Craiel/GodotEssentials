@@ -1,9 +1,10 @@
 ﻿namespace Craiel.Essentials.Runtime.Resource;
 
 using System;
+using Godot;
 
 public class ResourceReference<T> : IDisposable
-    where T : UnityEngine.Object
+    where T : Resource
 {
     private readonly ResourceProvider provider;
 

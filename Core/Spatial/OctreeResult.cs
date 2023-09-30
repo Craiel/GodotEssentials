@@ -1,6 +1,6 @@
 namespace Craiel.Essentials.Runtime.Spatial;
 
-using UnityEngine;
+using Godot;
 
 public struct OctreeResult<T>
     where T : class

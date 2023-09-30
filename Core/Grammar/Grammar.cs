@@ -2,9 +2,8 @@
 
 using System;
 using System.Collections.Generic;
-
-using Craiel.UnityEssentials.Runtime.Grammar.Contracts;
-using Craiel.UnityEssentials.Runtime.Grammar.Terms;
+using Contracts;
+using Terms;
 
 public abstract class Grammar : IGrammar
 {

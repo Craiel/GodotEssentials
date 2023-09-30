@@ -1,5 +1,6 @@
 namespace Craiel.Essentials.Runtime.Logging;
 
+using System;
 using Godot;
 
 public class GodotLogRelay

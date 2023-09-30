@@ -10,8 +10,10 @@ public partial class TweenLiteSystem
 	// -------------------------------------------------------------------
 	// Public
 	// -------------------------------------------------------------------
-	public static float ApplyEasing(TweenLiteEasingMode mode, float delta, float min, float max, float duration)
+	public static float ApplyEasing(TweenLiteEasingMode mode, double rawDelta, float min, float max, float duration)
 	{
+		float delta = (float)rawDelta;
+		
 		switch (mode)
 		{
 			case TweenLiteEasingMode.Swing:

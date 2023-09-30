@@ -2,7 +2,7 @@ namespace Craiel.Essentials.Runtime.Noise;
 
 using System;
 using Enums;
-using UnityEngine;
+using Godot;
 
 public partial class NoiseProvider
 {
@@ -46,8 +46,8 @@ public partial class NoiseProvider
 	// -------------------------------------------------------------------
 	private float GetCellularSingle(Vector2 point)
 	{
-		int xr = NoiseConstants.Round(point.x);
-		int yr = NoiseConstants.Round(point.y);
+		int xr = NoiseConstants.Round(point.X);
+		int yr = NoiseConstants.Round(point.Y);
 
 		float distance = 999999;
 		int xc = 0, yc = 0;
@@ -61,8 +61,8 @@ public partial class NoiseProvider
 					for (int yi = yr - 1; yi <= yr + 1; yi++)
 					{
 						Vector2 vec = NoiseConstants.Cell2D[NoiseConstants.Hash2D(this.seed, xi, yi) & 255];
-						float vecX = xi - point.x + vec.x * this.cellularJitter;
-						float vecY = yi - point.y + vec.y * this.cellularJitter;
+						float vecX = xi - point.X + vec.X * this.cellularJitter;
+						float vecY = yi - point.Y + vec.Y * this.cellularJitter;
 
 						float newDistance = vecX * vecX + vecY * vecY;
 
@@ -86,8 +86,8 @@ public partial class NoiseProvider
 					{
 						Vector2 vec = NoiseConstants.Cell2D[NoiseConstants.Hash2D(this.seed, xi, yi) & 255];
 
-						float vecX = xi - point.x + vec.x * this.cellularJitter;
-						float vecY = yi - point.y + vec.y * this.cellularJitter;
+						float vecX = xi - point.X + vec.X * this.cellularJitter;
+						float vecY = yi - point.Y + vec.Y * this.cellularJitter;
 
 						float newDistance = (Math.Abs(vecX) + Math.Abs(vecY));
 
@@ -111,8 +111,8 @@ public partial class NoiseProvider
 					{
 						Vector2 vec = NoiseConstants.Cell2D[NoiseConstants.Hash2D(this.seed, xi, yi) & 255];
 
-						float vecX = xi - point.x + vec.x * this.cellularJitter;
-						float vecY = yi - point.y + vec.y * this.cellularJitter;
+						float vecX = xi - point.X + vec.X * this.cellularJitter;
+						float vecY = yi - point.Y + vec.Y * this.cellularJitter;
 
 						float newDistance = (Math.Abs(vecX) + Math.Abs(vecY)) + (vecX * vecX + vecY * vecY);
 
@@ -139,7 +139,7 @@ public partial class NoiseProvider
 			case NoiseCellularReturn.NoiseLookup:
 			{
 				Vector2 vec = NoiseConstants.Cell2D[NoiseConstants.Hash2D(this.seed, xc, yc) & 255];
-				return this.cellularLookup.Get(new Vector2(xc + vec.x * this.cellularJitter, yc + vec.y * this.cellularJitter));
+				return this.cellularLookup.Get(new Vector2(xc + vec.X * this.cellularJitter, yc + vec.Y * this.cellularJitter));
 			}
 
 			case NoiseCellularReturn.Distance:
@@ -155,8 +155,8 @@ public partial class NoiseProvider
 
 	private float GetCellular2Edge(Vector2 point)
 	{
-		int xr = NoiseConstants.Round(point.x);
-		int yr = NoiseConstants.Round(point.y);
+		int xr = NoiseConstants.Round(point.X);
+		int yr = NoiseConstants.Round(point.Y);
 
 		float[] distance = {999999, 999999, 999999, 999999};
 
@@ -169,8 +169,8 @@ public partial class NoiseProvider
 					{
 						Vector2 vec = NoiseConstants.Cell2D[NoiseConstants.Hash2D(this.seed, xi, yi) & 255];
 
-						float vecX = xi - point.x + vec.x * this.cellularJitter;
-						float vecY = yi - point.y + vec.y * this.cellularJitter;
+						float vecX = xi - point.X + vec.X * this.cellularJitter;
+						float vecY = yi - point.Y + vec.Y * this.cellularJitter;
 
 						float newDistance = vecX * vecX + vecY * vecY;
 
@@ -191,8 +191,8 @@ public partial class NoiseProvider
 					{
 						Vector2 vec = NoiseConstants.Cell2D[NoiseConstants.Hash2D(this.seed, xi, yi) & 255];
 
-						float vecX = xi - point.x + vec.x * this.cellularJitter;
-						float vecY = yi - point.y + vec.y * this.cellularJitter;
+						float vecX = xi - point.X + vec.X * this.cellularJitter;
+						float vecY = yi - point.Y + vec.Y * this.cellularJitter;
 
 						float newDistance = Math.Abs(vecX) + Math.Abs(vecY);
 
@@ -213,8 +213,8 @@ public partial class NoiseProvider
 					{
 						Vector2 vec = NoiseConstants.Cell2D[NoiseConstants.Hash2D(this.seed, xi, yi) & 255];
 
-						float vecX = xi - point.x + vec.x * this.cellularJitter;
-						float vecY = yi - point.y + vec.y * this.cellularJitter;
+						float vecX = xi - point.X + vec.X * this.cellularJitter;
+						float vecY = yi - point.Y + vec.Y * this.cellularJitter;
 
 						float newDistance = (Math.Abs(vecX) + Math.Abs(vecY)) + (vecX * vecX + vecY * vecY);
 

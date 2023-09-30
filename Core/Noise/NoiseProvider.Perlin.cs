@@ -1,15 +1,15 @@
 namespace Craiel.Essentials.Runtime.Noise;
 
 using Enums;
-using UnityEngine;
+using Godot;
 
 public partial class NoiseProvider
 {
     private float GetPerlin(int seed, Vector3 point)
     {
-        int x0 = NoiseConstants.Floor(point.x);
-        int y0 = NoiseConstants.Floor(point.y);
-        int z0 = NoiseConstants.Floor(point.z);
+        int x0 = NoiseConstants.Floor(point.X);
+        int y0 = NoiseConstants.Floor(point.Y);
+        int z0 = NoiseConstants.Floor(point.Z);
         int x1 = x0 + 1;
         int y1 = y0 + 1;
         int z1 = z0 + 1;
@@ -19,32 +19,32 @@ public partial class NoiseProvider
         {
             default:
             {
-                xs = point.x - x0;
-                ys = point.y - y0;
-                zs = point.z - z0;
+                xs = point.X - x0;
+                ys = point.Y - y0;
+                zs = point.Z - z0;
                 break;
             }
 
             case NoiseInterpolation.Hermite:
             {
-                xs = NoiseConstants.InterpolateHermite(point.x - x0);
-                ys = NoiseConstants.InterpolateHermite(point.y - y0);
-                zs = NoiseConstants.InterpolateHermite(point.z - z0);
+                xs = NoiseConstants.InterpolateHermite(point.X - x0);
+                ys = NoiseConstants.InterpolateHermite(point.Y - y0);
+                zs = NoiseConstants.InterpolateHermite(point.Z - z0);
                 break;
             }
 
             case NoiseInterpolation.Quintic:
             {
-                xs = NoiseConstants.InterpolateQuintic(point.x - x0);
-                ys = NoiseConstants.InterpolateQuintic(point.y - y0);
-                zs = NoiseConstants.InterpolateQuintic(point.z - z0);
+                xs = NoiseConstants.InterpolateQuintic(point.X - x0);
+                ys = NoiseConstants.InterpolateQuintic(point.Y - y0);
+                zs = NoiseConstants.InterpolateQuintic(point.Z - z0);
                 break;
             }
         }
 
-        float xd0 = point.x - x0;
-        float yd0 = point.y - y0;
-        float zd0 = point.z - z0;
+        float xd0 = point.X - x0;
+        float yd0 = point.Y - y0;
+        float zd0 = point.Z - z0;
         float xd1 = xd0 - 1;
         float yd1 = yd0 - 1;
         float zd1 = zd0 - 1;
@@ -68,9 +68,9 @@ public partial class NoiseProvider
 
         for (int i = 1; i < this.octaves; i++)
         {
-            point.x *= this.lacunarity;
-            point.y *= this.lacunarity;
-            point.z *= this.lacunarity;
+            point.X *= this.lacunarity;
+            point.Y *= this.lacunarity;
+            point.Z *= this.lacunarity;
 
             amp *= this.gain;
             sum += GetPerlin(++localSeed, point) * amp;
@@ -87,9 +87,9 @@ public partial class NoiseProvider
 
         for (int i = 1; i < this.octaves; i++)
         {
-            point.x *= this.lacunarity;
-            point.y *= this.lacunarity;
-            point.z *= this.lacunarity;
+            point.X *= this.lacunarity;
+            point.Y *= this.lacunarity;
+            point.Z *= this.lacunarity;
 
             amp *= this.gain;
             sum += (Mathf.Abs(GetPerlin(++localSeec, point)) * 2 - 1) * amp;
@@ -106,9 +106,9 @@ public partial class NoiseProvider
 
         for (int i = 1; i < this.octaves; i++)
         {
-            point.x *= this.lacunarity;
-            point.y *= this.lacunarity;
-            point.z *= this.lacunarity;
+            point.X *= this.lacunarity;
+            point.Y *= this.lacunarity;
+            point.Z *= this.lacunarity;
 
             amp *= this.gain;
             sum -= (1 - Mathf.Abs(GetPerlin(++localSeed, point))) * amp;

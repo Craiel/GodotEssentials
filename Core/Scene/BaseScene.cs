@@ -180,11 +180,6 @@ public abstract class BaseScene<TSceneEnum>
     {
     }
 
-    public void SetLoadMode(LoadSceneMode mode)
-    {
-        this.loadMode = mode;
-    }
-
     // -------------------------------------------------------------------
     // Protected
     // -------------------------------------------------------------------

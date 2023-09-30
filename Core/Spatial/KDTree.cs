@@ -3,6 +3,7 @@ namespace Craiel.Essentials.Runtime.Spatial;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Utils;
 
 /// <summary>
 /// Represents a KD-Tree. KD-Trees are used for fast spatial searches. Searching in a

@@ -4,9 +4,7 @@ public interface IGameModule
 {
     void Initialize();
     
-    void Update();
-
-    void FixedUpdate();
+    void Update(double delta);
 
     void Destroy();
 }

@@ -5,6 +5,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Reflection;
+using Utils;
 
 public static class ObjectExtensions
 {
@@ -56,7 +57,7 @@ public static class ObjectExtensions
             if (!valueA.DeepCompare(valueB))
             {
 #if DEBUG
-                EssentialsCore.Logger.Warn("DeepCompare failed on property {0} of {1}", info.Name, compareType.Name);
+                EssentialsCore.Logger.Warn($"DeepCompare failed on property {info.Name} of {compareType.Name}");
 #endif
 
                 return false;

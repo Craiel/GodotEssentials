@@ -1,6 +1,6 @@
 namespace Craiel.Essentials.Runtime.Noise;
 
-using UnityEngine;
+using Godot;
 
 public partial class NoiseProvider
 {
@@ -9,16 +9,16 @@ public partial class NoiseProvider
     
     private static float GetSimplex(int seed, Vector2 point)
     {
-        float t = (point.x + point.y) * SimplexF2;
-        int i = NoiseConstants.Floor(point.x + t);
-        int j = NoiseConstants.Floor(point.y + t);
+        float t = (point.X + point.Y) * SimplexF2;
+        int i = NoiseConstants.Floor(point.X + t);
+        int j = NoiseConstants.Floor(point.Y + t);
 
         t = (i + j) * SimplexG2;
         float x0 = i - t;
         float y0 = j - t;
 
-        x0 = point.x - x0;
-        y0 = point.y - y0;
+        x0 = point.X - x0;
+        y0 = point.Y - y0;
 
         int i1, j1;
         if (x0 > y0)
@@ -81,8 +81,8 @@ public partial class NoiseProvider
 
         for (int i = 1; i < this.octaves; i++)
         {
-            point.x *= this.lacunarity;
-            point.y *= this.lacunarity;
+            point.X *= this.lacunarity;
+            point.Y *= this.lacunarity;
 
             amp *= this.gain;
             sum += GetSimplex(++localSeed, point) * amp;
@@ -99,8 +99,8 @@ public partial class NoiseProvider
 
         for (int i = 1; i < this.octaves; i++)
         {
-            point.x *= this.lacunarity;
-            point.y *= this.lacunarity;
+            point.X *= this.lacunarity;
+            point.Y *= this.lacunarity;
 
             amp *= this.gain;
             sum += (Mathf.Abs(GetSimplex(++localSeed, point)) * 2 - 1) * amp;
@@ -117,8 +117,8 @@ public partial class NoiseProvider
 
         for (int i = 1; i < this.octaves; i++)
         {
-            point.x *= this.lacunarity;
-            point.y *= this.lacunarity;
+            point.X *= this.lacunarity;
+            point.Y *= this.lacunarity;
 
             amp *= this.gain;
             sum -= (1 - Mathf.Abs(GetSimplex(++localSeed, point))) * amp;

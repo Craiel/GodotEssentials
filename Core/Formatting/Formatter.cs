@@ -6,6 +6,7 @@ using System.Globalization;
 using System.Text.RegularExpressions;
 using System.Threading;
 using Contracts;
+using Utils;
 
 // Formats a string using a dictionary approach
 public class Formatter : IFormatter
@@ -129,7 +130,7 @@ public class Formatter : IFormatter
             return ((FormatHandler)handlerValue).Evaluate(parameter);
         }
 
-        EssentialsCore.Logger.Error("Unknown Handler ({0}) for GetFormatted Value of {1}", handlerType, key);
+        EssentialsCore.Logger.Error($"Unknown Handler ({handlerType}) for GetFormatted Value of {key}");
         return string.Empty;
     }
 

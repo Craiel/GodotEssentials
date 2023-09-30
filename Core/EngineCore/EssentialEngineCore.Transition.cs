@@ -11,7 +11,6 @@ public abstract partial class EssentialEngineCore<T, TSceneEnum>
     private bool transitioning;
     private TSceneEnum transitionTarget;
     private SceneTransitionStep transitionStep;
-    private LoadSceneMode transitionMode;
     private object[] transitionData;
 
     // -------------------------------------------------------------------
@@ -25,16 +24,8 @@ public abstract partial class EssentialEngineCore<T, TSceneEnum>
 
     public bool InTransition { get; private set; }
 
-    public void Transition(TSceneEnum type, LoadSceneMode mode, params object[] data)
-    {
-        this.transitionMode = mode;
-
-        this.BeginTransition(type, data);
-    }
-
     public void Transition(TSceneEnum type, params object[] data)
     {
-        this.transitionMode = LoadSceneMode.Single;
         this.BeginTransition(type, data);
     }
 
@@ -103,7 +94,6 @@ public abstract partial class EssentialEngineCore<T, TSceneEnum>
             this.LoadScene(this.transitionTarget);
             this.activeScene = this.scenes[this.transitionTarget];
             this.activeScene.SetData(this.transitionData);
-            this.activeScene.SetLoadMode(this.transitionMode);
 
             EssentialsCore.Logger.Info($"Activated target scene {this.transitionTarget}");
         }
@@ -121,9 +111,6 @@ public abstract partial class EssentialEngineCore<T, TSceneEnum>
 
         // We are done transitioning
         EssentialsCore.Logger.Info($"Transition to {this.transitionTarget} completed");
-
-        // Try to free up un-used assets after transition
-        UnityEngine.Resources.UnloadUnusedAssets();
 
         this.transitioning = false;
         this.ActiveSceneType = this.activeScene.Type;

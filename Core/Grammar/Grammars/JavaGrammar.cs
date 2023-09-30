@@ -1,8 +1,7 @@
 ﻿namespace Craiel.Essentials.Runtime.Grammar.Grammars;
 
-using Craiel.UnityEssentials.Runtime.Grammar;
-using Craiel.UnityEssentials.Runtime.Grammar.Contracts.Grammars;
-using Craiel.UnityEssentials.Runtime.Grammar.Terms;
+using Contracts.Grammars;
+using Terms;
 
 // Based very loosely on https://github.com/KevinHoward/Irony/tree/master/Irony.Samples/Java
 public partial class JavaGrammar : Grammar, IJavaGrammar

@@ -4,8 +4,6 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Threading;
-using IO;
-using UnityEngine;
 
 public static class Localization
 {
@@ -46,7 +44,7 @@ public static class Localization
         var result = new LocalizationToken(key);
         if (ActiveTokens.Contains(result))
         {
-            EssentialsCore.Logger.Warn("Duplicate Localization token: {0}", key);
+            EssentialsCore.Logger.Warn($"Duplicate Localization token: {key}");
         }
         else
         {

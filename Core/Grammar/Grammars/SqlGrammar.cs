@@ -1,7 +1,7 @@
 ﻿namespace Craiel.Essentials.Runtime.Grammar.Grammars;
 
-using Craiel.UnityEssentials.Runtime.Grammar.Contracts.Grammars;
-using Craiel.UnityEssentials.Runtime.Grammar.Terms;
+using Contracts.Grammars;
+using Terms;
 
 public class SqlGrammar : Grammar, ISqlGrammar
 {

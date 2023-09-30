@@ -1,9 +1,9 @@
 ﻿namespace Craiel.Essentials.Runtime.Json;
 
 using System;
+using System.Text.Json;
 using Contracts;
 using IO;
-using UnityEngine;
 using Debug = System.Diagnostics.Debug;
 
 public class JsonConfig<T> : IJsonConfig<T>
@@ -29,13 +29,13 @@ public class JsonConfig<T> : IJsonConfig<T>
 
         try
         {
-            string contents = JsonUtility.ToJson(this.Current);
+            string contents = JsonSerializer.Serialize(this.Current);
             targetFile.WriteAsString(contents);
             return true;
         }
         catch (Exception e)
         {
-            EssentialsCore.Logger.Error(e, "Could not save config to {0}", file);
+            EssentialsCore.Logger.Error($"Could not save config to {file}", e);
             return false;
         }
     }
@@ -61,11 +61,11 @@ public class JsonConfig<T> : IJsonConfig<T>
         if (file.Exists)
         {
             string contents = file.ReadAsString();
-            this.Current = JsonUtility.FromJson<T>(contents);
+            this.Current = JsonSerializer.Deserialize<T>(contents);
         }
         else
         {
-            EssentialsCore.Logger.Warn("Config {0} does not exist, skipping", file);
+            EssentialsCore.Logger.Warn($"Config {file} does not exist, skipping");
         }
 
         if (this.Current == null)
@@ -73,7 +73,7 @@ public class JsonConfig<T> : IJsonConfig<T>
             EssentialsCore.Logger.Error("Config is invalid, resetting to default");
             this.Current = this.GetDefault();
 
-            string contents = JsonUtility.ToJson(this.Current);
+            string contents = JsonSerializer.Serialize(this.Current);
             file.WriteAsString(contents);
             return false;
         }

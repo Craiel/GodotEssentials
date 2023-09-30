@@ -3,32 +3,16 @@
 using System;
 using Contracts;
 using Enums;
-using UnityEngine;
+using Godot;
 
 public class ResourceLoadRequest : IResourceRequest
 {
-    private readonly UnityEngine.Object asset;
-    private readonly ResourceRequest resourceRequest;
-    private readonly AssetBundleRequest bundleRequest;
+    private readonly Resource asset;
 
     // -------------------------------------------------------------------
     // Constructor
     // -------------------------------------------------------------------
-    public ResourceLoadRequest(ResourceLoadInfo info, ResourceRequest internalRequest)
-        : this(info)
-    {
-        this.resourceRequest = internalRequest;
-        this.Mode = ResourceLoadMode.Internal;
-    }
-
-    public ResourceLoadRequest(ResourceLoadInfo info, AssetBundleRequest internalRequest)
-        : this(info)
-    {
-        this.bundleRequest = internalRequest;
-        this.Mode = ResourceLoadMode.Bundle;
-    }
-
-    public ResourceLoadRequest(ResourceLoadInfo info, UnityEngine.Object asset)
+    public ResourceLoadRequest(ResourceLoadInfo info, Resource asset)
         : this(info)
     {
         this.asset = asset;
@@ -58,16 +42,6 @@ public class ResourceLoadRequest : IResourceRequest
                         return true;
                     }
 
-                case ResourceLoadMode.Bundle:
-                    {
-                        return this.bundleRequest.isDone;
-                    }
-
-                case ResourceLoadMode.Internal:
-                    {
-                        return this.resourceRequest.isDone;
-                    }
-
                 default:
                     {
                         throw new NotImplementedException();
@@ -76,23 +50,13 @@ public class ResourceLoadRequest : IResourceRequest
         }
     }
 
-    public T GetAsset<T>() where T : UnityEngine.Object
+    public T GetAsset<T>() where T : Resource
     {
         switch (this.Mode)
         {
             case ResourceLoadMode.Assigned:
                 {
                     return this.asset as T;
-                }
-
-            case ResourceLoadMode.Internal:
-                {
-                    return this.resourceRequest.asset as T;
-                }
-
-            case ResourceLoadMode.Bundle:
-                {
-                    return this.bundleRequest.asset as T;
                 }
 
             default:
@@ -102,23 +66,13 @@ public class ResourceLoadRequest : IResourceRequest
         }
     }
 
-    public UnityEngine.Object GetAsset()
+    public Resource GetAsset()
     {
         switch (this.Mode)
         {
                 case ResourceLoadMode.Assigned:
                 {
                     return this.asset;
-                }
-
-                case ResourceLoadMode.Internal:
-                {
-                    return this.resourceRequest.asset;
-                }
-
-                case ResourceLoadMode.Bundle:
-                {
-                    return this.bundleRequest.asset;
                 }
 
             default:

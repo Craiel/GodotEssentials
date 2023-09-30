@@ -1,8 +1,8 @@
 namespace Craiel.Essentials.Runtime.Geometry;
 
 using System.Collections.Generic;
+using Godot;
 using Spatial;
-using UnityEngine;
 using Utils;
 
 public class DynamicMesh : Geometry.Mesh
@@ -13,7 +13,7 @@ public class DynamicMesh : Geometry.Mesh
     // Constructor
     // -------------------------------------------------------------------
     public DynamicMesh(float initialSize = 1f)
-        : this(Vector3.zero, initialSize)
+        : this(Vector3.Zero, initialSize)
     {
     }
 
@@ -43,16 +43,16 @@ public class DynamicMesh : Geometry.Mesh
         uint[] indexMap = new uint[vertices.Count];
         uint[] normalMap = new uint[normals.Count];
 
-        EssentialsCore.Logger.Info("- {0} vertices", vertices.Count);
+        EssentialsCore.Logger.Info($"- {vertices.Count} vertices");
         bool check = this.Vertices.Count > 0;
         int skipped = 0;
         for (var i = 0; i < vertices.Count; i++)
         {
             Vector3 finalVertex = vertices[i] + offset;
-            if (finalVertex.magnitude > EssentialMathUtils.MaxFloat)
+            if (finalVertex.Length() > EssentialMathUtils.MaxFloat)
             {
                 // Create a zero vertex, we will skip the triangles anyway
-                indexMap[i] = MeshUtils.AddNewVertex(this.Vertices, Vector3.zero, this.mergeTree);
+                indexMap[i] = MeshUtils.AddNewVertex(this.Vertices, Vector3.Zero, this.mergeTree);
                 vertexInvalidMap[i] = false;
                 EssentialsCore.Logger.Warn("- Vertex out of Safe Range: " + finalVertex);
                 skipped++;
@@ -78,10 +78,10 @@ public class DynamicMesh : Geometry.Mesh
 
         if (skipped > 0)
         {
-            EssentialsCore.Logger.Info("  {0} duplicates", skipped);
+            EssentialsCore.Logger.Info($"  {skipped} duplicates");
         }
 
-        EssentialsCore.Logger.Info("- {0} normals", normals.Count);
+        EssentialsCore.Logger.Info($"- {normals.Count} normals");
         bool checkNormals = this.Normals.Count > 0;
         skipped = 0;
         for (var i = 0; i < normals.Count; i++)
@@ -107,10 +107,10 @@ public class DynamicMesh : Geometry.Mesh
 
         if (skipped > 0)
         {
-            EssentialsCore.Logger.Info("  {0} duplicates", skipped);
+            EssentialsCore.Logger.Info($"  {skipped} duplicates");
         }
 
-        EssentialsCore.Logger.Info("- {0} triangles", triangles.Count);
+        EssentialsCore.Logger.Info($"- {triangles.Count} triangles");
         for (var i = 0; i < triangles.Count; i++)
         {
             Triangle3Indexed triangle = triangles[i];

@@ -1,9 +1,11 @@
 namespace Craiel.Essentials.Runtime.Resource;
 
+using Godot;
+
 public static class ResourceExtensions
 {
     public static T LoadManaged<T>(this ResourceKey key)
-        where T : UnityEngine.Object
+        where T : Resource
     {
         using (var resource = ResourceProvider.Instance.AcquireOrLoadResource<T>(key))
         {

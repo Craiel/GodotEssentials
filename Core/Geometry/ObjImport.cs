@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.IO;
-using UnityEngine;
+using Godot;
 
 public static class ObjImport
 {
@@ -50,7 +50,7 @@ public static class ObjImport
         }
 
         target.Name = context.Name;
-        target.Join(context.TempVertices, context.Normals, context.NormalMapping, context.Triangles, Vector3.zero);
+        target.Join(context.TempVertices, context.Normals, context.NormalMapping, context.Triangles, Vector3.Zero);
     }
 
     // -------------------------------------------------------------------
@@ -69,14 +69,14 @@ public static class ObjImport
     {
         if (context.CurrentSegments.Length < 4)
         {
-            EssentialsCore.Logger.Error("Invalid Segment count for Geometric Vertex, Expected 4 but got {0}, line {1}", context.CurrentSegments.Length, context.CurrentLineNumber);
+            EssentialsCore.Logger.Error($"Invalid Segment count for Geometric Vertex, Expected 4 but got {context.CurrentSegments.Length}, line {context.CurrentLineNumber}");
             return;
         }
 
         Vector3 vertex;
         if (!TryParseVector3(context.CurrentSegments[1], context.CurrentSegments[2], context.CurrentSegments[3], out vertex))
         {
-            EssentialsCore.Logger.Error("Invalid vertex format in line {0}: {1}", context.CurrentLineNumber, context.CurrentLine);
+            EssentialsCore.Logger.Error($"Invalid vertex format in line {context.CurrentLineNumber}: {context.CurrentLine}");
             return;
         }
 
@@ -87,14 +87,14 @@ public static class ObjImport
     {
         if (context.CurrentSegments.Length < 4)
         {
-            EssentialsCore.Logger.Error("Invalid Segment count for Vertex Normal, Expected 4 but got {0}, line {1}", context.CurrentSegments.Length, context.CurrentLineNumber);
+            EssentialsCore.Logger.Error($"Invalid Segment count for Vertex Normal, Expected 4 but got {context.CurrentSegments.Length}, line {context.CurrentLineNumber}");
             return;
         }
 
         Vector3 normal;
         if (!TryParseVector3(context.CurrentSegments[1], context.CurrentSegments[2], context.CurrentSegments[3], out normal))
         {
-            EssentialsCore.Logger.Error("Invalid vertex normal format in line {0}: {1}", context.CurrentLineNumber, context.CurrentLine);
+            EssentialsCore.Logger.Error($"Invalid vertex normal format in line {context.CurrentLineNumber}: {context.CurrentLine}");
             return;
         }
 
@@ -147,7 +147,7 @@ public static class ObjImport
     {
         if (context.CurrentSegments.Length < 4)
         {
-            EssentialsCore.Logger.Error("Invalid Segment count for Polygon Face, Expected  at least 4 but got {0}, line {1}", context.CurrentSegments.Length, context.CurrentLineNumber);
+            EssentialsCore.Logger.Error($"Invalid Segment count for Polygon Face, Expected  at least 4 but got {context.CurrentSegments.Length}, line {context.CurrentLineNumber}");
             return;
         }
 
@@ -271,19 +271,19 @@ public static class ObjImport
 
     private static bool TryParseVector3(string x, string y, string z, out Vector3 v)
     {
-        v = Vector3.zero;
+        v = Vector3.Zero;
 
-        if (!float.TryParse(x, NumberStyles.Any, CultureInfo.InvariantCulture, out v.x))
+        if (!float.TryParse(x, NumberStyles.Any, CultureInfo.InvariantCulture, out v.X))
         {
             return false;
         }
 
-        if (!float.TryParse(y, NumberStyles.Any, CultureInfo.InvariantCulture, out v.y))
+        if (!float.TryParse(y, NumberStyles.Any, CultureInfo.InvariantCulture, out v.Y))
         {
             return false;
         }
 
-        if (!float.TryParse(z, NumberStyles.Any, CultureInfo.InvariantCulture, out v.z))
+        if (!float.TryParse(z, NumberStyles.Any, CultureInfo.InvariantCulture, out v.Z))
         {
             return false;
         }

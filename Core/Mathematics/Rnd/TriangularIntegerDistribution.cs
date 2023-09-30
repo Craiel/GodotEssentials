@@ -4,6 +4,7 @@ namespace Craiel.Essentials.Runtime.Mathematics.Rnd;
     using System.Diagnostics.CodeAnalysis;
     using System.Globalization;
     using Contracts;
+    using Utils;
 
     public class TriangularIntegerDistribution : IntegerDistribution
     {

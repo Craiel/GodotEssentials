@@ -6,7 +6,6 @@ using Collections;
 using Contracts;
 using Enums;
 using Pool;
-using UnityEngine;
 
 /// <summary>
 /// A <see cref="MessageDispatcher"/> is in charge of the creation, dispatch, and management of telegrams
@@ -270,7 +269,7 @@ public class MessageDispatcher : ITelegraph
             if (this.DebugEnabled)
             {
                 float currentTime = Time.time;
-                EssentialsCore.Logger.Info("Instant telegram dispatched at time: {0} by {1} for {2}. Message code is " + message, currentTime, sender, receiver);
+                EssentialsCore.Logger.Info($"Instant telegram dispatched at time: {currentTime} by {sender} for {receiver}. Message code is {message}");
             }
 
             // Send the telegram to the recipient
@@ -296,11 +295,11 @@ public class MessageDispatcher : ITelegraph
             {
                 if (added)
                 {
-                    EssentialsCore.Logger.Info("Delayed telegram from {0} for {1} recorded at time {2}. Message code is {3}", sender, receiver, currentTime, message);
+                    EssentialsCore.Logger.Info($"Delayed telegram from {sender} for {receiver} recorded at time {currentTime}. Message code is {message}");
                 }
                 else
                 {
-                    EssentialsCore.Logger.Info("Delayed telegram from {0} for {1} rejected by the queue. Message code is {2}", sender, receiver, message);
+                    EssentialsCore.Logger.Info($"Delayed telegram from {sender} for {receiver} rejected by the queue. Message code is {message}");
                 }
             }
         }
@@ -333,7 +332,7 @@ public class MessageDispatcher : ITelegraph
 
             if (this.DebugEnabled)
             {
-                EssentialsCore.Logger.Info("Queued telegram ready for dispatch: Sent to {0}. Message code is {1}", telegram.Receiver, telegram.Message);
+                EssentialsCore.Logger.Info($"Queued telegram ready for dispatch: Sent to {telegram.Receiver}. Message code is {telegram.Message}");
             }
             
             // Send the telegram to the recipient
@@ -383,7 +382,7 @@ public class MessageDispatcher : ITelegraph
                 // Telegram could not be handled
                 if (this.DebugEnabled)
                 {
-                    EssentialsCore.Logger.Info("Message {0} not handled", telegram.Message);
+                    EssentialsCore.Logger.Info($"Message {telegram.Message} not handled");
                 }
             }
         }
@@ -406,7 +405,7 @@ public class MessageDispatcher : ITelegraph
             // Telegram could not be handled
             if (this.DebugEnabled && handledCount == 0)
             {
-                EssentialsCore.Logger.Info("Message {0} not handled", telegram.Message);
+                EssentialsCore.Logger.Info($"Message {telegram.Message} not handled");
             }
         }
 

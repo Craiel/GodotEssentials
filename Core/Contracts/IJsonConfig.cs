@@ -1,5 +1,7 @@
 ﻿namespace Craiel.Essentials.Runtime.Contracts;
 
+using IO;
+
 public interface IJsonConfig<T>
 {
     T Current { get; set; }
