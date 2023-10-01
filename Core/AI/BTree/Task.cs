@@ -160,7 +160,7 @@ public abstract class Task<T>
     /// </summary>
     public virtual void Start()
     {
-        float gameTime = EssentialsCore.GameTime;
+        float gameTime = EssentialCore.GameTime;
         if (Math.Abs(this.lastRunTime - gameTime) < EssentialMathUtils.Epsilon)
         {
             throw new IllegalStateException("Task was started multiple times in the same frame!");

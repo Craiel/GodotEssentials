@@ -30,7 +30,7 @@ public class UniformFloatDistribution : FloatDistribution
 
     public override float NextFloat()
     {
-        return this.Low + (float)(EssentialsCore.Random.Randf() * (this.High - this.Low));
+        return this.Low + (float)(EssentialCore.Random.Randf() * (this.High - this.Low));
     }
 
     public override T Clone<T>()

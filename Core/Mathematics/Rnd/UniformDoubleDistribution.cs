@@ -30,7 +30,7 @@ public class UniformDoubleDistribution : DoubleDistribution
 
     public override double NextDouble()
     {
-        return this.Low + (EssentialsCore.Random.Randf() * (this.High - this.Low));
+        return this.Low + (EssentialCore.Random.Randf() * (this.High - this.Low));
     }
 
     public override T Clone<T>()

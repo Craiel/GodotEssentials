@@ -9,7 +9,7 @@ public static class CollectionExtensions
         int iL = array.Length;
         while (iL > 1)
         {
-            int iS = EssentialsCore.Random.RandiRange(0, iL--);
+            int iS = EssentialCore.Random.RandiRange(0, iL--);
             (array[iL], array[iS]) = (array[iS], array[iL]);
         }
     }
@@ -17,14 +17,14 @@ public static class CollectionExtensions
     public static T RandomEntry<T>(this T[] array)
     {
         return array.Length > 0
-            ? array[EssentialsCore.Random.RandiRange(0, array.Length)]
+            ? array[EssentialCore.Random.RandiRange(0, array.Length)]
             : default;
     }
     
     public static T RandomEntry<T>(this List<T> array)
     {
         return array.Count > 0 
-            ? array[EssentialsCore.Random.RandiRange(0, array.Count)] 
+            ? array[EssentialCore.Random.RandiRange(0, array.Count)] 
             : default;
     }
     

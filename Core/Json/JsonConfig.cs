@@ -35,7 +35,7 @@ public class JsonConfig<T> : IJsonConfig<T>
         }
         catch (Exception e)
         {
-            EssentialsCore.Logger.Error($"Could not save config to {file}", e);
+            EssentialCore.Logger.Error($"Could not save config to {file}", e);
             return false;
         }
     }
@@ -65,12 +65,12 @@ public class JsonConfig<T> : IJsonConfig<T>
         }
         else
         {
-            EssentialsCore.Logger.Warn($"Config {file} does not exist, skipping");
+            EssentialCore.Logger.Warn($"Config {file} does not exist, skipping");
         }
 
         if (this.Current == null)
         {
-            EssentialsCore.Logger.Error("Config is invalid, resetting to default");
+            EssentialCore.Logger.Error("Config is invalid, resetting to default");
             this.Current = this.GetDefault();
 
             string contents = JsonSerializer.Serialize(this.Current);

@@ -69,14 +69,14 @@ public static class ObjImport
     {
         if (context.CurrentSegments.Length < 4)
         {
-            EssentialsCore.Logger.Error($"Invalid Segment count for Geometric Vertex, Expected 4 but got {context.CurrentSegments.Length}, line {context.CurrentLineNumber}");
+            EssentialCore.Logger.Error($"Invalid Segment count for Geometric Vertex, Expected 4 but got {context.CurrentSegments.Length}, line {context.CurrentLineNumber}");
             return;
         }
 
         Vector3 vertex;
         if (!TryParseVector3(context.CurrentSegments[1], context.CurrentSegments[2], context.CurrentSegments[3], out vertex))
         {
-            EssentialsCore.Logger.Error($"Invalid vertex format in line {context.CurrentLineNumber}: {context.CurrentLine}");
+            EssentialCore.Logger.Error($"Invalid vertex format in line {context.CurrentLineNumber}: {context.CurrentLine}");
             return;
         }
 
@@ -87,14 +87,14 @@ public static class ObjImport
     {
         if (context.CurrentSegments.Length < 4)
         {
-            EssentialsCore.Logger.Error($"Invalid Segment count for Vertex Normal, Expected 4 but got {context.CurrentSegments.Length}, line {context.CurrentLineNumber}");
+            EssentialCore.Logger.Error($"Invalid Segment count for Vertex Normal, Expected 4 but got {context.CurrentSegments.Length}, line {context.CurrentLineNumber}");
             return;
         }
 
         Vector3 normal;
         if (!TryParseVector3(context.CurrentSegments[1], context.CurrentSegments[2], context.CurrentSegments[3], out normal))
         {
-            EssentialsCore.Logger.Error($"Invalid vertex normal format in line {context.CurrentLineNumber}: {context.CurrentLine}");
+            EssentialCore.Logger.Error($"Invalid vertex normal format in line {context.CurrentLineNumber}: {context.CurrentLine}");
             return;
         }
 
@@ -147,7 +147,7 @@ public static class ObjImport
     {
         if (context.CurrentSegments.Length < 4)
         {
-            EssentialsCore.Logger.Error($"Invalid Segment count for Polygon Face, Expected  at least 4 but got {context.CurrentSegments.Length}, line {context.CurrentLineNumber}");
+            EssentialCore.Logger.Error($"Invalid Segment count for Polygon Face, Expected  at least 4 but got {context.CurrentSegments.Length}, line {context.CurrentLineNumber}");
             return;
         }
 

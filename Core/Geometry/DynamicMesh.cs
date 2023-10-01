@@ -43,7 +43,7 @@ public class DynamicMesh : Geometry.Mesh
         uint[] indexMap = new uint[vertices.Count];
         uint[] normalMap = new uint[normals.Count];
 
-        EssentialsCore.Logger.Info($"- {vertices.Count} vertices");
+        EssentialCore.Logger.Info($"- {vertices.Count} vertices");
         bool check = this.Vertices.Count > 0;
         int skipped = 0;
         for (var i = 0; i < vertices.Count; i++)
@@ -54,7 +54,7 @@ public class DynamicMesh : Geometry.Mesh
                 // Create a zero vertex, we will skip the triangles anyway
                 indexMap[i] = MeshUtils.AddNewVertex(this.Vertices, Vector3.Zero, this.mergeTree);
                 vertexInvalidMap[i] = false;
-                EssentialsCore.Logger.Warn("- Vertex out of Safe Range: " + finalVertex);
+                EssentialCore.Logger.Warn("- Vertex out of Safe Range: " + finalVertex);
                 skipped++;
                 continue;
             }
@@ -78,10 +78,10 @@ public class DynamicMesh : Geometry.Mesh
 
         if (skipped > 0)
         {
-            EssentialsCore.Logger.Info($"  {skipped} duplicates");
+            EssentialCore.Logger.Info($"  {skipped} duplicates");
         }
 
-        EssentialsCore.Logger.Info($"- {normals.Count} normals");
+        EssentialCore.Logger.Info($"- {normals.Count} normals");
         bool checkNormals = this.Normals.Count > 0;
         skipped = 0;
         for (var i = 0; i < normals.Count; i++)
@@ -107,17 +107,17 @@ public class DynamicMesh : Geometry.Mesh
 
         if (skipped > 0)
         {
-            EssentialsCore.Logger.Info($"  {skipped} duplicates");
+            EssentialCore.Logger.Info($"  {skipped} duplicates");
         }
 
-        EssentialsCore.Logger.Info($"- {triangles.Count} triangles");
+        EssentialCore.Logger.Info($"- {triangles.Count} triangles");
         for (var i = 0; i < triangles.Count; i++)
         {
             Triangle3Indexed triangle = triangles[i];
 
             if (vertexInvalidMap[triangle.A] || vertexInvalidMap[triangle.B] || vertexInvalidMap[triangle.C])
             {
-                EssentialsCore.Logger.Warn("Triangle had invalid index mapping, possibly skipped vertices, skipping triangle");
+                EssentialCore.Logger.Warn("Triangle had invalid index mapping, possibly skipped vertices, skipping triangle");
                 continue;
             }
 

@@ -44,7 +44,7 @@ public static class Localization
         var result = new LocalizationToken(key);
         if (ActiveTokens.Contains(result))
         {
-            EssentialsCore.Logger.Warn($"Duplicate Localization token: {key}");
+            EssentialCore.Logger.Warn($"Duplicate Localization token: {key}");
         }
         else
         {

@@ -101,7 +101,7 @@ public partial class NoiseProvider
 
 	        default:
 	        {
-		        EssentialsCore.Logger.Warn($"Get Noise not supported for Vector2 and {this.noiseType}");
+		        EssentialCore.Logger.Warn($"Get Noise not supported for Vector2 and {this.noiseType}");
 		        return 0;
 	        }
         }
@@ -162,7 +162,7 @@ public partial class NoiseProvider
 
 	        default:
 	        {
-		        EssentialsCore.Logger.Warn($"Get Noise not supported for Vector3 and {this.noiseType}");
+		        EssentialCore.Logger.Warn($"Get Noise not supported for Vector3 and {this.noiseType}");
 		        return 0;
 	        }
         }

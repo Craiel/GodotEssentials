@@ -24,7 +24,7 @@ public class LocalizationProvider : ILocalizationProvider
         this.currentDictionary = new LocalizationStringDictionary();
 
 #if DEBUG
-        Root = EssentialsCore.PersistentDataPath;
+        Root = EssentialCore.PersistentDataPath;
 #endif
     }
 
@@ -36,7 +36,6 @@ public class LocalizationProvider : ILocalizationProvider
     public void SetRoot(ManagedDirectory newRoot)
     {
         Root = newRoot;
-        ReloadDictionary();
     }
 
     public void ReloadDictionary(bool forceLoadFromResource = false)
@@ -70,7 +69,7 @@ public class LocalizationProvider : ILocalizationProvider
 
     public string GetString(string key)
     {
-        if (key.StartsWith(EssentialsCore.LocalizationIgnoreString))
+        if (key.StartsWith(EssentialCore.LocalizationIgnoreString))
         {
             return key;
         }
@@ -89,7 +88,7 @@ public class LocalizationProvider : ILocalizationProvider
 #if DEBUG
         if (this.currentDictionary.Values.Any(x => string.Equals(x, key)))
         {
-            EssentialsCore.Logger.Warn($"Localization recursion where key = '{key}'");
+            EssentialCore.Logger.Warn($"Localization recursion where key = '{key}'");
 
             return key;
         }
@@ -197,11 +196,11 @@ public class LocalizationProvider : ILocalizationProvider
 
         if (!file.Exists)
         {
-            EssentialsCore.Logger.Warn($"Could not load dictionary for {Localization.CurrentCulture}, file not found: {file}");
+            EssentialCore.Logger.Warn($"Could not load dictionary for {Localization.CurrentCulture}, file not found: {file}");
             return false;
         }
 
-        EssentialsCore.Logger.Info($"Loading Dictionary {Localization.CurrentCulture} ({file})");
+        EssentialCore.Logger.Info($"Loading Dictionary {Localization.CurrentCulture} ({file})");
         
         var localizationFile = new LocalizationFile();
         localizationFile.LoadFromPO(file);

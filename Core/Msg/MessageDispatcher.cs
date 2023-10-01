@@ -269,7 +269,7 @@ public class MessageDispatcher : ITelegraph
 
             if (this.DebugEnabled)
             {
-                EssentialsCore.Logger.Info($"Instant telegram dispatched at time: {EssentialsCore.GameTime} by {sender} for {receiver}. Message code is {message}");
+                EssentialCore.Logger.Info($"Instant telegram dispatched at time: {EssentialCore.GameTime} by {sender} for {receiver}. Message code is {message}");
             }
 
             // Send the telegram to the recipient
@@ -278,7 +278,7 @@ public class MessageDispatcher : ITelegraph
         else
         {
             // Set the timestamp for the delayed telegram
-            telegram.Timestamp = EssentialsCore.GameTime + delay;
+            telegram.Timestamp = EssentialCore.GameTime + delay;
 
             // Put the telegram in the queue
             bool added = this.queue.Add(telegram);
@@ -293,11 +293,11 @@ public class MessageDispatcher : ITelegraph
             {
                 if (added)
                 {
-                    EssentialsCore.Logger.Info($"Delayed telegram from {sender} for {receiver} recorded at time {EssentialsCore.GameTime}. Message code is {message}");
+                    EssentialCore.Logger.Info($"Delayed telegram from {sender} for {receiver} recorded at time {EssentialCore.GameTime}. Message code is {message}");
                 }
                 else
                 {
-                    EssentialsCore.Logger.Info($"Delayed telegram from {sender} for {receiver} rejected by the queue. Message code is {message}");
+                    EssentialCore.Logger.Info($"Delayed telegram from {sender} for {receiver} rejected by the queue. Message code is {message}");
                 }
             }
         }
@@ -323,14 +323,14 @@ public class MessageDispatcher : ITelegraph
         while ((telegram = this.queue.Peek()) != null)
         {
             // Exit loop if the telegram is in the future
-            if (telegram.Timestamp > EssentialsCore.GameTime)
+            if (telegram.Timestamp > EssentialCore.GameTime)
             {
                 break;
             }
 
             if (this.DebugEnabled)
             {
-                EssentialsCore.Logger.Info($"Queued telegram ready for dispatch: Sent to {telegram.Receiver}. Message code is {telegram.Message}");
+                EssentialCore.Logger.Info($"Queued telegram ready for dispatch: Sent to {telegram.Receiver}. Message code is {telegram.Message}");
             }
             
             // Send the telegram to the recipient
@@ -355,7 +355,7 @@ public class MessageDispatcher : ITelegraph
         {
             Telegram telegram = this.queue.Get(i);
             callback.Report(
-                telegram.Timestamp - EssentialsCore.GameTime,
+                telegram.Timestamp - EssentialCore.GameTime,
                 telegram.Sender,
                 telegram.Receiver,
                 telegram.Message,
@@ -380,7 +380,7 @@ public class MessageDispatcher : ITelegraph
                 // Telegram could not be handled
                 if (this.DebugEnabled)
                 {
-                    EssentialsCore.Logger.Info($"Message {telegram.Message} not handled");
+                    EssentialCore.Logger.Info($"Message {telegram.Message} not handled");
                 }
             }
         }
@@ -403,7 +403,7 @@ public class MessageDispatcher : ITelegraph
             // Telegram could not be handled
             if (this.DebugEnabled && handledCount == 0)
             {
-                EssentialsCore.Logger.Info($"Message {telegram.Message} not handled");
+                EssentialCore.Logger.Info($"Message {telegram.Message} not handled");
             }
         }
 

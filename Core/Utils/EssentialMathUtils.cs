@@ -135,8 +135,8 @@ public static class EssentialMathUtils
         double v1, v2, s;
         do
         {
-            v1 = 2 * EssentialsCore.Random.Randf() - 1; // between -1 and 1
-            v2 = 2 * EssentialsCore.Random.Randf() - 1; // between -1 and 1
+            v1 = 2 * EssentialCore.Random.Randf() - 1; // between -1 and 1
+            v2 = 2 * EssentialCore.Random.Randf() - 1; // between -1 and 1
             s = v1 * v1 + v2 * v2;
         }
         while (s >= 1 || Math.Abs(s) < DoubleEpsilon);
@@ -149,12 +149,12 @@ public static class EssentialMathUtils
 
     public static double RandomTriangular(double high)
     {
-        return (EssentialsCore.Random.Randf() - EssentialsCore.Random.Randf()) * high;
+        return (EssentialCore.Random.Randf() - EssentialCore.Random.Randf()) * high;
     }
 
     public static double RandomTriangular(double low, double high, double mode)
     {
-        double u = EssentialsCore.Random.Randf();
+        double u = EssentialCore.Random.Randf();
         double d = high - low;
         if (u <= (mode - low) / d)
         {
@@ -166,12 +166,12 @@ public static class EssentialMathUtils
 
     public static float RandomTriangular(float high)
     {
-        return (EssentialsCore.Random.Randf() - EssentialsCore.Random.Randf()) * high;
+        return (EssentialCore.Random.Randf() - EssentialCore.Random.Randf()) * high;
     }
 
     public static float RandomTriangular(float low, float high, float mode)
     {
-        float u = EssentialsCore.Random.Randf();
+        float u = EssentialCore.Random.Randf();
         float d = high - low;
         if (u <= (mode - low) / d)
         {

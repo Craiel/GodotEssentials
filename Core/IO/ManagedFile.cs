@@ -283,7 +283,7 @@ public class ManagedFile : ManagedPath
         }
         catch (Exception e)
         {
-            EssentialsCore.Logger.Error($"Failed to copy file {this} to {target}", e);
+            EssentialCore.Logger.Error($"Failed to copy file {this} to {target}", e);
         }
 
         return false;

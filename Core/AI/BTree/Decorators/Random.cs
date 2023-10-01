@@ -90,7 +90,7 @@ namespace Craiel.Essentials.Runtime.AI.BTree.Decorators;
     // -------------------------------------------------------------------
     private void Decide()
     {
-        if (EssentialsCore.Random.Randf() <= this.value)
+        if (EssentialCore.Random.Randf() <= this.value)
         {
             this.Success();
         }

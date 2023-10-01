@@ -59,7 +59,7 @@ public class ResourceMap<T> where T : class
     {
         if (this.resources.Contains(source))
         {
-            EssentialsCore.Logger.Error("Resource {0} was already loaded, can not add as a link");
+            EssentialCore.Logger.Error("Resource {0} was already loaded, can not add as a link");
             return;
         }
 
@@ -71,7 +71,7 @@ public class ResourceMap<T> where T : class
             }
             else
             {
-                EssentialsCore.Logger.Error($"Resource {source} was already linked to {this.linkToResource[source]}, skipping link to {target}");
+                EssentialCore.Logger.Error($"Resource {source} was already linked to {this.linkToResource[source]}, skipping link to {target}");
                 return;
             }
         }
@@ -93,7 +93,7 @@ public class ResourceMap<T> where T : class
         if (!this.links.Contains(source))
         {
             // Link was not registered
-            EssentialsCore.Logger.Warn($"Unregister link called with non existing key {source}");
+            EssentialCore.Logger.Warn($"Unregister link called with non existing key {source}");
             return;
         }
 
@@ -141,7 +141,7 @@ public class ResourceMap<T> where T : class
     {
         if (!this.data.ContainsKey(key))
         {
-            EssentialsCore.Logger.Warn($"Unregister Resource called with non existing key {key}");
+            EssentialCore.Logger.Warn($"Unregister Resource called with non existing key {key}");
             return;
         }
 
@@ -235,7 +235,7 @@ public class ResourceMap<T> where T : class
     {
         if (depth > KeyLookupMaxDepth)
         {
-            EssentialsCore.Logger.Error("ResourceKey lookup exceeded max depth, probably circular resource link!");
+            EssentialCore.Logger.Error("ResourceKey lookup exceeded max depth, probably circular resource link!");
             return null;
         }
 

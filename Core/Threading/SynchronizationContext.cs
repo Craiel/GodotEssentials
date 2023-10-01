@@ -2,18 +2,18 @@
 
 using System.Threading;
 
-public class UnitySynchronizationContext : SynchronizationContext
+public class SynchronizationContext : System.Threading.SynchronizationContext
 {
     // -------------------------------------------------------------------
     // Public
     // -------------------------------------------------------------------
     public override void Post(SendOrPostCallback d, object state)
     {
-        UnitySynchronizationDispatcher.Instance.InvokeLater(() => { d.Invoke(state); });
+        EssentialCore.Synchronization.InvokeLater(() => { d.Invoke(state); });
     }
 
     public override void Send(SendOrPostCallback d, object state)
     {
-        UnitySynchronizationDispatcher.Instance.InvokeLater(() => { d.Invoke(state); });
+        EssentialCore.Synchronization.InvokeLater(() => { d.Invoke(state); });
     }
 }

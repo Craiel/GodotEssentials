@@ -2,29 +2,32 @@
 
 using System;
 using Contracts;
-using Singletons;
+using EngineCore;
 
-public class GameEvents : GodotSingleton<GameEvents>
+public class GameEvents : IGameModule
 {
     private BaseEventAggregate<IGameEvent> aggregate;
 
     // -------------------------------------------------------------------
     // Public
     // -------------------------------------------------------------------
-    public override void Initialize()
+    public void Initialize()
     {
-        base.Initialize();
-
         this.aggregate = new BaseEventAggregate<IGameEvent>();
+    }
+
+    public void Update(double delta)
+    {
+    }
+
+    public void Destroy()
+    {
     }
 
     public static void Send<T>(T eventData)
         where T : IGameEvent
     {
-        if (IsInstanceActive)
-        {
-            Instance.DoSend(eventData);
-        }
+        EssentialCore.GameEvents.DoSend(eventData);
     }
 
     public static void Subscribe<TSpecific>(BaseEventAggregate<IGameEvent>.GameEventAction<TSpecific> actionDelegate, 
@@ -32,19 +35,12 @@ public class GameEvents : GodotSingleton<GameEvents>
         Func<TSpecific, bool> filterDelegate = null)
         where TSpecific : IGameEvent
     {
-        ticket = null;
-        if (IsInstanceActive)
-        {
-            ticket = Instance.DoSubscribe(actionDelegate, filterDelegate);
-        }
+        ticket = EssentialCore.GameEvents.DoSubscribe(actionDelegate, filterDelegate);
     }
     
     public static void Unsubscribe(ref BaseEventSubscriptionTicket ticket)
     {
-        if (IsInstanceActive)
-        {
-            Instance.DoUnsubscribe(ref ticket);
-        }
+        EssentialCore.GameEvents.DoUnsubscribe(ref ticket);
     }
 
     // -------------------------------------------------------------------

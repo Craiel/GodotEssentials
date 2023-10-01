@@ -1,9 +1,8 @@
 namespace Craiel.Essentials.Runtime.TweenLite;
 
 using EngineCore;
-using Singletons;
 
-public partial class TweenLiteSystem : GodotSingleton<TweenLiteSystem>
+public partial class TweenLiteSystem : IGameModule
 {
     private readonly TicketProviderManaged<TweenLiteTicket, TweenLiteNode> activeTweens;
 
@@ -31,11 +30,19 @@ public partial class TweenLiteSystem : GodotSingleton<TweenLiteSystem>
         ticket = TweenLiteTicket.Invalid;
     }
 
+    public void Initialize()
+    {
+    }
+
     public void Update(double delta)
     {
         this.activeTweens.Update(delta);
     }
-    
+
+    public void Destroy()
+    {
+    }
+
     // -------------------------------------------------------------------
     // Private
     // -------------------------------------------------------------------

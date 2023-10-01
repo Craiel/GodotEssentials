@@ -1,4 +1,4 @@
-﻿namespace Craiel.Essentials.Runtime.EngineCore;
+﻿/*namespace Craiel.Essentials.Runtime.EngineCore;
 
 using System;
 using System.Collections.Generic;
@@ -37,7 +37,7 @@ public abstract partial class EssentialEngineCore<T, TSceneEnum>
     {
         if (!this.scenes.ContainsKey(type))
         {
-            EssentialsCore.Logger.Warn($"Scene {type} is not loaded, skipping shutdown");
+            EssentialCore.Logger.Warn($"Scene {type} is not loaded, skipping shutdown");
             return;
         }
 
@@ -62,23 +62,24 @@ public abstract partial class EssentialEngineCore<T, TSceneEnum>
     {
         if (this.scenes.ContainsKey(type))
         {
-            EssentialsCore.Logger.Warn($"Scene {type} is already loaded, skipping");
+            EssentialCore.Logger.Warn($"Scene {type} is already loaded, skipping");
             return null;
         }
 
         Type implementation;
         if (!this.sceneImplementations.TryGetValue(type, out implementation))
         {
-            EssentialsCore.Logger.Error($"Scene {type} has no implementation defined!");
+            EssentialCore.Logger.Error($"Scene {type} has no implementation defined!");
             return null;
         }
 
         if (!TypeCache<BaseScene<TSceneEnum>>.Value.IsAssignableFrom(implementation))
         {
-            EssentialsCore.Logger.Error($"Scene implementation {implementation} is not of type IGameScene!");
+            EssentialCore.Logger.Error($"Scene implementation {implementation} is not of type IGameScene!");
             return null;
         }
 
         return (BaseScene<TSceneEnum>)Activator.CreateInstance(implementation);
     }
 }
+*/

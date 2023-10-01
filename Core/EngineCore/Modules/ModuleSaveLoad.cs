@@ -31,8 +31,8 @@ public class ModuleSaveLoad : GameModuleLite
     {
         this.register = new HashSet<SaveDataId>();
         
-        this.saveRoot = EssentialsCore.DefaultSavePath;
-        this.savePrefix = EssentialsCore.DefaultSavePrefix;
+        this.saveRoot = EssentialCore.DefaultSavePath;
+        this.savePrefix = EssentialCore.DefaultSavePrefix;
         this.saveSuffix = "";
         this.Mode = SaveLoadMode.PlayerPrefs;
     }
@@ -169,6 +169,11 @@ public class ModuleSaveLoad : GameModuleLite
                 var registerKey = string.Concat(PlayerPrefsPrefix, PlayerPrefsRegisterPrefix, SaveVersionInternal);
 
                 string data = PlayerPrefs.GetString(registerKey);
+                if (string.IsNullOrEmpty(data))
+                {
+                    return;
+                }
+                
                 string[] idList = data.Split(PlayerPrefsDataSeparator);
                 foreach (string id in idList)
                 {
@@ -282,7 +287,7 @@ public class ModuleSaveLoad : GameModuleLite
                 string data = PlayerPrefs.GetString(PlayerPrefsPrefix + key.Id);
                 if (string.IsNullOrEmpty(data))
                 {
-                    EssentialsCore.Logger.Warn("PlayerPrefs data was empty!");
+                    EssentialCore.Logger.Warn("PlayerPrefs data was empty!");
                     return null;
                 }
 
@@ -294,7 +299,7 @@ public class ModuleSaveLoad : GameModuleLite
                 ManagedFile file = this.GetSavePath(key);
                 if (!file.Exists)
                 {
-                    EssentialsCore.Logger.Warn($"Load called on non-existing save: {key} -> {file}");
+                    EssentialCore.Logger.Warn($"Load called on non-existing save: {key} -> {file}");
                     return null;
                 }
                 
@@ -307,14 +312,14 @@ public class ModuleSaveLoad : GameModuleLite
                         reader.Read(header, 0, header.Length);
                         if (!header.SequenceEqual(SaveHeaderInternal))
                         {
-                            EssentialsCore.Logger.Warn("Load called on invalid save file");
+                            EssentialCore.Logger.Warn("Load called on invalid save file");
                             return null;
                         }
                         
                         ushort version = reader.ReadUInt16();
                         if (version < SaveVersionInternal)
                         {
-                            EssentialsCore.Logger.Warn("Load called on outdated save file");
+                            EssentialCore.Logger.Warn("Load called on outdated save file");
                             return null;
                         }
                         

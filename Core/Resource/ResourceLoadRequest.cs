@@ -12,6 +12,16 @@ public class ResourceLoadRequest : IResourceRequest
     // -------------------------------------------------------------------
     // Constructor
     // -------------------------------------------------------------------
+    public ResourceLoadRequest(ResourceLoadInfo info, Error threadedStatus)
+    {
+        if (threadedStatus != Error.Ok)
+        {
+            throw new InvalidOperationException("Resource Load Failed: " + threadedStatus);
+        }
+        
+        this.Mode = ResourceLoadMode.Async;
+    }
+    
     public ResourceLoadRequest(ResourceLoadInfo info, Resource asset)
         : this(info)
     {
@@ -38,14 +48,19 @@ public class ResourceLoadRequest : IResourceRequest
             switch (this.Mode)
             {
                 case ResourceLoadMode.Assigned:
-                    {
-                        return true;
-                    }
+                {
+                    return true;
+                }
+
+                case ResourceLoadMode.Async:
+                {
+                    return ResourceLoader.LoadThreadedGetStatus(this.Info.Key.Path) == ResourceLoader.ThreadLoadStatus.Loaded;
+                }
 
                 default:
-                    {
-                        throw new NotImplementedException();
-                    }
+                {
+                    throw new NotImplementedException();
+                }
             }
         }
     }

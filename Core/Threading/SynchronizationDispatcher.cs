@@ -2,9 +2,9 @@
 
 using System;
 using System.Collections.Generic;
-using Singletons;
+using EngineCore;
 
-public class UnitySynchronizationDispatcher : GodotSingleton<UnitySynchronizationDispatcher>
+public class SynchronizationDispatcher : IGameModule
 {
     private static readonly Queue<Action> Tasks = new Queue<Action>();
     private static readonly IList<Action> TaskCache = new List<Action>();
@@ -18,6 +18,10 @@ public class UnitySynchronizationDispatcher : GodotSingleton<UnitySynchronizatio
         {
             Tasks.Enqueue(task);
         }
+    }
+
+    public void Initialize()
+    {
     }
 
     public void Update(double delta)
@@ -35,5 +39,9 @@ public class UnitySynchronizationDispatcher : GodotSingleton<UnitySynchronizatio
         {
             action.Invoke();
         }
+    }
+
+    public void Destroy()
+    {
     }
 }

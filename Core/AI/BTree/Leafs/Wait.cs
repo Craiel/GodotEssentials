@@ -58,7 +58,7 @@ public class Wait<T> : LeafTask<T>
     public override void Start()
     {
         this.timeout = this.Seconds.NextFloat();
-        this.startTime = EssentialsCore.GameTime;
+        this.startTime = EssentialCore.GameTime;
 
         base.Start();
     }
@@ -69,7 +69,7 @@ public class Wait<T> : LeafTask<T>
     /// <returns>Succeeded if the specified timeout has expired; Running otherwise</returns>
     protected override BTTaskStatus Execute()
     {
-        return EssentialsCore.GameTime - this.startTime < this.timeout ? BTTaskStatus.Running : BTTaskStatus.Succeeded;
+        return EssentialCore.GameTime - this.startTime < this.timeout ? BTTaskStatus.Running : BTTaskStatus.Succeeded;
     }
 
     protected override void CopyTo(Task<T> clone)

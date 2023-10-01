@@ -82,7 +82,7 @@ public class ManagedDirectory : ManagedPath
         {
             if (filter.Directory == null || filter.Directory.IsNull || !filter.Directory.Exists)
             {
-                EssentialsCore.Logger.Warn($"Specified directory is invalid: {filter.Directory}");
+                EssentialCore.Logger.Warn($"Specified directory is invalid: {filter.Directory}");
                 continue;
             }
 
@@ -116,7 +116,7 @@ public class ManagedDirectory : ManagedPath
         {
             if (filter.Directory.IsNull || !filter.Directory.Exists)
             {
-                EssentialsCore.Logger.Warn($"Specified directory is invalid: {filter.Directory}");
+                EssentialCore.Logger.Warn($"Specified directory is invalid: {filter.Directory}");
                 continue;
             }
 
@@ -207,7 +207,7 @@ public class ManagedDirectory : ManagedPath
     {
         if (this.Drive == null)
         {
-            EssentialsCore.Logger.Warn("GetFreeSpace called with no drive available!");
+            EssentialCore.Logger.Warn("GetFreeSpace called with no drive available!");
             return 0;
         }
 
@@ -337,7 +337,7 @@ public class ManagedDirectory : ManagedPath
     {
         if (!this.Exists)
         {
-            EssentialsCore.Logger.Error("Move called on non-existing source");
+            EssentialCore.Logger.Error("Move called on non-existing source");
             return false;
         }
 
@@ -349,7 +349,7 @@ public class ManagedDirectory : ManagedPath
             }
             else
             {
-                EssentialsCore.Logger.Error($"Can not move directory {this}, target exists: {target}");
+                EssentialCore.Logger.Error($"Can not move directory {this}, target exists: {target}");
                 return false;
             }
         }
@@ -366,7 +366,7 @@ public class ManagedDirectory : ManagedPath
     {
         if (!this.Exists)
         {
-            EssentialsCore.Logger.Error("Copy called on non-existing source");
+            EssentialCore.Logger.Error("Copy called on non-existing source");
             return 0;
         }
 
@@ -386,7 +386,7 @@ public class ManagedDirectory : ManagedPath
             ManagedFile targetFile = target.ToFile(file.Relative);
             if (targetFile.Exists && !overwrite)
             {
-                EssentialsCore.Logger.Error($"Copy would fail, target file exist and overwrite is set to false ({targetFile})");
+                EssentialCore.Logger.Error($"Copy would fail, target file exist and overwrite is set to false ({targetFile})");
                 return 0;
             }
         }

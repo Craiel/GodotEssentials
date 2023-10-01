@@ -24,7 +24,7 @@ public class Octree<T>
     {
         if (minNodeSize > initialSize)
         {
-            EssentialsCore.Logger.Info($"Minimum node size must be bigger or equal initial size: {minNodeSize} > {initialSize}");
+            EssentialCore.Logger.Info($"Minimum node size must be bigger or equal initial size: {minNodeSize} > {initialSize}");
             minNodeSize = initialSize;
         }
 
@@ -71,7 +71,7 @@ public class Octree<T>
 #if DEBUG
         if (Math.Abs(objPos.Length()) > EssentialMathUtils.MaxFloat)
         {
-            EssentialsCore.Logger.Error("Add Operation failed, coordinates are outside of safe range");
+            EssentialCore.Logger.Error("Add Operation failed, coordinates are outside of safe range");
             return false;
         }
 #endif
@@ -81,7 +81,7 @@ public class Octree<T>
         if (positionVector.X < this.root.Bounds.Position.X || positionVector.Y < this.root.Bounds.Position.Y ||
             positionVector.Z < this.root.Bounds.Position.Z)
         {
-            EssentialsCore.Logger.Error("Object position outside of octree lower bounds!");
+            EssentialCore.Logger.Error("Object position outside of octree lower bounds!");
             return false;
         }
         
@@ -100,7 +100,7 @@ public class Octree<T>
 
             if (++recursionCheck > OctreeConstants.RecursionCheckDepth)
             {
-                EssentialsCore.Logger.Info("Add Operation exceeded recursion check");
+                EssentialCore.Logger.Info("Add Operation exceeded recursion check");
                 return false;
             }
         }

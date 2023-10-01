@@ -7,7 +7,7 @@ public static class ResourceExtensions
     public static T LoadManaged<T>(this ResourceKey key)
         where T : Resource
     {
-        using (var resource = ResourceProvider.Instance.AcquireOrLoadResource<T>(key))
+        using (var resource = EssentialCore.ResourceProvider.AcquireOrLoadResource<T>(key))
         {
             if (resource == null)
             {

@@ -57,7 +57,7 @@ public static class ObjectExtensions
             if (!valueA.DeepCompare(valueB))
             {
 #if DEBUG
-                EssentialsCore.Logger.Warn($"DeepCompare failed on property {info.Name} of {compareType.Name}");
+                EssentialCore.Logger.Warn($"DeepCompare failed on property {info.Name} of {compareType.Name}");
 #endif
 
                 return false;

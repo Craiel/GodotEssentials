@@ -1,11 +1,9 @@
 namespace Craiel.Essentials.Runtime.I18N;
 
 using System.Globalization;
-using Godot;
-using IO;
-using Singletons;
+using EngineCore;
 
-public class LocalizationSystem : GodotSingleton<LocalizationSystem>
+public class LocalizationSystem : IGameModule
 {
     private const float AutoSaveInterval = 5 * 60;
     
@@ -16,14 +14,14 @@ public class LocalizationSystem : GodotSingleton<LocalizationSystem>
     // -------------------------------------------------------------------
     // Public
     // -------------------------------------------------------------------
-    public void Update()
+    public void Update(double delta)
     {
 #if DEBUG
-        if (EssentialsCore.GameTime > this.lastAutoSave + AutoSaveInterval)
+        if (EssentialCore.GameTime > this.lastAutoSave + AutoSaveInterval)
         {
-            EssentialsCore.Logger.Info($"Saving Localization: {this.provider.Root}");
+            EssentialCore.Logger.Info($"Saving Localization: {this.provider.Root}");
 
-            this.lastAutoSave = EssentialsCore.GameTime;
+            this.lastAutoSave = EssentialCore.GameTime;
 
             // TODO: Localization
             this.provider.SaveDictionary();
@@ -31,17 +29,24 @@ public class LocalizationSystem : GodotSingleton<LocalizationSystem>
 #endif
     }
 
-    public override void Initialize()
+    public void Initialize()
     {
-        base.Initialize();
-
         this.provider = new LocalizationProvider();
 
 #if DEBUG
-        this.provider.SetRoot(EssentialsCore.PersistentDataPath);
+        this.provider.SetRoot(EssentialCore.PersistentDataPath);
 #endif
-
+        
         Localization.Initialize(this.provider);
+    }
+
+    public void Load()
+    {
+        this.provider.ReloadDictionary();
+    }
+
+    public void Destroy()
+    {
     }
 
     public void SetCulture(CultureInfo culture)

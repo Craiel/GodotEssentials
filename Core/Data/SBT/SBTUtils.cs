@@ -209,7 +209,7 @@ public static class SBTUtils
             byte[] rawData = Serialize(node);
             if (rawData.Length <= CompressionWarningThreshold)
             {
-                EssentialsCore.Logger.Warn("SBT Compressed Serialize called on small data, use compression on large data sets only");
+                EssentialCore.Logger.Warn("SBT Compressed Serialize called on small data, use compression on large data sets only");
             }
 
             using(var zipStream = new GZipStream(stream, CompressionLevel.Optimal, true))

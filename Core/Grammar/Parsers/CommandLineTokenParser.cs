@@ -29,7 +29,7 @@ public static class CommandLineTokenParser
             Token token = tokens[currentToken++];
             if (token.Term?.Tag == null)
             {
-                EssentialsCore.Logger.Error($"Argument parsing failed for token {token}");
+                EssentialCore.Logger.Error($"Argument parsing failed for token {token}");
                 continue;
             }
 
@@ -42,7 +42,7 @@ public static class CommandLineTokenParser
                 {
                     if (mode != TranslationMode.None && mode != TranslationMode.GotSwitch)
                     {
-                        EssentialsCore.Logger.Error($"Unexpected switch term: {token}");
+                        EssentialCore.Logger.Error($"Unexpected switch term: {token}");
                         return false;
                     }
 
@@ -55,7 +55,7 @@ public static class CommandLineTokenParser
                 {
                     if (mode != TranslationMode.GotSwitch)
                     {
-                        EssentialsCore.Logger.Error($"Unexpected argument assignment: {token}");
+                        EssentialCore.Logger.Error($"Unexpected argument assignment: {token}");
                         return false;
                     }
 
@@ -67,7 +67,7 @@ public static class CommandLineTokenParser
                 {
                     if (mode != TranslationMode.ExpectArgument && mode != TranslationMode.GotSwitch)
                     {
-                        EssentialsCore.Logger.Error($"Unexpected string: {token}");
+                        EssentialCore.Logger.Error($"Unexpected string: {token}");
                         return false;
                     }
 
@@ -92,7 +92,7 @@ public static class CommandLineTokenParser
                         continue;
                     }
 
-                    EssentialsCore.Logger.Error($"Unexpected identifier: {token}");
+                    EssentialCore.Logger.Error($"Unexpected identifier: {token}");
                     return false;
                 }
 

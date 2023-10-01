@@ -1,4 +1,4 @@
-﻿namespace Craiel.Essentials.Runtime.EngineCore;
+﻿/*namespace Craiel.Essentials.Runtime.EngineCore;
 
 using System;
 using System.Collections.Generic;
@@ -44,11 +44,11 @@ public abstract partial class EssentialEngineCore<T, TSceneEnum>
         if (this.ActiveSceneType.HasValue 
             && EqualityComparer<TSceneEnum>.Default.Equals(this.ActiveSceneType.Value, type))
         {
-            EssentialsCore.Logger.Warn("Transition target and active scene are the same, skipping!");
+            EssentialCore.Logger.Warn("Transition target and active scene are the same, skipping!");
             return;
         }
 
-        EssentialsCore.Logger.Info($"Transitioning to {type}");
+        EssentialCore.Logger.Info($"Transitioning to {type}");
         
         GameEvents.Send(new EventSceneTransitionStarting(type));
 
@@ -95,7 +95,7 @@ public abstract partial class EssentialEngineCore<T, TSceneEnum>
             this.activeScene = this.scenes[this.transitionTarget];
             this.activeScene.SetData(this.transitionData);
 
-            EssentialsCore.Logger.Info($"Activated target scene {this.transitionTarget}");
+            EssentialCore.Logger.Info($"Activated target scene {this.transitionTarget}");
         }
 
         if (this.activeScene.ContinueLoad(this.transitionStep))
@@ -110,7 +110,7 @@ public abstract partial class EssentialEngineCore<T, TSceneEnum>
         }
 
         // We are done transitioning
-        EssentialsCore.Logger.Info($"Transition to {this.transitionTarget} completed");
+        EssentialCore.Logger.Info($"Transition to {this.transitionTarget} completed");
 
         this.transitioning = false;
         this.ActiveSceneType = this.activeScene.Type;
@@ -241,3 +241,4 @@ public abstract partial class EssentialEngineCore<T, TSceneEnum>
         }
     }
 }
+*/

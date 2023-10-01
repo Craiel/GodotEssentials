@@ -4,15 +4,15 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using EngineCore;
 using Enums;
 using Godot;
-using Singletons;
 using Utils;
 
 public delegate void OnResourceLoadingDelegate(ResourceLoadInfo info);
 public delegate void OnResourceLoadedDelegate(ResourceLoadInfo info, long loadTime);
 
-public class ResourceProvider : GodotSingleton<ResourceProvider>
+public class ResourceProvider : IGameModule
 {
     private const int DefaultRequestPoolSize = 30;
 
@@ -23,7 +23,6 @@ public class ResourceProvider : GodotSingleton<ResourceProvider>
     private readonly IDictionary<ResourceKey, int> referenceCount;
 
     private readonly Queue<ResourceLoadInfo> currentPendingLoads;
-    private readonly IList<Resource> pendingInstantiations;
 
     private readonly ResourceRequestPool<ResourceLoadRequest> requestPool;
 
@@ -40,7 +39,6 @@ public class ResourceProvider : GodotSingleton<ResourceProvider>
         this.referenceCount = new Dictionary<ResourceKey, int>();
 
         this.currentPendingLoads = new Queue<ResourceLoadInfo>();
-        this.pendingInstantiations = new List<Resource>();
 
         this.requestPool = new ResourceRequestPool<ResourceLoadRequest>(DefaultRequestPoolSize);
 
@@ -67,8 +65,6 @@ public class ResourceProvider : GodotSingleton<ResourceProvider>
 
     public bool EnableHistory { get; set; }
 
-    public bool EnableInstantiation { get; set; }
-
     public ResourceRequestPool<ResourceLoadRequest> RequestPool
     {
         get
@@ -76,23 +72,35 @@ public class ResourceProvider : GodotSingleton<ResourceProvider>
             return this.requestPool;
         }
     }
+    
+    public void Initialize()
+    {
+    }
+
+    public void Update(double delta)
+    {
+    }
+
+    public void Destroy()
+    {
+    }
 
     public static T SingletonResource<T>()
         where T : Resource
     {
-        IList<ResourceKey> resources = Instance.AcquireResourcesByType<T>();
+        IList<ResourceKey> resources = EssentialCore.ResourceProvider.AcquireResourcesByType<T>();
         if (resources == null || resources.Count != 1)
         {
-            EssentialsCore.Logger.Warn($"Expected 1 result for {TypeCache<T>.Value}");
+            EssentialCore.Logger.Warn($"Expected 1 result for {TypeCache<T>.Value}");
             return null;
         }
 
-        return Instance.AcquireResource<T>(resources.First()).Data;
+        return EssentialCore.ResourceProvider.AcquireResource<T>(resources.First()).Data;
     }
 
     public static Resource LoadImmediate(ResourceKey key)
     {
-        return Resources.Load(key.Path, key.Type ?? TypeCache<Resource>.Value);
+        return ResourceLoader.Load(key.Path, key.Type != null ? key.Type.ToString() : TypeCache<Resource>.Value.ToString());
     }
 
     // Note: Use this only when we can not do an async loading, avoid if possible
@@ -131,11 +139,6 @@ public class ResourceProvider : GodotSingleton<ResourceProvider>
 
         lock (this.currentPendingLoads)
         {
-            if (!this.EnableInstantiation)
-            {
-                flags &= ~ResourceLoadFlags.Instantiate;
-            }
-
             this.currentPendingLoads.Enqueue(new ResourceLoadInfo(key, flags));
         }
     }
@@ -144,7 +147,7 @@ public class ResourceProvider : GodotSingleton<ResourceProvider>
     {
         if (this.fallbackResources.ContainsKey(key.Type))
         {
-            EssentialsCore.Logger.Warn($"Duplicate fallback resource registered for type {key.Type}");
+            EssentialCore.Logger.Warn($"Duplicate fallback resource registered for type {key.Type}");
             return;
         }
 
@@ -173,7 +176,7 @@ public class ResourceProvider : GodotSingleton<ResourceProvider>
         ResourceReference<T> result;
         if (!this.TryAcquireOrLoadResource(key, out result, flags))
         {
-            EssentialsCore.Logger.Error("Could not load resource on-demand");
+            EssentialCore.Logger.Error("Could not load resource on-demand");
         }
 
         return result;
@@ -212,7 +215,7 @@ public class ResourceProvider : GodotSingleton<ResourceProvider>
             data = this.AcquireFallbackResource<T>();
             if (data == null)
             {
-                EssentialsCore.Logger.Error($"Resource was not loaded or registered: {key}");
+                EssentialCore.Logger.Error($"Resource was not loaded or registered: {key}");
                 return null;
             }
         }
@@ -299,9 +302,7 @@ public class ResourceProvider : GodotSingleton<ResourceProvider>
             this.requestPool.AddRequest(DoLoad(info));
         }
 
-        this.CleanupPendingInstantiations();
-
-        return this.currentPendingLoads.Count > 0 || this.requestPool.HasPendingRequests() || this.pendingInstantiations.Count > 0;
+        return this.currentPendingLoads.Count > 0 || this.requestPool.HasPendingRequests();
     }
 
     public void LoadImmediate()
@@ -321,7 +322,7 @@ public class ResourceProvider : GodotSingleton<ResourceProvider>
             }
         }
 
-        EssentialsCore.Logger.Info($"Immediate! Loaded {resourceCount} resources in {-1}ms");
+        EssentialCore.Logger.Info($"Immediate! Loaded {resourceCount} resources in {-1}ms");
     }
 
     // -------------------------------------------------------------------
@@ -329,7 +330,7 @@ public class ResourceProvider : GodotSingleton<ResourceProvider>
     // -------------------------------------------------------------------
     private static ResourceLoadRequest DoLoad(ResourceLoadInfo info)
     {
-        ResourceRequest request = Resources.LoadAsync(info.Key.Path, info.Key.Type);
+        Error request = ResourceLoader.LoadThreadedRequest(info.Key.Path, info.Key.Type.ToString());
         return new ResourceLoadRequest(info, request);
     }
 
@@ -338,7 +339,7 @@ public class ResourceProvider : GodotSingleton<ResourceProvider>
     {
         if (!(data is T))
         {
-            EssentialsCore.Logger.Error($"Type requested {TypeCache<T>.Value} did not match the registered key type {key.Type} for {key}");
+            EssentialCore.Logger.Error($"Type requested {TypeCache<T>.Value} did not match the registered key type {key.Type} for {key}");
             return null;
         }
 
@@ -390,7 +391,7 @@ public class ResourceProvider : GodotSingleton<ResourceProvider>
 
         if (data == null)
         {
-            EssentialsCore.Logger.Warn($"Loading {request.Info.Key} returned null data");
+            EssentialCore.Logger.Warn($"Loading {request.Info.Key} returned null data");
             return;
         }
 
@@ -406,19 +407,6 @@ public class ResourceProvider : GodotSingleton<ResourceProvider>
             }
         }
 
-        if ((request.Info.Flags & ResourceLoadFlags.Instantiate) != 0 && data is GameObject)
-        {
-            try
-            {
-                var instance = Resource.Instantiate(data) as GameObject;
-                this.pendingInstantiations.Add(instance);
-            }
-            catch (Exception e)
-            {
-                EssentialsCore.Logger.Error($"Failed to instantiate resource {request.Info.Key} on load: {e}");
-            }
-        }
-
         this.resourceMap.SetData(request.Info.Key, request);
 
         this.ResourcesLoaded++;
@@ -426,16 +414,6 @@ public class ResourceProvider : GodotSingleton<ResourceProvider>
         {
             this.ResourceLoaded(request.Info, 1);
         }
-    }
-
-    private void CleanupPendingInstantiations()
-    {
-        foreach (Resource resource in this.pendingInstantiations)
-        {
-            Resource.Destroy(resource);
-        }
-
-        this.pendingInstantiations.Clear();
     }
 
     private Resource AcquireFallbackResource<T>()

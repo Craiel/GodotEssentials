@@ -1,4 +1,4 @@
-﻿namespace Craiel.Essentials.Runtime.Scene;
+﻿/*namespace Craiel.Essentials.Runtime.Scene;
 
 using System;
 using System.Collections.Generic;
@@ -120,7 +120,7 @@ public abstract class BaseScene<TSceneEnum>
         catch (Exception e)
         {
             this.HadErrors = true;
-            EssentialsCore.Logger.Error($"Error in Load of Scene {this.GetType()}({step}): {e}");
+            EssentialCore.Logger.Error($"Error in Load of Scene {this.GetType()}({step}): {e}");
             return true;
         }
     }
@@ -171,7 +171,7 @@ public abstract class BaseScene<TSceneEnum>
         catch (Exception e)
         {
             this.HadErrors = true;
-            EssentialsCore.Logger.Error($"Error in Destroy of Scene {this.GetType()}({step}): {e}");
+            EssentialCore.Logger.Error($"Error in Destroy of Scene {this.GetType()}({step}): {e}");
             return true;
         }
     }
@@ -341,7 +341,7 @@ public abstract class BaseScene<TSceneEnum>
     {
         if (this.UseAsyncLoading)
         {
-            if (ResourceProvider.Instance.ContinueLoad())
+            if (EssentialCore.ResourceProvider.ContinueLoad())
             {
                 return true;
             }
@@ -349,7 +349,8 @@ public abstract class BaseScene<TSceneEnum>
             return false;
         }
 
-        ResourceProvider.Instance.LoadImmediate();
+        EssentialCore.ResourceProvider.LoadImmediate();
         return false;
     }
 }
+*/

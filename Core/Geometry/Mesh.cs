@@ -169,7 +169,7 @@ public class Mesh : IEnumerable<Triangle3Indexed>
                 || triangle.B < 0 || triangle.B >= this.Vertices.Count
                 || triangle.C < 0 || triangle.C >= this.Vertices.Count)
             {
-                EssentialsCore.Logger.Error($" - Invalid Triangle {i} / {this.Triangles.Count}: {triangle}");
+                EssentialCore.Logger.Error($" - Invalid Triangle {i} / {this.Triangles.Count}: {triangle}");
                 result = false;
             }
         }

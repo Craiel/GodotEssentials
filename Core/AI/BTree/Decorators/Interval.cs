@@ -32,7 +32,7 @@ public class Interval<T> : Decorator<T>
         : base(child)
     {
         this.Delay = delay;
-        this.startTime = EssentialsCore.GameTime;
+        this.startTime = EssentialCore.GameTime;
     }
 
     // -------------------------------------------------------------------
@@ -46,14 +46,14 @@ public class Interval<T> : Decorator<T>
     
     public override void Run()
     {
-        if (this.startTime + this.Delay < EssentialsCore.GameTime)
+        if (this.startTime + this.Delay < EssentialCore.GameTime)
         {
             // Not enough time passed
             this.Success();
             return;
         }
 
-        this.startTime = EssentialsCore.GameTime;
+        this.startTime = EssentialCore.GameTime;
         base.Run();
     }
 }

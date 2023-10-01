@@ -39,7 +39,7 @@ public static class MeshUtils
             if (!IsVertexValid(vertices[indexed.A]) || !IsVertexValid(vertices[indexed.B]) || !IsVertexValid(vertices[indexed.C]))
             {
                 // This triangle has invalid vertices, ignore
-                EssentialsCore.Logger.Warn("- Triangle Vertex out of safe range, skipping!");
+                EssentialCore.Logger.Warn("- Triangle Vertex out of safe range, skipping!");
                 continue;
             }
 
@@ -88,7 +88,7 @@ public static class MeshUtils
 
         if (cleanVertices.Count != vertices.Count)
         {
-            EssentialsCore.Logger.Info($"- {vertices.Count - cleanVertices.Count} orphan vertices");
+            EssentialCore.Logger.Info($"- {vertices.Count - cleanVertices.Count} orphan vertices");
         }
     }
 

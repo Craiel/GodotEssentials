@@ -232,7 +232,7 @@ public class Tokenizer : ITokenizer<Token>
         
         if (potentialMatches.Count > 1)
         {
-            EssentialsCore.Logger.Error("Conflicting keyword: " + data.PendingContent);
+            EssentialCore.Logger.Error("Conflicting keyword: " + data.PendingContent);
         }
         
         return false;

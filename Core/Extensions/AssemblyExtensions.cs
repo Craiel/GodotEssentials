@@ -47,7 +47,7 @@ public static class AssemblyExtensions
         Assembly[] assemblies = domain.GetAssemblies();
         if (assemblies.Length <= 0)
         {
-            EssentialsCore.Logger.Warn($"Could not locate any assemblies in domain {domain}");
+            EssentialCore.Logger.Warn($"Could not locate any assemblies in domain {domain}");
             return null;
         }
 
@@ -146,7 +146,7 @@ public static class AssemblyExtensions
         {
             if (stream == null)
             {
-                EssentialsCore.Logger.Error($"Could not Open Resource Stream: {resourcePath}");
+                EssentialCore.Logger.Error($"Could not Open Resource Stream: {resourcePath}");
                 return null;
             }
             
@@ -163,7 +163,7 @@ public static class AssemblyExtensions
         string[] resources = assembly.GetManifestResourceNames();
         if (resources.Length <= 0)
         {
-            EssentialsCore.Logger.Warn($"No resource to load for {assembly}");
+            EssentialCore.Logger.Warn($"No resource to load for {assembly}");
             return null;
         }
 
@@ -217,7 +217,7 @@ public static class AssemblyExtensions
             using (var writer = targetFile.OpenCreate())
             {
                 writer.Write(resources[file], 0, resources[file].Length);
-                EssentialsCore.Logger.Info($"Extracted {targetFile} ({targetFile.Size})");
+                EssentialCore.Logger.Info($"Extracted {targetFile} ({targetFile.Size})");
             }
         }
 

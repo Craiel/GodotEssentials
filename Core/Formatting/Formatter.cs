@@ -130,7 +130,7 @@ public class Formatter : IFormatter
             return ((FormatHandler)handlerValue).Evaluate(parameter);
         }
 
-        EssentialsCore.Logger.Error($"Unknown Handler ({handlerType}) for GetFormatted Value of {key}");
+        EssentialCore.Logger.Error($"Unknown Handler ({handlerType}) for GetFormatted Value of {key}");
         return string.Empty;
     }
 
