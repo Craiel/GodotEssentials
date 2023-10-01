@@ -44,7 +44,7 @@ public abstract class GameComponent : DelayedLoadedObject
         
         foreach (IntervalTrigger trigger in this.intervals)
         {
-            trigger.Update(Time.time);
+            trigger.Update(EssentialsCore.GameTime);
         }
     }
     

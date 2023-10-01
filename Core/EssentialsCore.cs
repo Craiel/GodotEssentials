@@ -12,7 +12,7 @@ public static class EssentialsCore
     
     public const string LocalizationIgnoreString = "XX_";
     
-    public static DateTime StartTime = DateTime.Now;
+    public static RandomNumberGenerator Random = new();
     
     public static readonly string ProjectName = ProjectSettings.GetSetting("application/config/name").AsString();
     
@@ -23,5 +23,7 @@ public static class EssentialsCore
 
     public static GodotLogRelay Logger = new();
 
-    public static TimeSpan GameTime => DateTime.Now - StartTime;
+    public static float GameTime => Time.GetTicksMsec() / 1000f;
+    
+    public static float StartTime = GameTime;
 }

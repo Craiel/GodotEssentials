@@ -1,12 +1,13 @@
 namespace Craiel.Essentials.Runtime.I18N;
 
 using System.Globalization;
+using Godot;
 using IO;
 using Singletons;
 
 public class LocalizationSystem : GodotSingleton<LocalizationSystem>
 {
-    private const float AutoSaveInterval = 60 * 5;
+    private const float AutoSaveInterval = 5 * 60;
     
     private LocalizationProvider provider;
 
@@ -18,11 +19,11 @@ public class LocalizationSystem : GodotSingleton<LocalizationSystem>
     public void Update()
     {
 #if DEBUG
-        if (Time.time > this.lastAutoSave + AutoSaveInterval)
+        if (EssentialsCore.GameTime > this.lastAutoSave + AutoSaveInterval)
         {
             EssentialsCore.Logger.Info($"Saving Localization: {this.provider.Root}");
 
-            this.lastAutoSave = Time.time;
+            this.lastAutoSave = EssentialsCore.GameTime;
 
             // TODO: Localization
             this.provider.SaveDictionary();
@@ -37,7 +38,7 @@ public class LocalizationSystem : GodotSingleton<LocalizationSystem>
         this.provider = new LocalizationProvider();
 
 #if DEBUG
-        this.provider.SetRoot(new ManagedDirectory(Application.persistentDataPath));
+        this.provider.SetRoot(EssentialsCore.PersistentDataPath);
 #endif
 
         Localization.Initialize(this.provider);

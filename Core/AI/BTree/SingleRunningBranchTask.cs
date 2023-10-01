@@ -79,7 +79,7 @@ namespace Craiel.Essentials.Runtime.AI.BTree;
                 if (this.CurrentChildIndex < last)
                 {
                     // Random swap
-                    int otherChildIndex = UnityEngine.Random.Range(this.CurrentChildIndex, last);
+                    int otherChildIndex = EssentialsCore.Random.RandiRange(this.CurrentChildIndex, last);
                     TaskId temp = this.RandomChildren[this.CurrentChildIndex];
                     this.RandomChildren[this.CurrentChildIndex] = this.RandomChildren[otherChildIndex];
                     this.RandomChildren[otherChildIndex] = temp;

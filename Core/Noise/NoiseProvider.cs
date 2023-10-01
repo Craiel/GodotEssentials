@@ -64,7 +64,7 @@ public partial class NoiseProvider
         this.seed = newSeed;
     }
 
-    private float GetCellular(Vector3 point)
+    private float GetCellular(Vector2 point)
     {
         switch (this.cellularReturn)
         {
@@ -91,7 +91,7 @@ public partial class NoiseProvider
         {
 	        case NoiseType.WhiteNoise:
 	        {
-		        return this.GetWhiteNoise(point);
+		        return this.GetWhiteNoise(new Vector3(point.X, point.Y, 0));
 	        }
 
 	        case NoiseType.Cubic:
@@ -137,22 +137,22 @@ public partial class NoiseProvider
 
 	        case NoiseType.Simplex:
 	        {
-		        return GetSimplex(this.seed, point);
+		        return GetSimplex(this.seed, new Vector2(point.X, point.Y));
 	        }
 
 	        case NoiseType.SimplexFractal:
 	        {
-		        return this.GetFractalSimplex(point);
+		        return this.GetFractalSimplex(new Vector2(point.X, point.Y));
 	        }
 
 	        case NoiseType.Cellular:
 	        {
-		        return this.GetCellular(point);
+		        return this.GetCellular(new Vector2(point.X, point.Y));
 	        }
 
 	        case NoiseType.CubicFractal:
 	        {
-		        return this.GetFractalCubic(point);
+		        return this.GetFractalCubic(new Vector2(point.X, point.Y));
 	        }
 	        
 	        case NoiseType.WhiteNoise:

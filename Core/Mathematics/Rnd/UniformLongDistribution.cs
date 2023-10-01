@@ -30,7 +30,7 @@ public class UniformLongDistribution : LongDistribution
 
     public override long NextLong()
     {
-        return this.Low + (long)(UnityEngine.Random.value * (this.High - this.Low));
+        return this.Low + (long)(EssentialsCore.Random.Randf() * (this.High - this.Low));
     }
 
     public override T Clone<T>()

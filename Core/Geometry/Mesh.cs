@@ -187,8 +187,7 @@ public class Mesh : IEnumerable<Triangle3Indexed>
     // -------------------------------------------------------------------
     protected void RecalculateBounds(float padding)
     {
-        var newBounds = new Aabb();
-        newBounds.SetMinMax(VectorExtensions.Fill(float.MaxValue), VectorExtensions.Fill(float.MinValue));
+        var newBounds = new Aabb(VectorExtensions.Fill(-(float.MaxValue / 2f)), VectorExtensions.Fill(float.MaxValue));
 
         foreach (Triangle3Indexed triangle in this.Triangles)
         {
@@ -212,23 +211,22 @@ public class Mesh : IEnumerable<Triangle3Indexed>
     [SuppressMessage("StyleCop.CSharp.LayoutRules", "SA1501:StatementMustNotBeOnSingleLine", Justification = "Reviewed. Suppression is OK here.")]
     private static void ApplyVertexToBounds(ref Vector3 vertex, ref Aabb target)
     {
-        Vector3 min = target.min;
-        Vector3 max = target.max;
+        Vector3 min = target.Position;
+        Vector3 max = target.End;
 
-        if (vertex.x < min.x) { min.x = vertex.x; }
-        if (vertex.y < min.y) { min.y = vertex.y; }
-        if (vertex.z < min.z) { min.z = vertex.z; }
-        if (vertex.x > max.x) { max.x = vertex.x; }
-        if (vertex.y > max.y) { max.y = vertex.y; }
-        if (vertex.z > max.z) { max.z = vertex.z; }
+        if (vertex.X < min.X) { min.X = vertex.X; }
+        if (vertex.Y < min.Y) { min.Y = vertex.Y; }
+        if (vertex.Z < min.Z) { min.Z = vertex.Z; }
+        if (vertex.X > max.X) { max.X = vertex.X; }
+        if (vertex.Y > max.Y) { max.Y = vertex.Y; }
+        if (vertex.Z > max.Z) { max.Z = vertex.Z; }
 
-        target.SetMinMax(min, max);
+        target = new Aabb(min, max - min);
     }
 
     private static void ApplyPaddingToBounds(float padding, ref Aabb target)
     {
         Vector3 paddingVector = VectorExtensions.Fill(padding);
-        target.min += paddingVector;
-        target.max += paddingVector;
+        target.Position += paddingVector;
     }
 }

@@ -44,7 +44,7 @@ public static class RandomExtension
         }
 
         // select a random value between 0 and our total
-        float random = UnityEngine.Random.Range(0, total);
+        float random = EssentialsCore.Random.RandfRange(0, total);
 
         // loop thru our weights until we arrive at the correct one
         float current = 0;

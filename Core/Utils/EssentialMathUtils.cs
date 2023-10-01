@@ -11,8 +11,6 @@ using Godot;
 /// </summary>
 public static class EssentialMathUtils
 {
-    private static RandomNumberGenerator RNG = new RandomNumberGenerator();
-    
     // Largest and lowest safe numbers to do comparisons on, c# gets inaccurate after
     public const float MinFloat = 1 - (1 << 24);
     public const float MaxFloat = (1 << 24) - 1;
@@ -137,8 +135,8 @@ public static class EssentialMathUtils
         double v1, v2, s;
         do
         {
-            v1 = 2 * RNG.Randf() - 1; // between -1 and 1
-            v2 = 2 * RNG.Randf() - 1; // between -1 and 1
+            v1 = 2 * EssentialsCore.Random.Randf() - 1; // between -1 and 1
+            v2 = 2 * EssentialsCore.Random.Randf() - 1; // between -1 and 1
             s = v1 * v1 + v2 * v2;
         }
         while (s >= 1 || Math.Abs(s) < DoubleEpsilon);
@@ -151,12 +149,12 @@ public static class EssentialMathUtils
 
     public static double RandomTriangular(double high)
     {
-        return (RNG.Randf() - RNG.Randf()) * high;
+        return (EssentialsCore.Random.Randf() - EssentialsCore.Random.Randf()) * high;
     }
 
     public static double RandomTriangular(double low, double high, double mode)
     {
-        double u = RNG.Randf();
+        double u = EssentialsCore.Random.Randf();
         double d = high - low;
         if (u <= (mode - low) / d)
         {
@@ -168,18 +166,18 @@ public static class EssentialMathUtils
 
     public static float RandomTriangular(float high)
     {
-        return (RNG.Randf() - RNG.Randf()) * high;
+        return (EssentialsCore.Random.Randf() - EssentialsCore.Random.Randf()) * high;
     }
 
     public static float RandomTriangular(float low, float high, float mode)
     {
-        float u = RNG.Randf();
+        float u = EssentialsCore.Random.Randf();
         float d = high - low;
         if (u <= (mode - low) / d)
         {
             return low + (float)Math.Sqrt(u * d * (mode - low));
         }
-
+        
         return high - (float)Math.Sqrt((1 - u) * d * (high - mode));
     }
 

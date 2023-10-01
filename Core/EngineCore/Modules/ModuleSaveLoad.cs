@@ -8,6 +8,7 @@ using Data;
 using Data.SBT;
 using Enums;
 using IO;
+using Utils;
 
 public class ModuleSaveLoad : GameModuleLite
 {
@@ -293,7 +294,7 @@ public class ModuleSaveLoad : GameModuleLite
                 ManagedFile file = this.GetSavePath(key);
                 if (!file.Exists)
                 {
-                    EssentialsCore.Logger.Warn("Load called on non-existing save: {0} -> {1}", key, file);
+                    EssentialsCore.Logger.Warn($"Load called on non-existing save: {key} -> {file}");
                     return null;
                 }
                 

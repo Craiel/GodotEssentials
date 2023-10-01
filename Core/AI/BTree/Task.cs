@@ -160,7 +160,7 @@ public abstract class Task<T>
     /// </summary>
     public virtual void Start()
     {
-        double gameTime = EssentialsCore.GameTime.TotalMilliseconds;
+        float gameTime = EssentialsCore.GameTime;
         if (Math.Abs(this.lastRunTime - gameTime) < EssentialMathUtils.Epsilon)
         {
             throw new IllegalStateException("Task was started multiple times in the same frame!");
@@ -337,7 +337,7 @@ public abstract class Task<T>
         }
     }
 
-    public virtual void Serialize(ISBTNodeSerializer serializer)
+    public virtual ISBTNode Serialize()
     {
         var data = new SBTDictionary();
         data.Add("Id", this.Id.Value);
@@ -347,12 +347,12 @@ public abstract class Task<T>
             data.Add("Guard", this.Guard.Value);
         }
 
-        serializer.Serialize(data);
+        return data;
     }
 
-    public virtual void Deserialize(ISBTNodeDeserializer deserializer)
+    public virtual void Deserialize(ISBTNode node)
     {
-        var root = deserializer.GetData<SBTDictionary>();
+        var root = (SBTDictionary)node;
 
         ushort id = root.ReadUShort("Id");
         this.Id = new TaskId(id);

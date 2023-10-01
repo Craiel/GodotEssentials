@@ -2,6 +2,7 @@ namespace Craiel.Essentials.Runtime.AI.BTree.Decorators;
 
 using BTree;
 using Contracts;
+using Godot;
 
 /// <summary>
 /// Executes the child only when a certain delay time has passed and gets reset on execution
@@ -12,7 +13,7 @@ public class Interval<T> : Decorator<T>
 {
     private const float DefaultDelay = 1f;
 
-    private float time;
+    private float startTime;
 
     // -------------------------------------------------------------------
     // Constructor
@@ -31,6 +32,7 @@ public class Interval<T> : Decorator<T>
         : base(child)
     {
         this.Delay = delay;
+        this.startTime = EssentialsCore.GameTime;
     }
 
     // -------------------------------------------------------------------
@@ -44,15 +46,14 @@ public class Interval<T> : Decorator<T>
     
     public override void Run()
     {
-        this.time += Time.deltaTime;
-        if (this.time < this.Delay)
+        if (this.startTime + this.Delay < EssentialsCore.GameTime)
         {
             // Not enough time passed
             this.Success();
             return;
         }
 
-        this.time = 0;
+        this.startTime = EssentialsCore.GameTime;
         base.Run();
     }
 }

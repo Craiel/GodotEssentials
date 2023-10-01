@@ -3,6 +3,7 @@ namespace Craiel.Essentials.Runtime.AI.BTree.Leafs;
 using BTree;
 using Contracts;
 using Enums;
+using Godot;
 using Mathematics.Rnd;
 
 /// <summary>
@@ -57,7 +58,7 @@ public class Wait<T> : LeafTask<T>
     public override void Start()
     {
         this.timeout = this.Seconds.NextFloat();
-        this.startTime = Time.time;
+        this.startTime = EssentialsCore.GameTime;
 
         base.Start();
     }
@@ -68,7 +69,7 @@ public class Wait<T> : LeafTask<T>
     /// <returns>Succeeded if the specified timeout has expired; Running otherwise</returns>
     protected override BTTaskStatus Execute()
     {
-        return Time.time - this.startTime < this.timeout ? BTTaskStatus.Running : BTTaskStatus.Succeeded;
+        return EssentialsCore.GameTime - this.startTime < this.timeout ? BTTaskStatus.Running : BTTaskStatus.Succeeded;
     }
 
     protected override void CopyTo(Task<T> clone)

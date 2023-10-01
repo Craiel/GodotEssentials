@@ -4,9 +4,8 @@ namespace Craiel.Essentials.Runtime.AI.BTree.Utils
     using System.Collections.Generic;
     using BTree;
     using Contracts;
+    using Data.SBT;
     using Exceptions;
-    using Runtime.Enums;
-    using Runtime.Utils;
 
     /// <summary>
     /// Serializer for <see cref="BehaviorStream{T}"/>
@@ -27,41 +26,26 @@ namespace Craiel.Essentials.Runtime.AI.BTree.Utils
         /// <exception cref="SerializationException">if any data is not able to serialize</exception>
         public string Serialize(BehaviorStream<T> tree)
         {
-            var serializer = new YamlFluentSerializer();
-            serializer.Begin(YamlContainerType.Dictionary)
-                .Add("Size", tree.stream.Length)
-                .Add("GrowBy", tree.GrowBy)
-                .Add("RootId", tree.Root.Value)
-            .End();
+            var serializer = new SBTTOMLSerializer();
 
-            serializer.Begin(YamlContainerType.Dictionary);
+            var root = new SBTDictionary();
+            root.Add("Size", tree.stream.Length);
+            root.Add("GrowBy", tree.GrowBy);
+            root.Add("RootId", tree.Root.Value);
+            var streamData = root.AddDictionary("StreamData");
             for (var i = 0; i < tree.stream.Length; i++)
             {
                 if (tree.stream[i] == null)
                 {
-                    serializer.Add(i);
                     continue;
                 }
 
-                serializer.Add(i, tree.stream[i].GetType().AssemblyQualifiedName);
+                streamData.Add($"{i}_assembly", tree.stream[i].GetType().AssemblyQualifiedName);
+                streamData.AddEntry($"{i}_data", tree.stream[i].Serialize());
             }
 
-            serializer.End();
-
-            serializer.Begin(YamlContainerType.Dictionary);
-            for (var i = 0; i < tree.stream.Length; i++)
-            {
-                if (tree.stream[i] == null)
-                {
-                    serializer.Add(i);
-                    continue;
-                }
-
-                serializer.Add(i, tree.stream[i]);
-            }
-            serializer.End();
-            
-            return serializer.Serialize();
+            serializer.Serialize(root);
+            return serializer.GetData();
         }
 
         /// <summary>
@@ -73,52 +57,41 @@ namespace Craiel.Essentials.Runtime.AI.BTree.Utils
         /// <exception cref="SerializationException">if the data fails to deserialize</exception>
         public BehaviorStream<T> Deserialize(T blackboard, string data)
         {
-            int size;
-            int growBy;
-            ushort id;
-            var deserializer = new YamlFluentDeserializer(data)
-                .Read("Size", out size)
-                .Read("GrowBy", out growBy)
-                .Read("RootId", out id);
+            var deserializer = new SBTTOMLDeserializer(data);
+            var root = deserializer.GetData<SBTDictionary>();
+            int size = root.ReadInt("Size");
+            int growBy = root.ReadInt("GrowBy");
+            ushort id = root.ReadUShort("RootId");
 
             BehaviorStream<T> result = new BehaviorStream<T>(blackboard, size, growBy) { Root = new TaskId(id) };
 
             IDictionary<int, string> typeMap = new Dictionary<int, string>();
-            deserializer.BeginRead();
-            for (var i = 0; i < size; i++)
+            var streamData = root.Read<SBTDictionary>("StreamData");
+            for (var i = 0; i < streamData.Count; i++)
             {
-                string typeName;
-                deserializer.Read(i, out typeName);
-                typeMap.Add(i, typeName);
-            }
-
-            deserializer.EndRead();
-
-            deserializer.BeginRead();
-            for (var i = 0; i < size; i++)
-            {
-                if (string.IsNullOrEmpty(typeMap[i]))
+                if (!streamData.Contains($"{i}_assembly"))
                 {
                     continue;
                 }
 
-                Type type = Type.GetType(typeMap[i]);
+                string typeName = streamData.ReadString($"{i}_assembly");
+                Type type = Type.GetType(typeName);
                 if (type == null)
                 {
                     throw new SerializationException("Could not get type information for " + typeMap[i]);
                 }
-
+                
+                typeMap.Add(i, typeName);
+                
                 Task<T> task = Activator.CreateInstance(type) as Task<T>;
                 if (task == null)
                 {
                     throw new SerializationException("Could not create task from type " + type.AssemblyQualifiedName);
                 }
 
-                deserializer.Read(i, task);
+                task.Deserialize(streamData.Read($"{i}_data"));
                 result.stream[i] = task;
             }
-
-            deserializer.EndRead();
 
             return result;
         }

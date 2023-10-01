@@ -30,7 +30,7 @@ public class UniformIntegerDistribution : IntegerDistribution
 
     public override int NextInt()
     {
-        return UnityEngine.Random.Range(this.Low, this.High);
+        return EssentialsCore.Random.RandiRange(this.Low, this.High);
     }
 
     public override T Clone<T>()

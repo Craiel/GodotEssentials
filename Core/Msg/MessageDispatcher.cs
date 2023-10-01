@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using Collections;
 using Contracts;
 using Enums;
+using Godot;
 using Pool;
 
 /// <summary>
@@ -268,8 +269,7 @@ public class MessageDispatcher : ITelegraph
 
             if (this.DebugEnabled)
             {
-                float currentTime = Time.time;
-                EssentialsCore.Logger.Info($"Instant telegram dispatched at time: {currentTime} by {sender} for {receiver}. Message code is {message}");
+                EssentialsCore.Logger.Info($"Instant telegram dispatched at time: {EssentialsCore.GameTime} by {sender} for {receiver}. Message code is {message}");
             }
 
             // Send the telegram to the recipient
@@ -277,10 +277,8 @@ public class MessageDispatcher : ITelegraph
         }
         else
         {
-            float currentTime = Time.time;
-
             // Set the timestamp for the delayed telegram
-            telegram.Timestamp = currentTime + delay;
+            telegram.Timestamp = EssentialsCore.GameTime + delay;
 
             // Put the telegram in the queue
             bool added = this.queue.Add(telegram);
@@ -295,7 +293,7 @@ public class MessageDispatcher : ITelegraph
             {
                 if (added)
                 {
-                    EssentialsCore.Logger.Info($"Delayed telegram from {sender} for {receiver} recorded at time {currentTime}. Message code is {message}");
+                    EssentialsCore.Logger.Info($"Delayed telegram from {sender} for {receiver} recorded at time {EssentialsCore.GameTime}. Message code is {message}");
                 }
                 else
                 {
@@ -325,7 +323,7 @@ public class MessageDispatcher : ITelegraph
         while ((telegram = this.queue.Peek()) != null)
         {
             // Exit loop if the telegram is in the future
-            if (telegram.Timestamp > Time.time)
+            if (telegram.Timestamp > EssentialsCore.GameTime)
             {
                 break;
             }
@@ -357,7 +355,7 @@ public class MessageDispatcher : ITelegraph
         {
             Telegram telegram = this.queue.Get(i);
             callback.Report(
-                telegram.Timestamp - Time.time,
+                telegram.Timestamp - EssentialsCore.GameTime,
                 telegram.Sender,
                 telegram.Receiver,
                 telegram.Message,

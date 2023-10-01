@@ -281,7 +281,7 @@ public class ObjectSet<T> : IEnumerable<T>
         do
         {
             // Replace the key and value for one of the hashes.
-            switch (UnityEngine.Random.Range(0, 2))
+            switch (EssentialsCore.Random.RandiRange(0, 2))
             {
                 case 0:
                     evictedKey = key1;

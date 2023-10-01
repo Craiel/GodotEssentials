@@ -128,7 +128,7 @@ public partial class NoiseProvider
         }
     }
 
-    private float GetFractalSimplex(Vector3 point)
+    private float GetFractalSimplex(Vector2 point)
     {
         switch (this.fractalType)
         {
@@ -153,7 +153,7 @@ public partial class NoiseProvider
             }
         }
     }
-    private float GetFractalCubic(Vector3 point)
+    private float GetFractalCubic(Vector2 point)
     {
         switch (this.fractalType)
         {
