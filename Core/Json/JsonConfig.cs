@@ -1,4 +1,4 @@
-﻿namespace Craiel.Essentials.Runtime.Json;
+﻿namespace Craiel.Essentials.Json;
 
 using System;
 using System.Text.Json;

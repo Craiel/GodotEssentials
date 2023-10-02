@@ -1,9 +1,9 @@
-namespace Craiel.Essentials.Runtime.AI.BTree.Leafs;
+namespace Craiel.Essentials.AI.BTree.Leafs;
 
 using BTree;
 using Contracts;
 using Enums;
-using Runtime.Exceptions;
+using Essentials.Exceptions;
 
 public delegate bool ActionDelegate();
 

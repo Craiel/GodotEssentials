@@ -1,4 +1,4 @@
-namespace Craiel.Essentials.Runtime.Contracts;
+namespace Craiel.Essentials.Contracts;
 
 /// <summary>
 /// A counting semaphore that does not block the thread when the requested resource is not available.

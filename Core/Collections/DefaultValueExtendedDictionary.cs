@@ -1,4 +1,4 @@
-﻿namespace Craiel.Essentials.Runtime.Collections;
+﻿namespace Craiel.Essentials.Collections;
 
 public class DefaultValueExtendedDictionary<T, TN> : ExtendedDictionary<T, TN>
 {

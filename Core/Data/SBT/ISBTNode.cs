@@ -1,4 +1,4 @@
-namespace Craiel.Essentials.Runtime.Data.SBT;
+namespace Craiel.Essentials.Data.SBT;
 
 using System.IO;
 using Enums;

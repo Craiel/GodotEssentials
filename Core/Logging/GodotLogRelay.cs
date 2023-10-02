@@ -1,4 +1,4 @@
-namespace Craiel.Essentials.Runtime.Logging;
+namespace Craiel.Essentials.Logging;
 
 using System;
 using Godot;

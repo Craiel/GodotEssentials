@@ -1,4 +1,4 @@
-namespace Craiel.Essentials.Runtime.Mathematics.Rnd;
+namespace Craiel.Essentials.Mathematics.Rnd;
 
 using Contracts;
 

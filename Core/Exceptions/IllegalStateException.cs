@@ -1,4 +1,4 @@
-namespace Craiel.Essentials.Runtime.Exceptions;
+namespace Craiel.Essentials.Exceptions;
 
 using System;
 

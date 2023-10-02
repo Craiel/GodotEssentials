@@ -1,4 +1,4 @@
-﻿namespace Craiel.Essentials.Runtime;
+﻿namespace Craiel.Essentials;
 
 using System;
 using System.Collections.Generic;
@@ -32,6 +32,9 @@ public static class EssentialCore
     public static readonly ManagedDirectory DefaultSavePath = PersistentDataPath.ToDirectory("Save");
     public const string DefaultSavePrefix = "esv_";
 
+    public const string GameDataDefaultLocation = "res://";
+    public const string GameDataDefaultExtension = ".bin";
+
     public static GodotLogRelay Logger = new();
 
     public static float GameTime => Time.GetTicksMsec() / 1000f;
@@ -45,6 +48,7 @@ public static class EssentialCore
     public static UIEvents UIEvents;
     public static TweenLiteSystem Tween;
     public static SynchronizationDispatcher Synchronization;
+    public static GameRuntimeData GameData;
     
     public static void Initialize()
     {
@@ -60,6 +64,7 @@ public static class EssentialCore
         UIEvents = new UIEvents();
         Tween = new TweenLiteSystem();
         Synchronization = new SynchronizationDispatcher();
+        GameData = new GameRuntimeData();
     
         // Add Built-in Modules, order matters here
         ActiveGameModules.Add(ResourceProvider);
@@ -69,6 +74,7 @@ public static class EssentialCore
         ActiveGameModules.Add(UIEvents);
         ActiveGameModules.Add(Tween);
         ActiveGameModules.Add(Synchronization);
+        ActiveGameModules.Add(GameData);
         
         try
         {

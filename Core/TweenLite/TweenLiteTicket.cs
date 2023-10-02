@@ -1,4 +1,4 @@
-namespace Craiel.Essentials.Runtime.TweenLite;
+namespace Craiel.Essentials.TweenLite;
 
 public struct TweenLiteTicket
 {

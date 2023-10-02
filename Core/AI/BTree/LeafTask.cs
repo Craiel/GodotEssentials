@@ -1,9 +1,9 @@
-namespace Craiel.Essentials.Runtime.AI.BTree;
+namespace Craiel.Essentials.AI.BTree;
 
 using System;
 using Contracts;
 using Enums;
-using Runtime.Exceptions;
+using Essentials.Exceptions;
 
 /// <summary>
 /// A <see cref="LeafTask{T}"/> is a terminal task of a behavior tree, contains action or condition logic, can not have any child

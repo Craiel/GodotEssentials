@@ -1,4 +1,4 @@
-namespace Craiel.Essentials.Runtime.Events;
+namespace Craiel.Essentials.Events;
 
 using Contracts;
 

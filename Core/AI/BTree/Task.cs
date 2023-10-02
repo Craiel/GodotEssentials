@@ -1,15 +1,13 @@
-namespace Craiel.Essentials.Runtime.AI.BTree;
+namespace Craiel.Essentials.AI.BTree;
 
 using System;
 using System.Diagnostics.CodeAnalysis;
-using System.IO;
 using Contracts;
 using Data.SBT;
 using Enums;
+using Essentials.Exceptions;
+using Essentials.Utils;
 using Exceptions;
-using Runtime.Enums;
-using Runtime.Exceptions;
-using Runtime.Utils;
 
 /// <summary>
 /// This is the abstract base class of all behavior tree tasks. The Task of a behavior tree has a status, one control and a list of children.

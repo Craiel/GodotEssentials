@@ -1,4 +1,4 @@
-namespace Craiel.Essentials.Runtime.EngineCore.Modules;
+namespace Craiel.Essentials.EngineCore.Modules;
 
 using System;
 using System.Collections.Generic;

@@ -1,4 +1,4 @@
-namespace Craiel.Essentials.Runtime.Noise;
+namespace Craiel.Essentials.Noise;
 
 using Enums;
 using Godot;

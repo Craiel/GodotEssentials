@@ -1,4 +1,4 @@
-namespace Craiel.Essentials.Runtime.FSM;
+namespace Craiel.Essentials.FSM;
 
 using Contracts;
 using Msg;

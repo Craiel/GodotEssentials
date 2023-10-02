@@ -1,4 +1,4 @@
-namespace Craiel.Essentials.Runtime.Geometry;
+namespace Craiel.Essentials.Geometry;
 
 using System.IO;
 using Godot;

@@ -1,4 +1,4 @@
-namespace Craiel.Essentials.Runtime.Spatial;
+namespace Craiel.Essentials.Spatial;
 
 /// <summary>
 /// Contains methods used for doing index arithmetic to traverse nodes in a binary tree.

@@ -1,4 +1,4 @@
-namespace Craiel.Essentials.Runtime.Pool;
+namespace Craiel.Essentials.Pool;
 
 using System;
 using System.Collections.Generic;

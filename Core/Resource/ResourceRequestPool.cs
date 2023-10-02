@@ -1,4 +1,4 @@
-﻿namespace Craiel.Essentials.Runtime.Resource;
+﻿namespace Craiel.Essentials.Resource;
 
 using System.Collections.Generic;
 using System.Linq;

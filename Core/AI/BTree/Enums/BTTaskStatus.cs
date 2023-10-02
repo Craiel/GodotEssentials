@@ -1,4 +1,4 @@
-namespace Craiel.Essentials.Runtime.AI.BTree.Enums;
+namespace Craiel.Essentials.AI.BTree.Enums;
 
 /// <summary>
 /// The enumeration of the values that a task's status can have

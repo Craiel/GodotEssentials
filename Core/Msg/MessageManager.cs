@@ -1,4 +1,4 @@
-namespace Craiel.Essentials.Runtime.Msg;
+namespace Craiel.Essentials.Msg;
 
 /// <summary>
 /// The <see cref="MessageManager"/> is a singleton <see cref="MessageDispatcher"/> in charge of the creation, dispatch, and management of telegrams

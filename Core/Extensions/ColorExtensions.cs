@@ -1,5 +1,5 @@
 ﻿// ReSharper disable UnusedMember.Global
-namespace Craiel.Essentials.Runtime.Extensions;
+namespace Craiel.Essentials.Extensions;
 
 using System;
 using System.Globalization;

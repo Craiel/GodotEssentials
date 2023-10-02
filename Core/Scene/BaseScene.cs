@@ -1,4 +1,4 @@
-﻿/*namespace Craiel.Essentials.Runtime.Scene;
+﻿/*namespace Craiel.Essentials.Scene;
 
 using System;
 using System.Collections.Generic;

@@ -1,4 +1,4 @@
-﻿namespace Craiel.Essentials.Runtime.Extensions;
+﻿namespace Craiel.Essentials.Extensions;
 
 using System;
 using System.Text;

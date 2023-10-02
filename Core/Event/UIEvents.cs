@@ -1,4 +1,4 @@
-namespace Craiel.Essentials.Runtime.Event;
+namespace Craiel.Essentials.Event;
 
 using System;
 using EngineCore;

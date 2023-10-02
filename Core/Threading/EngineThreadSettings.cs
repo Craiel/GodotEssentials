@@ -1,4 +1,4 @@
-﻿namespace Craiel.Essentials.Runtime.Threading;
+﻿namespace Craiel.Essentials.Threading;
 
 public class EngineThreadSettings
 {

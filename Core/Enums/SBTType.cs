@@ -1,4 +1,4 @@
-namespace Craiel.Essentials.Runtime.Enums;
+namespace Craiel.Essentials.Enums;
 
 public enum SBTType
 {

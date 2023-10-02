@@ -1,4 +1,4 @@
-﻿namespace Craiel.Essentials.Runtime.Grammar.Terms;
+﻿namespace Craiel.Essentials.Grammar.Terms;
 
 public class TermString : BaseTerm
 {

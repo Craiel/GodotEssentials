@@ -1,4 +1,4 @@
-namespace Craiel.Essentials.Runtime.AI.BTree.Decorators;
+namespace Craiel.Essentials.AI.BTree.Decorators;
 
 using BTree;
 using Contracts;

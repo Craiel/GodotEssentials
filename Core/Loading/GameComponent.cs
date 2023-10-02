@@ -1,4 +1,4 @@
-﻿namespace Craiel.Essentials.Runtime.Loading;
+﻿namespace Craiel.Essentials.Loading;
 
 using System;
 using System.Collections.Generic;

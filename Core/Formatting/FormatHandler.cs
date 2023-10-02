@@ -1,4 +1,4 @@
-﻿namespace Craiel.Essentials.Runtime.Formatting;
+﻿namespace Craiel.Essentials.Formatting;
 
 using System;
 

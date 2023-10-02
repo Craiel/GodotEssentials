@@ -1,4 +1,4 @@
-namespace Craiel.Essentials.Runtime.Spatial;
+namespace Craiel.Essentials.Spatial;
 
 using System;
 using System.Collections;

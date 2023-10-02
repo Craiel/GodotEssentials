@@ -1,4 +1,4 @@
-﻿namespace Craiel.Essentials.Runtime.Grammar.Grammars;
+﻿namespace Craiel.Essentials.Grammar.Grammars;
 
 // ReSharper disable InconsistentNaming
 public enum JavaTermKey

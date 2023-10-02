@@ -1,8 +1,8 @@
-namespace Craiel.Essentials.Runtime.AI.BTree;
+namespace Craiel.Essentials.AI.BTree;
 
 using System;
 using Contracts;
-using Runtime.Exceptions;
+using Essentials.Exceptions;
 
 /// <summary>
 /// A <see cref="Decorator{T}"/> is a wrapper that provides custom behavior for its child. The child can be of any kind (branch task, leaf task, or another decorator)

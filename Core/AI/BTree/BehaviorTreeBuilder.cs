@@ -1,4 +1,4 @@
-namespace Craiel.Essentials.Runtime.AI.BTree;
+namespace Craiel.Essentials.AI.BTree;
 
 using System.Collections.Generic;
 using Branches;

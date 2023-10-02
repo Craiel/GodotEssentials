@@ -1,4 +1,4 @@
-namespace Craiel.Essentials.Runtime.AI.BTree.Exceptions;
+namespace Craiel.Essentials.AI.BTree.Exceptions;
 
 using System;
 

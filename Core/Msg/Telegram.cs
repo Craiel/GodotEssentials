@@ -1,4 +1,4 @@
-namespace Craiel.Essentials.Runtime.Msg;
+namespace Craiel.Essentials.Msg;
 
 using System;
 using System.Diagnostics.CodeAnalysis;

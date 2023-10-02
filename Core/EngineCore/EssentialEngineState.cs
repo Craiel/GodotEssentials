@@ -1,4 +1,4 @@
-namespace Craiel.Essentials.Runtime.EngineCore;
+namespace Craiel.Essentials.EngineCore;
 
 public static class EssentialEngineState
 {

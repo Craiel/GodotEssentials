@@ -1,9 +1,9 @@
-namespace Craiel.Essentials.Runtime.AI.BTree;
+namespace Craiel.Essentials.AI.BTree;
 
     using System.Collections.Generic;
     using System.Linq;
     using Contracts;
-    using Runtime.Exceptions;
+    using Essentials.Exceptions;
 
     /// <summary>
     /// A <see cref="SingleRunningBranchTask{T}"/> task is a branch task that supports only one running child at a time

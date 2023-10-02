@@ -1,4 +1,4 @@
-namespace Craiel.Essentials.Runtime.Contracts;
+namespace Craiel.Essentials.Contracts;
 
 /// <summary>
 /// Abstract factory for creating concrete instances of classes implementing <see cref="INonBlockingSemaphore"/>

@@ -1,4 +1,4 @@
-﻿namespace Craiel.Essentials.Runtime.Grammar.Contracts.Grammars;
+﻿namespace Craiel.Essentials.Grammar.Contracts.Grammars;
 
 public interface ISqlGrammar : IGrammar
 {

@@ -1,4 +1,4 @@
-﻿namespace Craiel.Essentials.Runtime;
+﻿namespace Craiel.Essentials;
 
 using System;
 using System.Diagnostics;

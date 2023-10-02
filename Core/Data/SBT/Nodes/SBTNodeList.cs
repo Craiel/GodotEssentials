@@ -1,4 +1,4 @@
-namespace Craiel.Essentials.Runtime.Data.SBT.Nodes;
+namespace Craiel.Essentials.Data.SBT.Nodes;
 
 using System.Collections.Generic;
 using System.IO;

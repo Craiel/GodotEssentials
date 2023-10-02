@@ -1,8 +1,8 @@
-namespace Craiel.Essentials.Runtime.AI.BTree.Decorators;
+namespace Craiel.Essentials.AI.BTree.Decorators;
 
 using BTree;
 using Contracts;
-using Runtime.Contracts;
+using Essentials.Contracts;
 
 /// <summary>
 /// A <see cref="SemaphoreGuard{T}"/> decorator allows you to specify how many characters should be allowed to concurrently execute its

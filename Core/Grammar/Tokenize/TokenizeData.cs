@@ -1,4 +1,4 @@
-﻿namespace Craiel.Essentials.Runtime.Grammar.Tokenize;
+﻿namespace Craiel.Essentials.Grammar.Tokenize;
 
 using System;
 using System.Collections.Generic;

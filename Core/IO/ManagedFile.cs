@@ -1,4 +1,4 @@
-﻿namespace Craiel.Essentials.Runtime.IO;
+﻿namespace Craiel.Essentials.IO;
 
 using System;
 using System.Collections.Generic;

@@ -1,4 +1,4 @@
-namespace Craiel.Essentials.Runtime.Contracts;
+namespace Craiel.Essentials.Contracts;
 
 /// <summary>
 /// A state machine manages the state transitions of its entity. 

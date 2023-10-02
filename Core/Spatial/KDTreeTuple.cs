@@ -1,4 +1,4 @@
-namespace Craiel.Essentials.Runtime.Spatial;
+namespace Craiel.Essentials.Spatial;
 
 public struct KDTreeTuple<TDimension, TNode>
 {

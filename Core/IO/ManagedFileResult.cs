@@ -1,4 +1,4 @@
-﻿namespace Craiel.Essentials.Runtime.IO;
+﻿namespace Craiel.Essentials.IO;
 
 public class ManagedFileResult
 {

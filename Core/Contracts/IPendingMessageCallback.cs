@@ -1,4 +1,4 @@
-namespace Craiel.Essentials.Runtime.Contracts;
+namespace Craiel.Essentials.Contracts;
 
 using Enums;
 using Msg;

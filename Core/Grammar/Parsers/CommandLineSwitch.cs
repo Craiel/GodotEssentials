@@ -1,4 +1,4 @@
-namespace Craiel.Essentials.Runtime.Grammar.Parsers;
+namespace Craiel.Essentials.Grammar.Parsers;
 
 using System.Collections.Generic;
 

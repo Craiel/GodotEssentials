@@ -1,4 +1,4 @@
-namespace Craiel.Essentials.Runtime.I18N;
+namespace Craiel.Essentials.I18N;
 
 public interface ILocalizationProvider
 {

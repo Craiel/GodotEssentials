@@ -1,11 +1,10 @@
-namespace Craiel.Essentials.Runtime.AI.BTree;
+namespace Craiel.Essentials.AI.BTree;
 
 using System;
 using System.Collections.Generic;
 using Contracts;
 using Enums;
-using Exceptions;
-using Runtime.Exceptions;
+using Essentials.Exceptions;
 
 /// <summary>
 /// Creates a new BehaviorStream object that is used to execute and maintain the tree at runtime

@@ -1,4 +1,4 @@
-namespace Craiel.Essentials.Runtime.Noise;
+namespace Craiel.Essentials.Noise;
 
 using System;
 using System.Runtime.CompilerServices;

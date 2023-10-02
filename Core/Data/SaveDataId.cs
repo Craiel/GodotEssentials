@@ -1,4 +1,4 @@
-namespace Craiel.Essentials.Runtime.Data;
+namespace Craiel.Essentials.Data;
 
 using System;
 using System.Linq;
