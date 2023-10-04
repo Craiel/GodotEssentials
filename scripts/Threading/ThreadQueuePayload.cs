@@ -2,7 +2,6 @@
 
 using Contracts;
 
-public class ThreadQueuePayload : IThreadQueueOperationPayload
+public class EmptyThreadQueuePayload : IThreadQueueCommandPayload
 {
-    public object Data { get; set; }
 }

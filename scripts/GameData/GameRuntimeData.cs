@@ -1,4 +1,6 @@
-﻿namespace Craiel.Essentials.GameData;
+﻿using Craiel.Essentials.Contracts;
+
+namespace Craiel.Essentials.GameData;
 
 using System;
 using System.Collections.Generic;

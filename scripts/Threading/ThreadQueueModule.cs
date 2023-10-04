@@ -4,13 +4,21 @@ using System;
 using System.Collections.Generic;
 using Contracts;
 
-public abstract class ThreadQueuedComponent : IThreadQueueComponent
+public class ThreadQueueModule : IEngineThreadModule
 {
     private static readonly long OperationWarningTimespan = TimeSpan.FromSeconds(2).Ticks;
     private static readonly long OperationErrorTimespan = TimeSpan.FromSeconds(5).Ticks;
 
-    private Queue<IThreadQueueOperation> queuedOperations;
-    private List<IThreadQueueOperation> lastOperations;
+    private readonly Queue<IThreadQueueCommand> queuedCommands;
+    private readonly List<IThreadQueueCommand> lastCommand;
+
+    private long lastUpdateFrameTime;
+
+    public ThreadQueueModule()
+    {
+        this.queuedCommands = new Queue<IThreadQueueCommand>();
+        this.lastCommand = new List<IThreadQueueCommand>();
+    }
 
     // -------------------------------------------------------------------
     // Public
@@ -19,29 +27,28 @@ public abstract class ThreadQueuedComponent : IThreadQueueComponent
     {
         get
         {
-            if (this.queuedOperations == null || this.queuedOperations.Count > 0)
+            if (this.queuedCommands.Count > 0)
             {
-                return false;
+                return true;
             }
 
-            return true;
+            return false;
         }
     }
-
-    // -------------------------------------------------------------------
-    // Protected
-    // -------------------------------------------------------------------
-    protected void ProcessOperations(long time)
+    
+    public void Update(EngineTime time)
     {
-        if (this.queuedOperations != null)
+        lastUpdateFrameTime = time.Ticks;
+        
+        if (this.queuedCommands != null)
         {
-            this.lastOperations = new List<IThreadQueueOperation>();
-            while (this.queuedOperations.Count > 0)
+            this.lastCommand.Clear();
+            while (this.queuedCommands.Count > 0)
             {
-                IThreadQueueOperation operation = this.queuedOperations.Dequeue();
-                operation.Suceeded = operation.Action(operation.Payload);
-                operation.ExecutionTime = time;
-                this.lastOperations.Add(operation);
+                IThreadQueueCommand command = this.queuedCommands.Dequeue();
+                command.Suceeded = command.Action(command.Payload);
+                command.ExecutionTime = time.DeltaTicks;
+                this.lastCommand.Add(command);
             }
 
 #if DEBUG
@@ -50,29 +57,37 @@ public abstract class ThreadQueuedComponent : IThreadQueueComponent
         }
     }
 
-    protected void QueueOperation(Func<IThreadQueueOperationPayload, bool> action, long time)
+    public void Queue(IThreadQueueCommand command)
+    {
+        if (command == null)
+        {
+            throw new ArgumentException();
+        }
+
+        command.QueueTime = this.lastUpdateFrameTime;
+        this.queuedCommands.Enqueue(command);
+    }
+    public void Queue(Func<IThreadQueueCommandPayload, bool> action)
     {
         if (action == null)
         {
             throw new ArgumentException();
         }
 
-        if (this.queuedOperations == null)
-        {
-            this.queuedOperations = new Queue<IThreadQueueOperation>();
-        }
-
-        var operation = new ThreadQueueOperation(action, time);
-        this.queuedOperations.Enqueue(operation);
+        var operation = new ThreadQueueCommand(action, this.lastUpdateFrameTime);
+        this.queuedCommands.Enqueue(operation);
     }
 
+    // -------------------------------------------------------------------
+    // Protected
+    // -------------------------------------------------------------------
     private void CheckLastUpdateOperations()
     {
         int slowWarning = 0;
         int slowError = 0;
         int error = 0;
 
-        foreach (IThreadQueueOperation operation in this.lastOperations)
+        foreach (IThreadQueueCommand operation in this.lastCommand)
         {
             long timeToUpdate = operation.ExecutionTime - operation.QueueTime;
             if (timeToUpdate > OperationErrorTimespan)

@@ -1,4 +1,6 @@
-﻿namespace Craiel.Essentials;
+﻿using Craiel.Essentials.Contracts;
+
+namespace Craiel.Essentials;
 
 using System;
 using System.Collections.Generic;

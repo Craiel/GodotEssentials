@@ -1,3 +1,5 @@
+using Craiel.Essentials.Contracts;
+
 namespace Craiel.Essentials.EngineCore;
 
 using System;

@@ -1,4 +1,4 @@
-namespace Craiel.Essentials.EngineCore;
+namespace Craiel.Essentials.Contracts;
 
 public interface ITicketData
 {

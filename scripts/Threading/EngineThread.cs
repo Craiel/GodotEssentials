@@ -1,4 +1,7 @@
-﻿namespace Craiel.Essentials.Threading;
+﻿using System.Collections.Generic;
+using Craiel.Essentials.Contracts;
+
+namespace Craiel.Essentials.Threading;
 
 using System;
 using System.Diagnostics;
@@ -13,6 +16,8 @@ public class EngineThread
     private static readonly long PerformanceMeasureInterval = Stopwatch.Frequency;   
 
     private static int nextThreadId;
+
+    private readonly IList<IEngineThreadModule> modules = new List<IEngineThreadModule>();
 
     private readonly ManualResetEvent shutdownEvent;
 
@@ -163,6 +168,22 @@ public class EngineThread
         }
     }
 
+    public void AddModule(IEngineThreadModule module)
+    {
+        lock (this.synchronizationObject)
+        {
+            this.modules.Add(module);
+        }
+    }
+
+    public void RemoveModule(IEngineThreadModule module)
+    {
+        lock (this.synchronizationObject)
+        {
+            this.modules.Remove(module);
+        }
+    }
+
     // -------------------------------------------------------------------
     // Private
     // -------------------------------------------------------------------
@@ -187,6 +208,12 @@ public class EngineThread
 
                     try
                     {
+                        // By default we do updates to modules before the main thread action
+                        for (var i = 0; i < this.modules.Count; i++)
+                        {
+                            this.modules[i].Update(this.time);
+                        }
+                        
                         if (!this.threadAction(this.time))
                         {
                             break;

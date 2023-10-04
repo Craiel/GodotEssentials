@@ -1,3 +1,5 @@
+using Craiel.Essentials.Contracts;
+
 namespace Craiel.Essentials.Event;
 
 using System;

@@ -1,3 +1,5 @@
+using Craiel.Essentials.Contracts;
+
 namespace Craiel.Essentials.I18N;
 
 using System.Globalization;

@@ -1,8 +1,9 @@
-﻿namespace Craiel.Essentials.Threading;
+﻿using Craiel.Essentials.Contracts;
+
+namespace Craiel.Essentials.Threading;
 
 using System;
 using System.Collections.Generic;
-using EngineCore;
 
 public class SynchronizationDispatcher : IGameModule
 {

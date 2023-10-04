@@ -81,6 +81,11 @@ public struct TempList<T> : IDisposable, IEnumerable<T>
         this.inner.Add(entry);
     }
 
+    public void Clear()
+    {
+        this.inner.Clear();
+    }
+
     public IEnumerator<T> GetEnumerator()
     {
         return this.inner.GetEnumerator();
