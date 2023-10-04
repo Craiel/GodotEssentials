@@ -3,11 +3,12 @@ namespace Craiel.Essentials.FSM;
 using System;
 using System.Globalization;
 using Contracts;
+using Utils;
 
 public class EnumStateMachine<T, TS, TE> : DefaultStateMachine<T, TS>
     where T : class
     where TS : class, IState<T>
-    where TE : struct, IConvertible
+    where TE : Enum, IConvertible
 {
     private readonly TS[] states;
 
@@ -17,7 +18,7 @@ public class EnumStateMachine<T, TS, TE> : DefaultStateMachine<T, TS>
     public EnumStateMachine(T owner = default, TS initialState = default, TS globalState = default)
         : base(owner, initialState, globalState)
     {
-        int maxValues = EnumCache<TE>.Count;
+        int maxValues = EnumDef<TE>.Count;
 
         this.states = new TS[maxValues];
     }
