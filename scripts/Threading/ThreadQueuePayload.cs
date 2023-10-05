@@ -2,6 +2,7 @@
 
 using Contracts;
 
-public class EmptyThreadQueuePayload : IThreadQueueCommandPayload
+public struct EmptyThreadQueuePayload : IThreadQueueCommandPayload
 {
+    public static EmptyThreadQueuePayload Value = new();
 }

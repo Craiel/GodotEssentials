@@ -46,8 +46,7 @@ public class ThreadQueueModule : IEngineThreadModule
             while (this.queuedCommands.Count > 0)
             {
                 IThreadQueueCommand command = this.queuedCommands.Dequeue();
-                command.Suceeded = command.Action(command.Payload);
-                command.ExecutionTime = time.DeltaTicks;
+                command.Execute(time.Ticks);
                 this.lastCommand.Add(command);
             }
 
@@ -67,14 +66,20 @@ public class ThreadQueueModule : IEngineThreadModule
         command.QueueTime = this.lastUpdateFrameTime;
         this.queuedCommands.Enqueue(command);
     }
-    public void Queue(Func<IThreadQueueCommandPayload, bool> action)
+    
+    public void Queue<T>(Func<T, bool> action, T payload)
+        where T: IThreadQueueCommandPayload
     {
         if (action == null)
         {
             throw new ArgumentException();
         }
 
-        var operation = new ThreadQueueCommand(action, this.lastUpdateFrameTime);
+        var operation = new CallbackThreadQueueCommand<T>(action, payload)
+        {
+            QueueTime = this.lastUpdateFrameTime
+        };
+        
         this.queuedCommands.Enqueue(operation);
     }
 
