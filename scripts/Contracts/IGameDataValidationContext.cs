@@ -2,7 +2,7 @@
 
 public delegate bool GameDataValidationFixDelegate(object owner, object entry);
 
-public interface IGameDataRuntimeValidationContext
+public interface IGameDataValidationContext
 {
     void Warning(object owner, object source, GameDataValidationFixDelegate fixDelegate, string message);
 

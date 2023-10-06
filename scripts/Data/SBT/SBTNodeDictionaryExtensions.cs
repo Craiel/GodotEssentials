@@ -84,6 +84,11 @@ public static class SBTNodeDictionaryExtensions
         return source.Read<SBTNodeDictionary>(key);
     }
     
+    public static SBTNodeSet ReadSet(this SBTNodeDictionary source, string key)
+    {
+        return source.Read<SBTNodeSet>(key);
+    }
+
     public static SBTNodeStream ReadStream(this SBTNodeDictionary source, string key)
     {
         return source.Read<SBTNodeStream>(key);
@@ -371,6 +376,16 @@ public static class SBTNodeDictionaryExtensions
         return source.TryRead(key, out SBTNodeDictionary result) ? result : defaultValue;
     }
     
+    public static bool TryReadSet(this SBTNodeDictionary source, string key, out SBTNodeSet result)
+    {
+        return source.TryRead(key, out result);
+    }
+    
+    public static SBTNodeSet TryReadSet(this SBTNodeDictionary source, string key, SBTNodeSet defaultValue)
+    {
+        return source.TryRead(key, out SBTNodeSet result) ? result : defaultValue;
+    }
+    
     public static bool TryReadStream(this SBTNodeDictionary source, string key, out SBTNodeStream result)
     {
         return source.TryRead(key, out result);
@@ -535,6 +550,11 @@ public static class SBTNodeDictionaryExtensions
         array.Add(values);
     }
 
+    public static SBTNodeSet StartSet(this SBTNodeDictionary target, string key, SBTFlags flags = SBTFlags.None, string note = null)
+    {
+        return (SBTNodeSet)target.AddEntry(key, SBTType.Set, null, flags, note);
+    }
+    
     public static SBTNodeStream StartStream(this SBTNodeDictionary target, string key, SBTFlags flags = SBTFlags.None, string note = null)
     {
         return (SBTNodeStream)target.AddEntry(key, SBTType.Stream, null, flags, note);

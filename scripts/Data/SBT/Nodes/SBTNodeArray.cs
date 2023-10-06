@@ -1,6 +1,8 @@
 namespace Craiel.Essentials.Data.SBT.Nodes;
 
 using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using Enums;
 using SBT;
@@ -58,9 +60,9 @@ public abstract class SBTNodeArray<T> : ISBTNode, ISBTNodeCollection
         get { return this.capacityLimit; }
     }
 
-    public int Count
+    public ushort Count
     {
-        get { return this.nextDataIndex; }
+        get { return (ushort)this.nextDataIndex; }
     }
 
     public void SetCapacityLimit(int newLimit)

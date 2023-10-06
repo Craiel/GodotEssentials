@@ -96,7 +96,7 @@ public static class EssentialCore
             ResourceProvider.LoadImmediate();
             Localization.Load();
 
-            Logger.Warn("Essential Engine.Initialize() complete");
+            Logger.Info("Essential Engine.Initialize() complete");
 
             EssentialEngineState.IsInitialized = true;
             GameEvents.Send(new EventEngineInitialized());

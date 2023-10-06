@@ -4,6 +4,6 @@ using System;
 using GameData;
 
 [Serializable]
-public class GameDataRuntimeAudioRef : GameDataRuntimeRef
+public class GameDataAudioRef : GameDataRef
 {
 }

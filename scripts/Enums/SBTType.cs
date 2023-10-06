@@ -28,6 +28,7 @@ public enum SBTType
     SingleArray,
     Double,
     DoubleArray,
+    Set,
     Stream,
     
     // Extras

@@ -15,11 +15,9 @@ using IO;
 using Utils;
 using FileAccess = Godot.FileAccess;
 
-public class GameDataReader : IGameDataRuntimeResolver
+public class GameDataReader : IGameDataResolver
 {
     private readonly IDictionary<GameDataId, object> gameDataRegister;
-
-    private readonly ExtendedDictionary<string, uint> gameDataIdLookup;
 
     private readonly IDictionary<Type, IList<object>> gameDataTypeLookup;
 
@@ -31,7 +29,6 @@ public class GameDataReader : IGameDataRuntimeResolver
     public GameDataReader()
     {
         this.gameDataRegister = new Dictionary<GameDataId, object>();
-        this.gameDataIdLookup = new ExtendedDictionary<string, uint> { EnableReverseLookup = true };
         this.gameDataTypeLookup = new Dictionary<Type, IList<object>>();
 
         this.data = new Dictionary<Type, IList<RuntimeGameData>>();
@@ -55,54 +52,14 @@ public class GameDataReader : IGameDataRuntimeResolver
         this.data.Add(dataType, new List<RuntimeGameData>());
     }
 
-    public string GetGuid(uint id)
+    public GameDataId GetId(GameDataRefBase dataRef)
     {
-        if (!this.IsLoaded)
-        {
-            EssentialCore.Logger.Warn("Game Data Not loaded");
-            return GameDataId.Invalid.Guid;
-        }
-
-        string result;
-        if (this.gameDataIdLookup.TryGetKey(id, out result))
-        {
-            return result;
-        }
-
-        return null;
-    }
-
-    public uint GetId(string guid)
-    {
-        if (!this.IsLoaded)
-        {
-            EssentialCore.Logger.Warn("Game Data Not loaded");
-            return GameDataId.InvalidId;
-        }
-
-        uint result;
-        if (this.gameDataIdLookup.TryGetValue(guid, out result))
-        {
-            return result;
-        }
-
-        return GameDataId.InvalidId;
-    }
-
-    public GameDataId GetRuntimeId(GameDataRuntimeRefBase runtimeRef)
-    {
-        if (!runtimeRef.IsValid())
+        if (!dataRef.IsValid())
         {
             return GameDataId.Invalid;
         }
 
-        uint internalId = this.GetId(runtimeRef.RefGuid);
-        if (internalId == GameDataId.InvalidId)
-        {
-            return GameDataId.Invalid;
-        }
-
-        return new GameDataId(runtimeRef.RefGuid, internalId);
+        return new GameDataId(dataRef.Id);
     }
 
     public bool GetAll<T>(IList<T> target)
@@ -185,8 +142,8 @@ public class GameDataReader : IGameDataRuntimeResolver
         string id = EssentialCore.GameDataDefaultLocation + type.Name + EssentialCore.GameDataDefaultExtension;
         if (db.Contains(id))
         {
-            SBTNodeStream stream = db.ReadStream(id);
-            using (BinaryReader reader = stream.BeginRead())
+            SBTNodeStream set = db.ReadStream(id);
+            using (BinaryReader reader = set.BeginRead())
             {
                 int count = reader.ReadInt32();
                 for (var i = 0; i < count; i++)
@@ -219,14 +176,13 @@ public class GameDataReader : IGameDataRuntimeResolver
 
         foreach (RuntimeGameData entry in entries)
         {
-            if (entry.Id.Id == GameDataId.InvalidId || string.IsNullOrEmpty(entry.Id.Guid))
+            if (entry.Id.Value == GameDataId.InvalidId)
             {
                 EssentialCore.Logger.Error($"Game Data Entry has invalid id: {entry.Id}");
                 continue;
             }
 
             this.gameDataRegister.Add(entry.Id, entry);
-            this.gameDataIdLookup.Add(entry.Id.Guid, entry.Id.Id);
             typeList.Add(entry);
         }
     }

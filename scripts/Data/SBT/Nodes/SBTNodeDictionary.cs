@@ -23,9 +23,9 @@ public class SBTNodeDictionary : ISBTNode, ISBTNodeCollection, IEnumerable<strin
     // -------------------------------------------------------------------
     // Public
     // -------------------------------------------------------------------
-    public int Count
+    public ushort Count
     {
-        get { return this.children.Count; }
+        get { return (ushort)this.children.Count; }
     }
     
     public SBTFlags Flags { get; set; }

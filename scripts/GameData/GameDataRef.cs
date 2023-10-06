@@ -3,6 +3,6 @@
 using System;
 
 [Serializable]
-public abstract class GameDataRuntimeRef : GameDataRuntimeRefBase
+public abstract class GameDataRef : GameDataRefBase
 {
 }

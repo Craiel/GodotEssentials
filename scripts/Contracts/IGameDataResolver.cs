@@ -3,9 +3,9 @@
 using System.Collections.Generic;
 using GameData;
 
-public interface IGameDataRuntimeResolver
+public interface IGameDataResolver
 {
-    GameDataId GetRuntimeId(GameDataRuntimeRefBase runtimeRef);
+    GameDataId GetId(GameDataRefBase runtimeRef);
 
     T Get<T>(GameDataId dataId);
 

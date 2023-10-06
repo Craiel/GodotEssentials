@@ -107,6 +107,10 @@ public class ThreadQueueModule : IEngineThreadModule
 
             if (!operation.Suceeded)
             {
+#if DEBUG
+                EssentialCore.Logger.Error($"Operation did not Succeed: {operation.GetType().Name}");
+#endif
+                
                 error++;
             }
         }

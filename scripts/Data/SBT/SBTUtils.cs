@@ -151,6 +151,11 @@ public static class SBTUtils
                 return new SBTNodeDictionary(flags, note);
             }
 
+            case SBTType.Set:
+            {
+                return new SBTNodeSet(flags, note);
+            }
+
             case SBTType.Stream:
             {
                 return new SBTNodeStream(flags, note);
@@ -323,6 +328,20 @@ public static class SBTUtils
 
             switch (type)
             {
+                case SBTType.Stream:
+                {
+                    var result = new SBTStream();
+                    result.Load(reader);
+                    return result;
+                }
+                    
+                case SBTType.Set:
+                {
+                    var result = new SBTSet();
+                    result.Load(reader);
+                    return result;
+                }
+                
                 case SBTType.List:
                 {
                     var result = new SBTList();

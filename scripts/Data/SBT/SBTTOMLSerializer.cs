@@ -54,6 +54,7 @@ public class SBTTOMLSerializer : ISBTNodeSerializer
         {
             case SBTType.Unknown:
             case SBTType.List:
+            case SBTType.Set:
             case SBTType.Stream:
             {
                 throw new NotSupportedException();
@@ -114,10 +115,10 @@ public class SBTTOMLSerializer : ISBTNodeSerializer
             {
                 var typed = (SBTNodeArrayString) node;
                 this.data.Append("[ ");
-                for (var i = 0; i < typed.Length; i++)
+                for (var i = 0; i < typed.Count; i++)
                 {
                     this.data.AppendFormat("\"{0}\"", typed.Read(i));
-                    if (i < typed.Length - 1)
+                    if (i < typed.Count - 1)
                     {
                         this.data.Append(", ");
                     }
@@ -131,10 +132,10 @@ public class SBTTOMLSerializer : ISBTNodeSerializer
             {
                 var typed = (SBTNodeArrayBool) node;
                 this.data.Append("[ ");
-                for (var i = 0; i < typed.Length; i++)
+                for (var i = 0; i < typed.Count; i++)
                 {
                     this.data.Append(typed.Read(i).ToString());
-                    if (i < typed.Length - 1)
+                    if (i < typed.Count - 1)
                     {
                         this.data.Append(", ");
                     }
@@ -148,10 +149,10 @@ public class SBTTOMLSerializer : ISBTNodeSerializer
             {
                 var typed = (SBTNodeArrayByte) node;
                 this.data.Append("[ ");
-                for (var i = 0; i < typed.Length; i++)
+                for (var i = 0; i < typed.Count; i++)
                 {
                     this.data.Append(typed.Read(i).ToString());
-                    if (i < typed.Length - 1)
+                    if (i < typed.Count - 1)
                     {
                         this.data.Append(", ");
                     }
@@ -165,10 +166,10 @@ public class SBTTOMLSerializer : ISBTNodeSerializer
             {
                 var typed = (SBTNodeArrayShort) node;
                 this.data.Append("[ ");
-                for (var i = 0; i < typed.Length; i++)
+                for (var i = 0; i < typed.Count; i++)
                 {
                     this.data.Append(typed.Read(i).ToString());
-                    if (i < typed.Length - 1)
+                    if (i < typed.Count - 1)
                     {
                         this.data.Append(", ");
                     }
@@ -182,10 +183,10 @@ public class SBTTOMLSerializer : ISBTNodeSerializer
             {
                 var typed = (SBTNodeArrayUShort) node;
                 this.data.Append("[ ");
-                for (var i = 0; i < typed.Length; i++)
+                for (var i = 0; i < typed.Count; i++)
                 {
                     this.data.Append(typed.Read(i).ToString());
-                    if (i < typed.Length - 1)
+                    if (i < typed.Count - 1)
                     {
                         this.data.Append(", ");
                     }
@@ -199,10 +200,10 @@ public class SBTTOMLSerializer : ISBTNodeSerializer
             {
                 var typed = (SBTNodeArrayInt) node;
                 this.data.Append("[ ");
-                for (var i = 0; i < typed.Length; i++)
+                for (var i = 0; i < typed.Count; i++)
                 {
                     this.data.Append(typed.Read(i).ToString());
-                    if (i < typed.Length - 1)
+                    if (i < typed.Count - 1)
                     {
                         this.data.Append(", ");
                     }
@@ -216,10 +217,10 @@ public class SBTTOMLSerializer : ISBTNodeSerializer
             {
                 var typed = (SBTNodeArrayUInt) node;
                 this.data.Append("[ ");
-                for (var i = 0; i < typed.Length; i++)
+                for (var i = 0; i < typed.Count; i++)
                 {
                     this.data.Append(typed.Read(i).ToString());
-                    if (i < typed.Length - 1)
+                    if (i < typed.Count - 1)
                     {
                         this.data.Append(", ");
                     }
@@ -233,10 +234,10 @@ public class SBTTOMLSerializer : ISBTNodeSerializer
             {
                 var typed = (SBTNodeArrayLong) node;
                 this.data.Append("[ ");
-                for (var i = 0; i < typed.Length; i++)
+                for (var i = 0; i < typed.Count; i++)
                 {
                     this.data.Append(typed.Read(i).ToString());
-                    if (i < typed.Length - 1)
+                    if (i < typed.Count - 1)
                     {
                         this.data.Append(", ");
                     }
@@ -250,10 +251,10 @@ public class SBTTOMLSerializer : ISBTNodeSerializer
             {
                 var typed = (SBTNodeArrayULong) node;
                 this.data.Append("[ ");
-                for (var i = 0; i < typed.Length; i++)
+                for (var i = 0; i < typed.Count; i++)
                 {
                     this.data.Append(typed.Read(i).ToString());
-                    if (i < typed.Length - 1)
+                    if (i < typed.Count - 1)
                     {
                         this.data.Append(", ");
                     }
@@ -267,10 +268,10 @@ public class SBTTOMLSerializer : ISBTNodeSerializer
             {
                 var typed = (SBTNodeArraySingle) node;
                 this.data.Append("[ ");
-                for (var i = 0; i < typed.Length; i++)
+                for (var i = 0; i < typed.Count; i++)
                 {
                     this.data.Append(typed.Read(i).ToString());
-                    if (i < typed.Length - 1)
+                    if (i < typed.Count - 1)
                     {
                         this.data.Append(", ");
                     }
@@ -284,10 +285,10 @@ public class SBTTOMLSerializer : ISBTNodeSerializer
             {
                 var typed = (SBTNodeArrayDouble) node;
                 this.data.Append("[ ");
-                for (var i = 0; i < typed.Length; i++)
+                for (var i = 0; i < typed.Count; i++)
                 {
                     this.data.Append(typed.Read(i).ToString());
-                    if (i < typed.Length - 1)
+                    if (i < typed.Count - 1)
                     {
                         this.data.Append(", ");
                     }

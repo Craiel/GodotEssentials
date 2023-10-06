@@ -4,24 +4,24 @@ using System;
 using Contracts;
 
 [Serializable]
-public class GameDataRuntimeRefBase
+public class GameDataRefBase
 {
     // -------------------------------------------------------------------
     // Public
     // -------------------------------------------------------------------
-    public string RefGuid;
+    public uint Id;
 
     public bool IsValid()
     {
-        return !string.IsNullOrEmpty(this.RefGuid);
+        return this.Id != GameDataId.InvalidId;
     }
 
     public void Reset()
     {
-        this.RefGuid = null;
+        this.Id = GameDataId.InvalidId;
     }
     
-    public bool Validate(object owner, IGameDataRuntimeValidationContext context, bool isOptional = true, bool warnIfMissing = false)
+    public bool Validate(object owner, IGameDataValidationContext context, bool isOptional = true, bool warnIfMissing = false)
     {
         if (!this.IsValid())
         {

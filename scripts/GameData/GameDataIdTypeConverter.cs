@@ -21,28 +21,24 @@ public class GameDataIdTypeConverter : TypeConverter
 
         return base.CanConvertFrom(context, sourceType);
     }
+    
     // Overrides the ConvertFrom method of TypeConverter.
     public override object ConvertFrom(ITypeDescriptorContext context, CultureInfo culture, object value)
     {
-        var typed = value as string;
-        if (typed != null)
+        if (value is string typed)
         {
-            string[] values = typed.Split(Separator);
-            if (values.Length == 2)
-            {
-                return new GameDataId(values[0], uint.Parse(values[1]));
-            }
+            return new GameDataId(uint.Parse(typed));
         }
 
         return base.ConvertFrom(context, culture, value);
     }
     // Overrides the ConvertTo method of TypeConverter.
-    public override object ConvertTo(ITypeDescriptorContext context,
-        CultureInfo culture, object value, Type destinationType)
+    
+    public override object ConvertTo(ITypeDescriptorContext context, CultureInfo culture, object value, Type destinationType)
     {
         if (destinationType == TypeDef<string>.Value)
         {
-            return string.Format("{0}" + Separator + "{1}", ((GameDataId)value).Guid, ((GameDataId)value).Id);
+            return ((GameDataId)value).Value;
         }
         return base.ConvertTo(context, culture, value, destinationType);
     }

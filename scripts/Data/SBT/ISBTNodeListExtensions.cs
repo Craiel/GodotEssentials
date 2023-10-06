@@ -97,6 +97,11 @@ public static class ISBTNodeListExtensions
         array.Add(values);
     }
 
+    public static SBTNodeSet StartSet(this ISBTNodeList target, SBTFlags flags = SBTFlags.None, string note = null)
+    {
+        return (SBTNodeSet)target.AddEntry(SBTType.Set, null, flags, note);
+    }
+
     public static SBTNodeStream StartStream(this ISBTNodeList target, SBTFlags flags = SBTFlags.None, string note = null)
     {
         return (SBTNodeStream)target.AddEntry(SBTType.Stream, null, flags, note);

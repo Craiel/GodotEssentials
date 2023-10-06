@@ -88,6 +88,11 @@ public static class SBTNodeListExtensions
         return source.Read<SBTNodeDictionary>(index);
     }
     
+    public static SBTNodeSet ReadSet(this SBTList source, int index)
+    {
+        return source.Read<SBTNodeSet>(index);
+    }
+    
     public static SBTNodeStream ReadStream(this SBTList source, int index)
     {
         return source.Read<SBTNodeStream>(index);
@@ -373,6 +378,16 @@ public static class SBTNodeListExtensions
     public static SBTNodeDictionary TryReadDictionary(this SBTList source, int index, SBTNodeDictionary defaultValue)
     {
         return source.TryRead(index, out SBTNodeDictionary result) ? result : defaultValue;
+    }
+    
+    public static bool TryReadSet(this SBTList source, int index, out SBTNodeSet result)
+    {
+        return source.TryRead(index, out result);
+    }
+    
+    public static SBTNodeSet TryReadSet(this SBTList source, int index, SBTNodeSet defaultValue)
+    {
+        return source.TryRead(index, out SBTNodeSet result) ? result : defaultValue;
     }
     
     public static bool TryReadStream(this SBTList source, int index, out SBTNodeStream result)

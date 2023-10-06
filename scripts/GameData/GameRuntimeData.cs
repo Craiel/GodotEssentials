@@ -5,7 +5,6 @@ namespace Craiel.Essentials.GameData;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using EngineCore;
 using Event;
 using Events;
 using Resource;
@@ -52,25 +51,14 @@ public class GameRuntimeData : IGameModule
         return this.reader.Get<T>(dataId);
     }
 
-    public GameDataId GetRuntimeId(GameDataRuntimeRefBase refData)
+    public GameDataId GetRuntimeId(GameDataRefBase refData)
     {
-        if (refData == null)
+        if (refData == null || !refData.IsValid())
         {
             return GameDataId.Invalid;
         }
 
-        return GetRuntimeId(refData.RefGuid);
-    }
-
-    public GameDataId GetRuntimeId(string guid)
-    {
-        if (string.IsNullOrEmpty(guid))
-        {
-            return GameDataId.Invalid;
-        }
-
-        uint runtimeId = this.reader.GetId(guid);
-        return new GameDataId(guid, runtimeId);
+        return new GameDataId(refData.Id);
     }
 
     public void Load(ResourceKey resourceKey)

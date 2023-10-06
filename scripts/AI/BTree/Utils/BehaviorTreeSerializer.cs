@@ -32,7 +32,7 @@ namespace Craiel.Essentials.AI.BTree.Utils
             root.Add("Size", tree.stream.Length);
             root.Add("GrowBy", tree.GrowBy);
             root.Add("RootId", tree.Root.Value);
-            var streamData = root.AddDictionary("StreamData");
+            var streamData = root.StartDictionary("StreamData");
             for (var i = 0; i < tree.stream.Length; i++)
             {
                 if (tree.stream[i] == null)

@@ -7,39 +7,23 @@ using System.ComponentModel;
 [Serializable]
 public struct GameDataId
 {
-    public const int InvalidId = 0;
-    public const int FirstValidId = 1;
+    public const uint InvalidId = 0;
+    public const uint FirstValidId = 1;
 
     public static readonly GameDataId Invalid = new GameDataId();
 
     // -------------------------------------------------------------------
     // Constructor
     // -------------------------------------------------------------------
-    public GameDataId(string guid, uint id)
-    {
-        this.Guid = guid;
-        this.Id = id;
-        this.HasGuid = !string.IsNullOrEmpty(guid);
-    }
-
-    public GameDataId(string guid)
-        : this(guid, InvalidId)
-    {
-    }
-
     public GameDataId(uint id)
-        : this(null, id)
     {
+        this.Value = id;
     }
 
     // -------------------------------------------------------------------
     // Public
     // -------------------------------------------------------------------
-    public string Guid;
-
-    public uint Id;
-
-    public readonly bool HasGuid;
+    public uint Value;
 
     public static bool operator ==(GameDataId value1, GameDataId value2)
     {
@@ -53,25 +37,17 @@ public struct GameDataId
 
     public bool Equals(GameDataId other)
     {
-        bool noneHasId = this.Id == InvalidId && other.Id == InvalidId;
-        bool bothHaveId = this.Id != InvalidId && other.Id != InvalidId;
-        bool noneHasGuid = !this.HasGuid && !other.HasGuid;
-        bool bothHaveGuid = this.HasGuid && other.HasGuid;
+        bool noneHasId = this.Value == InvalidId && other.Value == InvalidId;
+        bool bothHaveId = this.Value != InvalidId && other.Value != InvalidId;
 
         if (bothHaveId)
         {
             // Easy case, simple id compare
-            return (this.Id != InvalidId && other.Id != InvalidId) && this.Id == other.Id;
-        }
-
-        if (bothHaveGuid)
-        {
-            // both have a guid, compare on that
-            return string.Equals(this.Guid, other.Guid, StringComparison.OrdinalIgnoreCase);
+            return (this.Value != InvalidId && other.Value != InvalidId) && this.Value == other.Value;
         }
 
         // At this point they can only be equal if they have nothing
-        return noneHasId && noneHasGuid;
+        return noneHasId;
     }
 
     public override bool Equals(object obj)
@@ -86,17 +62,11 @@ public struct GameDataId
 
     public override int GetHashCode()
     {
-        if (this.Id == InvalidId && this.HasGuid)
-        {
-            // If no valid id is given guid will determine the hashcode
-            return this.Guid.GetHashCode();
-        }
-
-        return this.Id.GetHashCode();
+        return this.Value.GetHashCode();
     }
 
     public override string ToString()
     {
-        return string.Format("({0}:{1})", this.Guid ?? string.Empty, this.Id);
+        return this.Value.ToString();
     }
 }
