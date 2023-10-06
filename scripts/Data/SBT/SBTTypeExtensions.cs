@@ -12,7 +12,8 @@ public static class SBTTypeExtensions
     {
         switch (type)
         {
-            case SBTType.String:
+            case SBTType.String: 
+            case SBTType.Bool:
             case SBTType.Byte:
             case SBTType.Short:
             case SBTType.UShort:
@@ -71,6 +72,11 @@ public static class SBTTypeExtensions
             case SBTType.StringArray:
             {
                 return SBTType.String;
+            }
+
+            case SBTType.BoolArray:
+            {
+                return SBTType.Bool;
             }
                 
             case SBTType.ByteArray:
@@ -133,7 +139,12 @@ public static class SBTTypeExtensions
             {
                 return SBTType.StringArray;
             }
-                
+
+            case SBTType.Bool:
+            {
+                return SBTType.BoolArray;
+            }
+            
             case SBTType.Byte:
             {
                 return SBTType.ByteArray;

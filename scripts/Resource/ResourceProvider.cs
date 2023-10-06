@@ -93,7 +93,7 @@ public class ResourceProvider : IGameModule
         IList<ResourceKey> resources = EssentialCore.ResourceProvider.AcquireResourcesByType<T>();
         if (resources == null || resources.Count != 1)
         {
-            EssentialCore.Logger.Warn($"Expected 1 result for {TypeCache<T>.Value}");
+            EssentialCore.Logger.Warn($"Expected 1 result for {TypeDef<T>.Value}");
             return null;
         }
 
@@ -102,12 +102,12 @@ public class ResourceProvider : IGameModule
 
     public static Resource LoadImmediate(ResourceKey key)
     {
-        if (key.Type != null && !key.Type.IsSubclassOf(TypeCache<Resource>.Value))
+        if (key.Type != null && !key.Type.IsSubclassOf(TypeDef<Resource>.Value))
         {
             throw new InvalidOperationException("Resource Key requested with non-resource type: " + key);
         }
         
-        string typeHint = key.Type != null ? key.Type.Name : TypeCache<Resource>.Value.Name;
+        string typeHint = key.Type != null ? key.Type.Name : TypeDef<Resource>.Value.Name;
         return ResourceLoader.Load(key.Path, typeHint);
     }
 
@@ -347,7 +347,7 @@ public class ResourceProvider : IGameModule
     {
         if (!(data is T))
         {
-            EssentialCore.Logger.Error($"Type requested {TypeCache<T>.Value} did not match the registered key type {key.Type} for {key}");
+            EssentialCore.Logger.Error($"Type requested {TypeDef<T>.Value} did not match the registered key type {key.Type} for {key}");
             return null;
         }
 
@@ -427,7 +427,7 @@ public class ResourceProvider : IGameModule
     private Resource AcquireFallbackResource<T>()
     {
         ResourceKey fallbackKey;
-        if (this.fallbackResources.TryGetValue(TypeCache<T>.Value, out fallbackKey))
+        if (this.fallbackResources.TryGetValue(TypeDef<T>.Value, out fallbackKey))
         {
             ResourceLoadRequest request = this.resourceMap.GetData(fallbackKey);
             Resource data = request != null ? request.GetAsset() : null;

@@ -22,19 +22,19 @@ public static class NodeExtensions
 			
 			Variant meta = node.GetMeta(field.Name);
 
-			if (field.FieldType == TypeCache<double>.Value)
+			if (field.FieldType == TypeDef<double>.Value)
 			{
 				field.SetValue(node, meta.AsDouble());
 				continue;
 			}
 
-			if (field.FieldType.IsSubclassOf(TypeCache<Resource>.Value))
+			if (field.FieldType.IsSubclassOf(TypeDef<Resource>.Value))
 			{
 				field.SetValue(node, meta.Obj);
 				continue;
 			}
 
-			if (field.FieldType.IsSubclassOf(TypeCache<Control>.Value))
+			if (field.FieldType.IsSubclassOf(TypeDef<Control>.Value))
 			{
 				var nodePath = meta.AsNodePath();
 				field.SetValue(node, node.GetNode(nodePath));

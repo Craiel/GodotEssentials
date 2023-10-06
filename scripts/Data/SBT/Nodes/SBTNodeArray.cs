@@ -5,7 +5,7 @@ using System.IO;
 using Enums;
 using SBT;
 
-public abstract class SBTNodeArray<T> : ISBTNode
+public abstract class SBTNodeArray<T> : ISBTNode, ISBTNodeCollection
 {
     private const uint CapacityInterval = 100;
 
@@ -58,7 +58,7 @@ public abstract class SBTNodeArray<T> : ISBTNode
         get { return this.capacityLimit; }
     }
 
-    public int Length
+    public int Count
     {
         get { return this.nextDataIndex; }
     }
@@ -84,7 +84,7 @@ public abstract class SBTNodeArray<T> : ISBTNode
         
         Array.Resize(ref this.data, capacity);
         
-        if (this.Length > this.data.Length)
+        if (this.Count > this.data.Length)
         {
             // Clamp the next free slot index
             this.nextDataIndex = this.data.Length;
@@ -93,7 +93,7 @@ public abstract class SBTNodeArray<T> : ISBTNode
 
     public void AddChecked(T entry)
     {
-        if (this.Length >= this.data.Length)
+        if (this.Count >= this.data.Length)
         {
             this.SetCapacity((ushort) (this.data.Length + CapacityInterval));
         }
@@ -144,7 +144,7 @@ public abstract class SBTNodeArray<T> : ISBTNode
     
     public void Save(BinaryWriter writer)
     {
-        int count = this.Length;
+        int count = this.Count;
         
         writer.Write(this.capacityLimit);
         writer.Write(count);

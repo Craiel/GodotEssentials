@@ -32,9 +32,9 @@ public static class ObjectExtensions
             return false;
         }
 
-        if (compareType.BaseType == TypeCache<ValueType>.Value
-            || compareType.BaseType == TypeCache<Enum>.Value
-            || compareType == TypeCache<string>.Value)
+        if (compareType.BaseType == TypeDef<ValueType>.Value
+            || compareType.BaseType == TypeDef<Enum>.Value
+            || compareType == TypeDef<string>.Value)
         {
             // Value types, strings and enums should have match at this point
             return false;

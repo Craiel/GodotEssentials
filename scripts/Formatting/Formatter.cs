@@ -120,12 +120,12 @@ public class Formatter : IFormatter
     private string GetFormattedValue(string key, string parameter, object handlerValue)
     {
         Type handlerType = handlerValue.GetType();
-        if (handlerType == TypeCache<string>.Value)
+        if (handlerType == TypeDef<string>.Value)
         {
             return handlerValue as string;
         }
 
-        if (handlerType == TypeCache<FormatHandler>.Value)
+        if (handlerType == TypeDef<FormatHandler>.Value)
         {
             return ((FormatHandler)handlerValue).Evaluate(parameter);
         }

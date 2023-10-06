@@ -101,7 +101,7 @@ public class GameRuntimeData : IGameModule
     public static void RegisterData<T>()
         where T : RuntimeGameData
     {
-        DataRegister.Add(TypeCache<T>.Value);
+        DataRegister.Add(TypeDef<T>.Value);
     }
 
     public static GameDataReader InitializeReader()

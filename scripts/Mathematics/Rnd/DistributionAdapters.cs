@@ -12,23 +12,23 @@ public static class DistributionAdapters
     // -------------------------------------------------------------------
     static DistributionAdapters()
     {
-        Adapters.Add(TypeCache<ConstantDoubleDistribution>.Value, new ConstantDoubleDistributionAdapter());
-        Adapters.Add(TypeCache<ConstantFloatDistribution>.Value, new ConstantFloatDistributionAdapter());
-        Adapters.Add(TypeCache<ConstantIntegerDistribution>.Value, new ConstantIntegerDistributionAdapter());
-        Adapters.Add(TypeCache<ConstantLongDistribution>.Value, new ConstantLongDistributionAdapter());
+        Adapters.Add(TypeDef<ConstantDoubleDistribution>.Value, new ConstantDoubleDistributionAdapter());
+        Adapters.Add(TypeDef<ConstantFloatDistribution>.Value, new ConstantFloatDistributionAdapter());
+        Adapters.Add(TypeDef<ConstantIntegerDistribution>.Value, new ConstantIntegerDistributionAdapter());
+        Adapters.Add(TypeDef<ConstantLongDistribution>.Value, new ConstantLongDistributionAdapter());
 
-        Adapters.Add(TypeCache<GaussianDoubleDistribution>.Value, new GaussianDoubleDistributionAdapter());
-        Adapters.Add(TypeCache<GaussianFloatDistribution>.Value, new GaussianFloatDistributionAdapter());
+        Adapters.Add(TypeDef<GaussianDoubleDistribution>.Value, new GaussianDoubleDistributionAdapter());
+        Adapters.Add(TypeDef<GaussianFloatDistribution>.Value, new GaussianFloatDistributionAdapter());
 
-        Adapters.Add(TypeCache<TriangularDoubleDistribution>.Value, new TriangularDoubleDistributionAdapter());
-        Adapters.Add(TypeCache<TriangularFloatDistribution>.Value, new TriangularFloatDistributionAdapter());
-        Adapters.Add(TypeCache<TriangularIntegerDistribution>.Value, new TriangularIntegerDistributionAdapter());
-        Adapters.Add(TypeCache<TriangularLongDistribution>.Value, new TriangularLongDistributionAdapter());
+        Adapters.Add(TypeDef<TriangularDoubleDistribution>.Value, new TriangularDoubleDistributionAdapter());
+        Adapters.Add(TypeDef<TriangularFloatDistribution>.Value, new TriangularFloatDistributionAdapter());
+        Adapters.Add(TypeDef<TriangularIntegerDistribution>.Value, new TriangularIntegerDistributionAdapter());
+        Adapters.Add(TypeDef<TriangularLongDistribution>.Value, new TriangularLongDistributionAdapter());
 
-        Adapters.Add(TypeCache<UniformDoubleDistribution>.Value, new UniformDoubleDistributionAdapter());
-        Adapters.Add(TypeCache<UniformFloatDistribution>.Value, new UniformFloatDistributionAdapter());
-        Adapters.Add(TypeCache<UniformIntegerDistribution>.Value, new UniformIntegerDistributionAdapter());
-        Adapters.Add(TypeCache<UniformLongDistribution>.Value, new UniformLongDistributionAdapter());
+        Adapters.Add(TypeDef<UniformDoubleDistribution>.Value, new UniformDoubleDistributionAdapter());
+        Adapters.Add(TypeDef<UniformFloatDistribution>.Value, new UniformFloatDistributionAdapter());
+        Adapters.Add(TypeDef<UniformIntegerDistribution>.Value, new UniformIntegerDistributionAdapter());
+        Adapters.Add(TypeDef<UniformLongDistribution>.Value, new UniformLongDistributionAdapter());
     }
 
     // -------------------------------------------------------------------
@@ -40,7 +40,7 @@ public static class DistributionAdapters
         where TN : DoubleDistribution
     {
         protected DoubleAdapter(string category)
-            : base(category, TypeCache<DoubleDistribution>.Value)
+            : base(category, TypeDef<DoubleDistribution>.Value)
         {
         }
 
@@ -63,7 +63,7 @@ public static class DistributionAdapters
         where TN : FloatDistribution
     {
         protected FloatAdapter(string category)
-            : base(category, TypeCache<FloatDistribution>.Value)
+            : base(category, TypeDef<FloatDistribution>.Value)
         {
         }
 
@@ -86,7 +86,7 @@ public static class DistributionAdapters
         where TN : IntegerDistribution
     {
         protected IntegerAdapter(string category)
-            : base(category, TypeCache<IntegerDistribution>.Value)
+            : base(category, TypeDef<IntegerDistribution>.Value)
         {
         }
 
@@ -109,7 +109,7 @@ public static class DistributionAdapters
         where TN : LongDistribution
     {
         protected LongAdapter(string category)
-            : base(category, TypeCache<LongDistribution>.Value)
+            : base(category, TypeDef<LongDistribution>.Value)
         {
         }
 

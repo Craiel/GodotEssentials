@@ -47,7 +47,7 @@ public class GameDataReader : IGameDataRuntimeResolver
     public void RegisterData<T>()
         where T : RuntimeGameData
     {
-        this.data.Add(TypeCache<T>.Value, new List<RuntimeGameData>());
+        this.data.Add(TypeDef<T>.Value, new List<RuntimeGameData>());
     }
 
     public void RegisterData(Type dataType)
@@ -113,7 +113,7 @@ public class GameDataReader : IGameDataRuntimeResolver
         }
 
         IList<object> entries;
-        if (this.gameDataTypeLookup.TryGetValue(TypeCache<T>.Value, out entries))
+        if (this.gameDataTypeLookup.TryGetValue(TypeDef<T>.Value, out entries))
         {
             target.AddRange(entries.Cast<T>());
             return target.Count > 0;
@@ -165,7 +165,7 @@ public class GameDataReader : IGameDataRuntimeResolver
     public void AddManual<T>(T entry, Func<T, GameDataId> baseRetriever)
         where T : RuntimeGameData
     {
-        this.IndexGameData(TypeCache<T>.Value, new List<RuntimeGameData> { entry });
+        this.IndexGameData(TypeDef<T>.Value, new List<RuntimeGameData> { entry });
     }
 
     // -------------------------------------------------------------------

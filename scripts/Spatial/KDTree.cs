@@ -90,7 +90,7 @@ public class KDTree<TDimension, TNode>
         // Attempt find the Min/Max value if null.
         if (searchWindowMinValue.Equals(default(TDimension)))
         {
-            var type = TypeCache<TDimension>.Value;
+            var type = TypeDef<TDimension>.Value;
             this.MinValue = (TDimension)type.GetField("MinValue").GetValue(type);
         }
         else
@@ -100,7 +100,7 @@ public class KDTree<TDimension, TNode>
 
         if (searchWindowMaxValue.Equals(default(TDimension)))
         {
-            var type = TypeCache<TDimension>.Value;
+            var type = TypeDef<TDimension>.Value;
             this.MaxValue = (TDimension)type.GetField("MaxValue").GetValue(type);
         }
         else

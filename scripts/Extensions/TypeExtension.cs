@@ -11,7 +11,7 @@ public static class TypeExtension
     public static bool Implements<T>(this Type type)
         where T : class
     {
-        Type targetType = TypeCache<T>.Value;
+        Type targetType = TypeDef<T>.Value;
         if (!targetType.IsInterface)
         {
             throw new InvalidOperationException("Interface type expected for Implements call");
@@ -92,32 +92,32 @@ public static class TypeExtension
             return source;
         }
 
-        if (targetType == TypeCache<int>.Value)
+        if (targetType == TypeDef<int>.Value)
         {
             return Convert.ToInt32(source);
         }
 
-        if (targetType == TypeCache<uint>.Value)
+        if (targetType == TypeDef<uint>.Value)
         {
             return Convert.ToUInt32(source);
         }
 
-        if (targetType == TypeCache<long>.Value)
+        if (targetType == TypeDef<long>.Value)
         {
             return Convert.ToInt64(source);
         }
 
-        if (targetType == TypeCache<bool>.Value)
+        if (targetType == TypeDef<bool>.Value)
         {
             return Convert.ToBoolean(source);
         }
 
-        if (targetType == TypeCache<float>.Value)
+        if (targetType == TypeDef<float>.Value)
         {
             return Convert.ToSingle(source);
         }
 
-        if (targetType == TypeCache<DateTime>.Value)
+        if (targetType == TypeDef<DateTime>.Value)
         {
             return Convert.ToDateTime(source);
         }
@@ -149,7 +149,7 @@ public static class TypeExtension
     public static IDictionary<string, T> GetStaticProperties<T>(this Type type)
     {
         return type.GetFields(BindingFlags.Public | BindingFlags.Static)
-                .Where(f => f.FieldType == TypeCache<T>.Value)
+                .Where(f => f.FieldType == TypeDef<T>.Value)
                 .ToDictionary(f => f.Name, f => (T)f.GetValue(null));
     }
 }

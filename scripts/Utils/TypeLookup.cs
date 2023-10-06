@@ -20,7 +20,7 @@ public static class TypeLookup
         {
             var type = typeCache[i];
 
-            if (!TypeCache<T>.Value.IsAssignableFrom(type))
+            if (!TypeDef<T>.Value.IsAssignableFrom(type))
             {
                 continue;
             }

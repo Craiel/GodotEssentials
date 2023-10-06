@@ -114,7 +114,7 @@ public abstract class ManagedPath
 
         // Uri transforms this so we have to bring it back in line
         relativePath = relativePath.Replace("/", DirectorySeparator);
-        return (T)Activator.CreateInstance(TypeCache<T>.Value, relativePath);
+        return (T)Activator.CreateInstance(TypeDef<T>.Value, relativePath);
     }
 
     public T ToAbsolute<T>(ManagedPath root) where T : ManagedPath
@@ -125,13 +125,13 @@ public abstract class ManagedPath
         }
 
         string absolutePath = this.GetAbsolutePath(root);
-        return (T)Activator.CreateInstance(TypeCache<T>.Value, absolutePath);
+        return (T)Activator.CreateInstance(TypeDef<T>.Value, absolutePath);
     }
 
     public T ToAbsolute<T>() where T : ManagedPath
     {
         string absolutePath = System.IO.Path.GetFullPath(this.GetPath());
-        return (T)Activator.CreateInstance(TypeCache<T>.Value, absolutePath);
+        return (T)Activator.CreateInstance(TypeDef<T>.Value, absolutePath);
     }
 
     public bool Contains(string pattern, bool ignoreCase = false)
@@ -256,7 +256,7 @@ public abstract class ManagedPath
         for (int i = 0; i < other.Length; i++)
         {
             string otherValue;
-            if (TypeCache<T>.Value == TypeCache<string>.Value)
+            if (TypeDef<T>.Value == TypeDef<string>.Value)
             {
                 otherValue = other[i] as string;
             }

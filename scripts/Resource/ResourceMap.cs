@@ -42,7 +42,7 @@ public class ResourceMap<T> where T : class
     // -------------------------------------------------------------------
     public IList<ResourceKey> GetKeysByType<TX>()
     {
-        return this.GetKeysByType(TypeCache<TX>.Value);
+        return this.GetKeysByType(TypeDef<TX>.Value);
     }
 
     public IList<ResourceKey> GetKeysByType(Type type)

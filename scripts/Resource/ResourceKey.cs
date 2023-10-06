@@ -15,7 +15,7 @@ public struct ResourceKey
         : this()
     {
         this.Path = path;
-        this.Type = type ?? TypeCache<Resource>.Value;
+        this.Type = type ?? TypeDef<Resource>.Value;
     }
 
     // -------------------------------------------------------------------
@@ -32,7 +32,7 @@ public struct ResourceKey
 
     public static ResourceKey Create<T>(string path)
     {
-        return new ResourceKey(path, TypeCache<T>.Value);
+        return new ResourceKey(path, TypeDef<T>.Value);
     }
 
     public static bool operator ==(ResourceKey rhs, ResourceKey lhs)
@@ -53,7 +53,7 @@ public struct ResourceKey
 
     public override bool Equals(object other)
     {
-        if (other == null || other.GetType() != TypeCache<ResourceKey>.Value)
+        if (other == null || other.GetType() != TypeDef<ResourceKey>.Value)
         {
             return false;
         }

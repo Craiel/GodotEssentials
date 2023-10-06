@@ -1,13 +1,17 @@
+using System;
+using System.Collections.Generic;
+
 namespace Craiel.Essentials.Data.SBT.Nodes;
 
-using System;
 using System.IO;
 using System.Text;
 using Enums;
 
-public class SBTNodeStream : ISBTNode
+public class SBTNodeStream : ISBTNodeList
 {
-    private readonly MemoryStream inner;
+    private readonly IList<ISBTNode> entries = new List<ISBTNode>();
+
+    private ushort currentPosition;
     
     // -------------------------------------------------------------------
     // Constructor
@@ -16,7 +20,6 @@ public class SBTNodeStream : ISBTNode
     {
         this.Flags = flags;
         this.Note = note;
-        this.inner = new MemoryStream();
         this.Encoding = Encoding.UTF8;
     }
     
@@ -29,9 +32,9 @@ public class SBTNodeStream : ISBTNode
     
     public string Note { get; }
 
-    public long Length
+    public ushort Count
     {
-        get { return this.inner.Length; }
+        get { return (ushort)this.entries.Count; }
     }
 
     public SBTType Type
@@ -39,43 +42,126 @@ public class SBTNodeStream : ISBTNode
         get { return SBTType.Stream; }
     }
     
+    public ISBTNode AddEntry(SBTType type, object data, SBTFlags flags, string note)
+    {
+        var node = SBTUtils.GetNode(type, data, flags, note);
+        this.AddEntry(node);
+        return node;
+    }
+    
+    public void AddEntry<T>(T child)
+        where T : ISBTNode
+    {
+        if (this.entries.Count >= ushort.MaxValue)
+        {
+            throw new InvalidDataException("Node Stream limit exceeded!");
+        }
+        
+        this.entries.Add(child);
+        this.currentPosition = (ushort)this.entries.Count;
+    }
+    
+    public void Seek(ushort index)
+    {
+        if (index >= this.entries.Count)
+        {
+            throw new InvalidOperationException($"Attempt to seek beyond stream: {index} -> {this.entries.Count}");
+        }
+        
+        currentPosition = index;
+    }
+    
+    public T ReadNext<T>()
+        where T : ISBTNode
+    {
+        if (this.entries.Count == 0)
+        {
+            throw new InvalidOperationException("No Entries to read");
+        }
+        
+        if (this.currentPosition >= this.entries.Count)
+        {
+            throw new InvalidOperationException("End of Stream");
+        }
+        
+        return (T) this.entries[this.currentPosition++];
+    }
+    
+    public ISBTNode ReadNext()
+    {
+        if (this.entries.Count == 0)
+        {
+            throw new InvalidOperationException("No Entries to read");
+        }
+        
+        if (this.currentPosition >= this.entries.Count)
+        {
+            throw new InvalidOperationException("End of Stream");
+        }
+
+        return this.entries[this.currentPosition++];
+    }
+    
+    public bool TryReadNext<T>(out T result)
+        where T : ISBTNode
+    {
+        result = default;
+        
+        if (this.entries.Count == 0)
+        {
+            throw new InvalidOperationException("No Entries to read");
+        }
+
+        if (this.currentPosition >= this.entries.Count)
+        {
+            throw new InvalidOperationException("End of Stream");
+        }
+        
+        ISBTNode node = this.entries[this.currentPosition++];
+        if (node is T)
+        {
+            result = (T) node;
+            return true;
+        }
+
+        return false;
+    }
+    
     public void Save(BinaryWriter writer)
     {
-        this.inner.Seek(0, SeekOrigin.Begin);
-        byte[] data = new byte[this.inner.Length];
-        this.inner.Read(data, 0, data.Length);
-        this.inner.Seek(0, SeekOrigin.End);
-        
-        writer.Write(data.Length);
-        writer.Write(data);
+        writer.Write((ushort)this.entries.Count);
+        for (var i = 0; i < this.entries.Count; i++)
+        {
+            ISBTNode child = this.entries[i];
+            child.WriteHeader(writer);
+            child.Save(writer);
+        }
     }
     
     public void Load(BinaryReader reader)
     {
-        int length = reader.ReadInt32();
-        byte[] data = reader.ReadBytes(length);
-        this.inner.Seek(0, SeekOrigin.Begin);
-        this.inner.Write(data, 0, data.Length);
-        this.inner.Seek(0, SeekOrigin.Begin);
-    }
+        ushort count = reader.ReadUInt16();
+        for (var i = 0; i < count; i++)
+        {
+            SBTType type;
+            SBTFlags flags;
+            SBTUtils.ReadHeader(reader, out type, out flags);
 
-    public BinaryReader BeginRead()
-    {
-        return new BinaryReader(this.inner, this.Encoding, true);
-    }
+            object data = null;
+            if (type.IsSimpleType())
+            {
+                data = SBTUtils.ReadSimpleTypeData(type, reader);
+            }
+            
+            ISBTNode child = SBTUtils.GetNode(type, data, flags);
+            if (!type.IsSimpleType())
+            {
+                child.Load(reader);
+            }
+            
+            this.AddEntry(child);
+        }
 
-    public BinaryWriter BeginWrite()
-    {
-        return new BinaryWriter(this.inner, this.Encoding, true);
-    }
-    
-    public void Seek(int target, SeekOrigin origin)
-    {
-        this.inner.Seek(target, origin);
-    }
-    
-    public void Flush()
-    {
-        this.inner.Flush();
+        currentPosition = 0;
     }
 }

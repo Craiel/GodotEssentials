@@ -36,6 +36,11 @@ public static class SBTUtils
                 return new SBTNodeString((string)data, flags, note);
             }
 
+            case SBTType.Bool:
+            {
+                return new SBTNodeBool((bool)data, flags, note);
+            }
+            
             case SBTType.Byte:
             {
                 return new SBTNodeByte((byte)data, flags, note);
@@ -86,6 +91,11 @@ public static class SBTUtils
                 return new SBTNodeArrayString(type, flags, note);
             }
 
+            case SBTType.BoolArray:
+            {
+                return new SBTNodeArrayBool(type, flags, note);
+            }
+            
             case SBTType.ByteArray:
             {
                 return new SBTNodeArrayByte(type, flags, note);
@@ -356,6 +366,11 @@ public static class SBTUtils
                 return reader.ReadString();
             }
 
+            case SBTType.Bool:
+            {
+                return reader.ReadBoolean();
+            }
+            
             case SBTType.Byte:
             {
                 return reader.ReadByte();
@@ -442,6 +457,11 @@ public static class SBTUtils
     {
         switch (type)
         {
+            case SBTType.Bool:
+            {
+                return sizeof(bool);
+            }
+            
             case SBTType.Byte:
             {
                 return sizeof(byte);
@@ -522,52 +542,52 @@ public static class SBTUtils
 
     public static SBTType GetArrayBaseType(Type type)
     {
-        if (type == TypeCache<string>.Value)
+        if (type == TypeDef<string>.Value)
         {
             return SBTType.StringArray;
         }
 
-        if (type == TypeCache<byte>.Value)
+        if (type == TypeDef<byte>.Value)
         {
             return SBTType.ByteArray;
         }
 
-        if (type == TypeCache<short>.Value)
+        if (type == TypeDef<short>.Value)
         {
             return SBTType.ShortArray;
         }
 
-        if (type == TypeCache<ushort>.Value)
+        if (type == TypeDef<ushort>.Value)
         {
             return SBTType.UShortArray;
         }
 
-        if (type == TypeCache<int>.Value)
+        if (type == TypeDef<int>.Value)
         {
             return SBTType.IntArray;
         }
 
-        if (type == TypeCache<uint>.Value)
+        if (type == TypeDef<uint>.Value)
         {
             return SBTType.UIntArray;
         }
 
-        if (type == TypeCache<long>.Value)
+        if (type == TypeDef<long>.Value)
         {
             return SBTType.LongArray;
         }
 
-        if (type == TypeCache<ulong>.Value)
+        if (type == TypeDef<ulong>.Value)
         {
             return SBTType.ULongArray;
         }
 
-        if (type == TypeCache<float>.Value)
+        if (type == TypeDef<float>.Value)
         {
             return SBTType.SingleArray;
         }
 
-        if (type == TypeCache<double>.Value)
+        if (type == TypeDef<double>.Value)
         {
             return SBTType.DoubleArray;
         }

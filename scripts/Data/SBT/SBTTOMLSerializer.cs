@@ -127,6 +127,23 @@ public class SBTTOMLSerializer : ISBTNodeSerializer
                 break;
             }
 
+            case SBTType.BoolArray:
+            {
+                var typed = (SBTNodeArrayBool) node;
+                this.data.Append("[ ");
+                for (var i = 0; i < typed.Length; i++)
+                {
+                    this.data.Append(typed.Read(i).ToString());
+                    if (i < typed.Length - 1)
+                    {
+                        this.data.Append(", ");
+                    }
+                }
+
+                this.data.Append(" ]");
+                break;
+            }
+
             case SBTType.ByteArray:
             {
                 var typed = (SBTNodeArrayByte) node;
@@ -283,6 +300,12 @@ public class SBTTOMLSerializer : ISBTNodeSerializer
             case SBTType.String:
             {
                 this.data.Append(string.Concat("\"", ((SBTNodeString) node).Data, "\""));
+                break;
+            }
+            
+            case SBTType.Bool:
+            {
+                this.data.Append(((SBTNodeBool) node).Data.ToString());
                 break;
             }
             

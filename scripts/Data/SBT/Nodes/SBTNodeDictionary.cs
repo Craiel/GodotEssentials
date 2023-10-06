@@ -6,7 +6,7 @@ using System.IO;
 using Enums;
 using SBT;
 
-public class SBTNodeDictionary : ISBTNode, IEnumerable<string>
+public class SBTNodeDictionary : ISBTNode, ISBTNodeCollection, IEnumerable<string>
 {
     private readonly IDictionary<string, ISBTNode> children;
 

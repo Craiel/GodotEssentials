@@ -10,7 +10,7 @@ public static class EnumDef<T>
     // -------------------------------------------------------------------
     static EnumDef()
     {
-        Type = TypeCache<T>.Value;
+        Type = TypeDef<T>.Value;
         Values = (T[])Enum.GetValues(Type);
         Names = Enum.GetNames(Type);
 

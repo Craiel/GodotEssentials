@@ -26,7 +26,7 @@ public class BaseEventAggregate<T> : IEventAggregate
     public BaseEventSubscriptionTicket Subscribe<TSpecific>(GameEventAction<TSpecific> actionDelegate, Func<TSpecific, bool> filterDelegate = null)
         where TSpecific : T
     {
-        var ticket = new BaseEventSubscriptionTicket(TypeCache<TSpecific>.Value, actionDelegate);
+        var ticket = new BaseEventSubscriptionTicket(TypeDef<TSpecific>.Value, actionDelegate);
         if (filterDelegate != null)
         {
             ticket.FilterDelegate = x => filterDelegate((TSpecific) x);
@@ -92,7 +92,7 @@ public class BaseEventAggregate<T> : IEventAggregate
         lock (this.subscribers)
         {
             BaseEventTargetCollection<T> targets;
-            if (this.subscribers.TryGetValue(TypeCache<TSpecific>.Value, out targets))
+            if (this.subscribers.TryGetValue(TypeDef<TSpecific>.Value, out targets))
             {
                 targets.Send(eventData);
             }

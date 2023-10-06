@@ -8,6 +8,8 @@ public enum SBTType
     Dictionary,
     String,
     StringArray,
+    Bool,
+    BoolArray,
     Byte,
     ByteArray,
     Short,
@@ -28,7 +30,7 @@ public enum SBTType
     DoubleArray,
     Stream,
     
-    // Unity Extras
+    // Extras
     Vector2,
     Vector3,
     Quaternion,
