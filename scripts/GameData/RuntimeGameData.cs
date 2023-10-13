@@ -30,12 +30,12 @@ public abstract class RuntimeGameData
     {
         if (!string.IsNullOrEmpty(this.IconSmallResourcePath))
         {
-            this.IconSmall = ResourceKey.Create<Texture>(this.IconSmallResourcePath);
+            this.IconSmall = ResourceKey.Create<Texture2D>(this.IconSmallResourcePath);
         }
         
         if (!string.IsNullOrEmpty(this.IconLargeResourcePath))
         {
-            this.IconLarge = ResourceKey.Create<Texture>(this.IconLargeResourcePath);
+            this.IconLarge = ResourceKey.Create<Texture2D>(this.IconLargeResourcePath);
         }
     }
 }

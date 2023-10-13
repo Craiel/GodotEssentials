@@ -11,6 +11,7 @@ public class ThreadQueueModule : IEngineThreadModule
 
     private readonly Queue<IThreadQueueCommand> queuedCommands;
     private readonly List<IThreadQueueCommand> lastCommand;
+    private readonly Stack<ThreadQueueBatchCommand> batchStack;
 
     private long lastUpdateFrameTime;
 
@@ -18,6 +19,7 @@ public class ThreadQueueModule : IEngineThreadModule
     {
         this.queuedCommands = new Queue<IThreadQueueCommand>();
         this.lastCommand = new List<IThreadQueueCommand>();
+        this.batchStack = new Stack<ThreadQueueBatchCommand>();
     }
 
     // -------------------------------------------------------------------
@@ -64,7 +66,15 @@ public class ThreadQueueModule : IEngineThreadModule
         }
 
         command.QueueTime = this.lastUpdateFrameTime;
-        this.queuedCommands.Enqueue(command);
+
+        if (this.batchStack.TryPeek(out ThreadQueueBatchCommand batch))
+        {
+            batch.Enqueue(command);
+        }
+        else
+        {
+            this.queuedCommands.Enqueue(command);
+        }
     }
     
     public void Queue<T>(Func<T, bool> action, T payload)
@@ -75,12 +85,37 @@ public class ThreadQueueModule : IEngineThreadModule
             throw new ArgumentException();
         }
 
-        var operation = new CallbackThreadQueueCommand<T>(action, payload)
+        var command = new CallbackThreadQueueCommand<T>(action, payload)
         {
             QueueTime = this.lastUpdateFrameTime
         };
+
+        if (this.batchStack.TryPeek(out ThreadQueueBatchCommand batch))
+        {
+            batch.Enqueue(command);
+        }
+        else
+        {
+            this.queuedCommands.Enqueue(command);
+        }
+    }
+
+    public void BeginBatch()
+    {
+        // Create a new batch command, no queue at this time, EndBatch() will queue this up 
+        var newBatch = new ThreadQueueBatchCommand(this);
+        this.batchStack.Push(newBatch);
+    }
+
+    public void EndBatch()
+    {
+        if (!this.batchStack.TryPop(out ThreadQueueBatchCommand batch))
+        {
+            throw new InvalidOperationException("No active Command Batch!");
+        }
         
-        this.queuedCommands.Enqueue(operation);
+        // Queue up the batch now, this can cascade though multiple batches if needed
+        this.Queue(batch);
     }
 
     // -------------------------------------------------------------------
