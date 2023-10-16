@@ -2,11 +2,7 @@
 
 namespace Craiel.Essentials;
 
-using System.Collections.Generic;
 using EngineCore;
-using GameData;
-using Godot;
-using Resource;
 
 public class AudioSystem : IGameModule
 {
@@ -18,15 +14,12 @@ public class AudioSystem : IGameModule
     
     private readonly TicketProviderManaged<AudioTicket, DynamicAudioStream> activeAudio;
     
-    private readonly IDictionary<GameDataId, IList<AudioTicket>> sourcesByDataMap;
-    
     // -------------------------------------------------------------------
     // Constructor
     // -------------------------------------------------------------------
     public AudioSystem()
     {
         this.dynamicAudioStreamPool = new DynamicAudioStreamPool();
-        this.sourcesByDataMap = new Dictionary<GameDataId, IList<AudioTicket>>();
         
         this.activeAudio = new TicketProviderManaged<AudioTicket, DynamicAudioStream>();
         this.activeAudio.EnableManagedTickets(this.IsFinished, this.Stop);
@@ -37,7 +30,7 @@ public class AudioSystem : IGameModule
     // -------------------------------------------------------------------
     public void Initialize()
     {
-        this.dynamicAudioStreamPool.Initialize(ResourceKey.Create<PackedScene>(DefaultAudioStreamPackedScene), this.UpdateAudioSource);
+        //this.dynamicAudioStreamPool.Initialize(ResourceKey.Create<PackedScene>(DefaultAudioStreamPackedScene), this.UpdateAudioSource);
     }
 
     public void Update(double delta)
@@ -61,9 +54,9 @@ public class AudioSystem : IGameModule
         return true;
     }
 
-    public AudioTicket Play(GameDataId id, AudioPlayParameters parameters = default (AudioPlayParameters))
+    /*public AudioTicket Play(DELM resourceId, AudioPlayParameters parameters = default (AudioPlayParameters))
     {
-        var entry = EssentialCore.GameData.Get<RuntimeAudioData>(id);
+        var entry = EssentialCore.GameDataResources.Get<AudioDataResource>(resourceId);
         if (entry != null)
         {
             DynamicAudioStream source = this.PrepareAudioSource(entry);
@@ -80,7 +73,7 @@ public class AudioSystem : IGameModule
         }
 
         return AudioTicket.Invalid;
-    }
+    }*/
 
     public void Stop(ref AudioTicket ticket)
     {
@@ -92,9 +85,9 @@ public class AudioSystem : IGameModule
         ticket = AudioTicket.Invalid;
     }
 
-    public void StopByDataId(GameDataId id)
+    /*public void StopByDataId(DELM resourceId)
     {
-        if (this.sourcesByDataMap.TryGetValue(id, out IList<AudioTicket> tickets))
+        if (this.sourcesByDataMap.TryGetValue(resourceId, out IList<AudioTicket> tickets))
         {
             for (var i = 0; i < tickets.Count; i++)
             {
@@ -103,14 +96,14 @@ public class AudioSystem : IGameModule
             }
 
             tickets.Clear();
-            this.sourcesByDataMap.Remove(id);
+            this.sourcesByDataMap.Remove(resourceId);
         }
-    }
+    }*/
 
     // -------------------------------------------------------------------
     // Private
     // -------------------------------------------------------------------
-    private DynamicAudioStream PrepareAudioSource(RuntimeAudioData entry)
+    /*private DynamicAudioStream PrepareAudioSource(AudioDataResource entry)
     {
         if ((entry.Flags & AudioFlags.Unique) != 0)
         {
@@ -130,10 +123,10 @@ public class AudioSystem : IGameModule
         this.activeAudio.Register(ticket, source);
 
         IList<AudioTicket> ticketList;
-        if (!this.sourcesByDataMap.TryGetValue(source.ActiveId, out ticketList))
+        if (!this.sourcesByDataMap.TryGetValue(source.ActiveResourceId, out ticketList))
         {
             ticketList = new List<AudioTicket>();
-            this.sourcesByDataMap.Add(source.ActiveId, ticketList);
+            this.sourcesByDataMap.Add(source.ActiveResourceId, ticketList);
         }
 
         ticketList.Add(ticket);
@@ -142,14 +135,14 @@ public class AudioSystem : IGameModule
     private void UnregisterSource(DynamicAudioStream source)
     {
         IList<AudioTicket> ticketList;
-        if (this.sourcesByDataMap.TryGetValue(source.ActiveId, out ticketList))
+        if (this.sourcesByDataMap.TryGetValue(source.ActiveResourceId, out ticketList))
         {
             this.activeAudio.Unregister(source.Ticket);
             
             ticketList.Remove(source.Ticket);
             if (ticketList.Count == 0)
             {
-                this.sourcesByDataMap.Remove(source.ActiveId);
+                this.sourcesByDataMap.Remove(source.ActiveResourceId);
             }
         }
     }
@@ -163,5 +156,5 @@ public class AudioSystem : IGameModule
 
         this.UnregisterSource(source);
         return false;
-    }
+    }*/
 }

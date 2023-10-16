@@ -8,7 +8,6 @@ using EngineCore;
 using EngineCore.Modules;
 using Event;
 using Events;
-using GameData;
 using Godot;
 using I18N;
 using IO;
@@ -51,7 +50,6 @@ public static class EssentialCore
     public static UIEvents UIEvents;
     public static TweenLiteSystem Tween;
     public static SynchronizationDispatcher Synchronization;
-    public static GameRuntimeData GameData;
     public static AudioSystem Audio;
     
     public static void Initialize()
@@ -68,7 +66,6 @@ public static class EssentialCore
         UIEvents = new UIEvents();
         Tween = new TweenLiteSystem();
         Synchronization = new SynchronizationDispatcher();
-        GameData = new GameRuntimeData();
         Audio = new AudioSystem();
     
         // Add Built-in Modules, order matters here
@@ -79,7 +76,6 @@ public static class EssentialCore
         ActiveGameModules.Add(UIEvents);
         ActiveGameModules.Add(Tween);
         ActiveGameModules.Add(Synchronization);
-        ActiveGameModules.Add(GameData);
         ActiveGameModules.Add(Audio);
         
         try

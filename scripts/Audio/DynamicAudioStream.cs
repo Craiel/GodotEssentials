@@ -1,11 +1,8 @@
 namespace Craiel.Essentials;
 
 using Contracts;
-using EngineCore;
 using FSM;
-using GameData;
 using Godot;
-using Resource;
 
 public partial class DynamicAudioStream : AudioStreamPlayer, IPoolable, ITicketData
 {
@@ -31,7 +28,7 @@ public partial class DynamicAudioStream : AudioStreamPlayer, IPoolable, ITicketD
 
 	public double CurrentFadeTime;
 
-	public GameDataId ActiveId { get; private set; }
+	//public GameDataResourceId ActiveResourceId { get; private set; }
 
 	public AudioTicket Ticket { get; private set; }
 
@@ -46,7 +43,7 @@ public partial class DynamicAudioStream : AudioStreamPlayer, IPoolable, ITicketD
 
 		this.Parameters = default;
 
-		this.ActiveId = GameDataId.Invalid;
+		//this.ActiveResourceId = GameDataResourceId.Invalid;
 
 		this.state.SwitchState(DynamicAudioStreamState.Inactive);
 	}
@@ -56,7 +53,7 @@ public partial class DynamicAudioStream : AudioStreamPlayer, IPoolable, ITicketD
 		this.state.Update(delta);
 	}
 
-	public void Start(AudioTicket ticket, RuntimeAudioData entry, bool is3D, AudioPlayParameters parameters)
+	/*public void Start(AudioTicket ticket, AudioDataResource entry, bool is3D, AudioPlayParameters parameters)
 	{
 		this.Stream = parameters.UseRandomClip
 			? this.GetClip(entry, (ushort)EssentialCore.Random.RandiRange(0, entry.ClipKeys.Count))
@@ -64,11 +61,11 @@ public partial class DynamicAudioStream : AudioStreamPlayer, IPoolable, ITicketD
 		
 		this.Parameters = parameters;
 
-		this.ActiveId = entry.Id;
+		this.ActiveResourceId = entry.Id;
 		this.Ticket = ticket;
 
 		this.state.SwitchState(DynamicAudioStreamState.FadeIn);
-	}
+	}*/
 	
 	public void End()
 	{
@@ -88,8 +85,8 @@ public partial class DynamicAudioStream : AudioStreamPlayer, IPoolable, ITicketD
 	// -------------------------------------------------------------------
 	// Private
 	// -------------------------------------------------------------------
-	private AudioStream GetClip(RuntimeAudioData data, int index)
+	/*private AudioStream GetClip(AudioDataResource data, int index)
 	{
 		return data.ClipKeys[index].LoadManaged<AudioStream>();
-	}
+	}*/
 }
