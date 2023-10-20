@@ -13,6 +13,11 @@ public static class SBTNodeDictionaryExtensions
     {
         return source.Read<SBTNodeString>(key).Data;
     }
+
+    public static bool ReadBool(this SBTNodeDictionary source, string key)
+    {
+        return source.Read<SBTNodeBool>(key).Data;
+    }
     
     public static byte ReadByte(this SBTNodeDictionary source, string key)
     {
