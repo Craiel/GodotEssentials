@@ -20,9 +20,6 @@ public static class EssentialCore
 {
     private static readonly IList<IGameModule> ActiveGameModules = new List<IGameModule>();
     
-    public const int LogFileArchiveSize = 10485760;
-    public const int LogFileArchiveCount = 10;
-    
     public const string LocalizationIgnoreString = "XX_";
     
     public static RandomNumberGenerator Random = new();
@@ -34,12 +31,11 @@ public static class EssentialCore
     public static readonly ManagedDirectory DefaultSavePath = PersistentDataPath.ToDirectory("Save");
     public const string DefaultSavePrefix = "esv_";
 
-    public const string GameDataDefaultLocation = "res://";
-    public const string GameDataDefaultExtension = ".bin";
-
     public static GodotLogRelay Logger = new();
 
     public static float GameTime => Time.GetTicksMsec() / 1000f;
+
+    public static bool IsRunningInWeb;
     
     public static float StartTime = GameTime;
 
@@ -58,6 +54,8 @@ public static class EssentialCore
         {
             throw new InvalidOperationException("Engine was already initialized!");
         }
+
+        IsRunningInWeb = OS.HasFeature("JavaScript");
         
         ResourceProvider = new ResourceProvider();
         SaveLoad = new ModuleSaveLoad();
