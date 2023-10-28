@@ -4,22 +4,21 @@ using System;
 using System.Collections.Generic;
 using Contracts;
 
-public class ThreadQueueModule : IEngineThreadModule
+public class ThreadQueueModule<T> : IEngineThreadModule
+    where T : IThreadQueueCommand
 {
     private static readonly long OperationWarningTimespan = TimeSpan.FromSeconds(2).Ticks;
     private static readonly long OperationErrorTimespan = TimeSpan.FromSeconds(5).Ticks;
 
-    private readonly Queue<IThreadQueueCommand> queuedCommands;
-    private readonly List<IThreadQueueCommand> lastCommand;
-    private readonly Stack<ThreadQueueBatchCommand> batchStack;
+    private readonly Queue<T> queuedCommands;
+    private readonly List<T> lastCommand;
 
     private long lastUpdateFrameTime;
 
     public ThreadQueueModule()
     {
-        this.queuedCommands = new Queue<IThreadQueueCommand>();
-        this.lastCommand = new List<IThreadQueueCommand>();
-        this.batchStack = new Stack<ThreadQueueBatchCommand>();
+        this.queuedCommands = new Queue<T>();
+        this.lastCommand = new List<T>();
     }
 
     // -------------------------------------------------------------------
@@ -47,8 +46,8 @@ public class ThreadQueueModule : IEngineThreadModule
             this.lastCommand.Clear();
             while (this.queuedCommands.Count > 0)
             {
-                IThreadQueueCommand command = this.queuedCommands.Dequeue();
-                command.Execute(time.Ticks);
+                T command = this.queuedCommands.Dequeue();
+                command.Execute(lastUpdateFrameTime);
                 this.lastCommand.Add(command);
             }
 
@@ -58,7 +57,13 @@ public class ThreadQueueModule : IEngineThreadModule
         }
     }
 
-    public void Queue(IThreadQueueCommand command)
+    public void ExecuteImmediate(T command)
+    {
+        command.Execute(this.lastUpdateFrameTime);
+        this.lastCommand.Add(command);
+    }
+    
+    public void Queue(T command)
     {
         if (command == null)
         {
@@ -67,55 +72,7 @@ public class ThreadQueueModule : IEngineThreadModule
 
         command.QueueTime = this.lastUpdateFrameTime;
 
-        if (this.batchStack.TryPeek(out ThreadQueueBatchCommand batch))
-        {
-            batch.Enqueue(command);
-        }
-        else
-        {
-            this.queuedCommands.Enqueue(command);
-        }
-    }
-    
-    public void Queue<T>(Func<T, bool> action, T payload)
-        where T: IThreadQueueCommandPayload
-    {
-        if (action == null)
-        {
-            throw new ArgumentException();
-        }
-
-        var command = new CallbackThreadQueueCommand<T>(action, payload)
-        {
-            QueueTime = this.lastUpdateFrameTime
-        };
-
-        if (this.batchStack.TryPeek(out ThreadQueueBatchCommand batch))
-        {
-            batch.Enqueue(command);
-        }
-        else
-        {
-            this.queuedCommands.Enqueue(command);
-        }
-    }
-
-    public void BeginBatch()
-    {
-        // Create a new batch command, no queue at this time, EndBatch() will queue this up 
-        var newBatch = new ThreadQueueBatchCommand(this);
-        this.batchStack.Push(newBatch);
-    }
-
-    public void EndBatch()
-    {
-        if (!this.batchStack.TryPop(out ThreadQueueBatchCommand batch))
-        {
-            throw new InvalidOperationException("No active Command Batch!");
-        }
-        
-        // Queue up the batch now, this can cascade though multiple batches if needed
-        this.Queue(batch);
+        this.queuedCommands.Enqueue(command);
     }
 
     // -------------------------------------------------------------------
