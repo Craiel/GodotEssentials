@@ -84,6 +84,11 @@ public struct TempHashSet<T> : IDisposable, IEnumerable<T>
         this.inner.Add(entry);
     }
 
+    public bool Remove(T entry)
+    {
+        return this.inner.Remove(entry);
+    }
+    
     public IEnumerator<T> GetEnumerator()
     {
         return this.inner.GetEnumerator();

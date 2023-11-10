@@ -29,9 +29,23 @@ public static class NodeExtensions
 		return result;
 	}
 	
-	public static T GetRootNode<T>(this Node scene)
+	public static T GetRootNode<T>(this Node node)
 		where T: class
 	{
-		return scene.GetNode<T>(".");
+		return node.GetNode<T>(".");
+	}
+
+	public static void Empty(this Node node)
+	{
+		if (node.GetChildCount() == 0)
+		{
+			return;
+		}
+
+		var childNodes = node.GetChildren();
+		for (var i = 0; i < childNodes.Count; i++)
+		{
+			childNodes[i].QueueFree();
+		}
 	}
 }
