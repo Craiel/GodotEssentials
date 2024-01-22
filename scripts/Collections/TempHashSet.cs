@@ -3,6 +3,7 @@ namespace Craiel.Essentials.Collections;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Extensions;
 
 public struct TempHashSet<T> : IDisposable, IEnumerable<T>
 {
@@ -37,6 +38,21 @@ public struct TempHashSet<T> : IDisposable, IEnumerable<T>
         }
     }
 
+    public static TempHashSet<T> Allocate(params T[] entries)
+    {
+        var result = Allocate();
+
+        if (!entries.IsNullOrEmpty())
+        {
+            for (var i = 0; i < entries.Length; i++)
+            {
+                result.Add(entries[i]);
+            }
+        }
+
+        return result;
+    }
+    
     public static TempHashSet<T> Allocate(IEnumerable<T> entries)
     {
         lock (ReadyQueue)
