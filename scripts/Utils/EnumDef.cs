@@ -26,4 +26,9 @@ public static class EnumDef<T>
 
     public static readonly T[] Values;
     public static readonly string[] Names;
+
+    public static T Parse(string value)
+    {
+        return (T)Enum.Parse(Type, value);
+    }
 }
