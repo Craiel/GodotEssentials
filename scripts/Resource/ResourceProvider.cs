@@ -424,10 +424,9 @@ public class ResourceProvider : IGameModule
         }
     }
 
-    private Resource AcquireFallbackResource<T>()
+    private Resource? AcquireFallbackResource<T>()
     {
-        ResourceKey fallbackKey;
-        if (this.fallbackResources.TryGetValue(TypeDef<T>.Value, out fallbackKey))
+        if (this.fallbackResources.TryGetValue(TypeDef<T>.Value, out ResourceKey fallbackKey))
         {
             ResourceLoadRequest request = this.resourceMap.GetData(fallbackKey);
             Resource data = request != null ? request.GetAsset() : null;

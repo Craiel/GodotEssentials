@@ -10,16 +10,10 @@ public class ThreadQueueModule<T> : IEngineThreadModule
     private static readonly long OperationWarningTimespan = TimeSpan.FromSeconds(2).Ticks;
     private static readonly long OperationErrorTimespan = TimeSpan.FromSeconds(5).Ticks;
 
-    private readonly Queue<T> queuedCommands;
-    private readonly List<T> lastCommand;
+    private readonly Queue<T> queuedCommands = new();
+    private readonly List<T> lastFrameCommands = new();
 
     private long lastUpdateFrameTime;
-
-    public ThreadQueueModule()
-    {
-        this.queuedCommands = new Queue<T>();
-        this.lastCommand = new List<T>();
-    }
 
     // -------------------------------------------------------------------
     // Public
@@ -41,26 +35,23 @@ public class ThreadQueueModule<T> : IEngineThreadModule
     {
         lastUpdateFrameTime = time.Ticks;
         
-        if (this.queuedCommands != null)
+        this.lastFrameCommands.Clear();
+        while (this.queuedCommands.Count > 0)
         {
-            this.lastCommand.Clear();
-            while (this.queuedCommands.Count > 0)
-            {
-                T command = this.queuedCommands.Dequeue();
-                command.Execute(lastUpdateFrameTime);
-                this.lastCommand.Add(command);
-            }
+            T command = this.queuedCommands.Dequeue();
+            command.Execute(lastUpdateFrameTime);
+            this.lastFrameCommands.Add(command);
+        }
 
 #if DEBUG
-            this.CheckLastUpdateOperations();
+        this.CheckLastUpdateOperations();
 #endif
-        }
     }
 
     public void ExecuteImmediate(T command)
     {
         command.Execute(this.lastUpdateFrameTime);
-        this.lastCommand.Add(command);
+        this.lastFrameCommands.Add(command);
     }
     
     public void Queue(T command)
@@ -84,7 +75,7 @@ public class ThreadQueueModule<T> : IEngineThreadModule
         int slowError = 0;
         int error = 0;
 
-        foreach (IThreadQueueCommand operation in this.lastCommand)
+        foreach (var operation in this.lastFrameCommands)
         {
             long timeToUpdate = operation.ExecutionTime - operation.QueueTime;
             if (timeToUpdate > OperationErrorTimespan)

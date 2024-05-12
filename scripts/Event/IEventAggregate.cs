@@ -2,5 +2,5 @@
 
 public interface IEventAggregate
 {
-    void Unsubscribe(ref BaseEventSubscriptionTicket ticket);
+    void Unsubscribe(ref BaseEventSubscriptionTicket? ticket);
 }

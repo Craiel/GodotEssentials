@@ -23,7 +23,7 @@ public class BaseEventAggregate<T> : IEventAggregate
     public delegate void GameEventAction<in TSpecific>(TSpecific eventData)
         where TSpecific : T;
 
-    public BaseEventSubscriptionTicket Subscribe<TSpecific>(GameEventAction<TSpecific> actionDelegate, Func<TSpecific, bool> filterDelegate = null)
+    public BaseEventSubscriptionTicket Subscribe<TSpecific>(GameEventAction<TSpecific> actionDelegate, Func<TSpecific, bool>? filterDelegate = null)
         where TSpecific : T
     {
         var ticket = new BaseEventSubscriptionTicket(TypeDef<TSpecific>.Value, actionDelegate);
@@ -36,7 +36,7 @@ public class BaseEventAggregate<T> : IEventAggregate
         return ticket;
     }
 
-    public void Unsubscribe(ref BaseEventSubscriptionTicket ticket)
+    public void Unsubscribe(ref BaseEventSubscriptionTicket? ticket)
     {
         if (ticket == null)
         {
@@ -60,8 +60,7 @@ public class BaseEventAggregate<T> : IEventAggregate
     {
         lock (this.subscribers)
         {
-            BaseEventTargetCollection<T> targets;
-            if (!this.subscribers.TryGetValue(ticket.TargetType, out targets))
+            if (!this.subscribers.TryGetValue(ticket.TargetType, out var targets))
             {
                 targets = new BaseEventTargetCollection<T>();
                 this.subscribers.Add(ticket.TargetType, targets);
@@ -75,8 +74,7 @@ public class BaseEventAggregate<T> : IEventAggregate
     {
         lock (this.subscribers)
         {
-            BaseEventTargetCollection<T> targets;
-            if (this.subscribers.TryGetValue(ticket.TargetType, out targets))
+            if (this.subscribers.TryGetValue(ticket.TargetType, out var targets))
             {
                 if (!targets.Remove(ticket))
                 {
@@ -91,8 +89,7 @@ public class BaseEventAggregate<T> : IEventAggregate
     {
         lock (this.subscribers)
         {
-            BaseEventTargetCollection<T> targets;
-            if (this.subscribers.TryGetValue(TypeDef<TSpecific>.Value, out targets))
+            if (this.subscribers.TryGetValue(TypeDef<TSpecific>.Value, out var targets))
             {
                 targets.Send(eventData);
             }

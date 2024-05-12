@@ -4,6 +4,7 @@ namespace Craiel.Essentials;
 
 using System;
 using System.Collections.Generic;
+using Commands;
 using EngineCore;
 using EngineCore.Modules;
 using Event;
@@ -34,19 +35,16 @@ public static class EssentialCore
     public static GodotLogRelay Logger = new();
 
     public static float GameTime => Time.GetTicksMsec() / 1000f;
-
-    public static bool IsRunningInWeb;
     
     public static float StartTime = GameTime;
 
-    public static ResourceProvider ResourceProvider;
-    public static ModuleSaveLoad SaveLoad;
-    public static LocalizationSystem Localization;
-    public static GameEvents GameEvents;
-    public static UIEvents UIEvents;
-    public static TweenLiteSystem Tween;
-    public static SynchronizationDispatcher Synchronization;
-    public static AudioSystem Audio;
+    public static ResourceProvider ResourceProvider = new();
+    public static ModuleSaveLoad SaveLoad = new();
+    public static LocalizationSystem Localization = new();
+    public static GameCommands GameCommands = new();
+    public static TweenLiteSystem Tween = new();
+    public static SynchronizationDispatcher Synchronization = new();
+    public static AudioSystem Audio = new();
     
     public static void Initialize()
     {
@@ -54,24 +52,12 @@ public static class EssentialCore
         {
             throw new InvalidOperationException("Engine was already initialized!");
         }
-
-        IsRunningInWeb = OS.HasFeature("JavaScript");
         
-        ResourceProvider = new ResourceProvider();
-        SaveLoad = new ModuleSaveLoad();
-        Localization = new LocalizationSystem();
-        GameEvents = new GameEvents();
-        UIEvents = new UIEvents();
-        Tween = new TweenLiteSystem();
-        Synchronization = new SynchronizationDispatcher();
-        Audio = new AudioSystem();
-    
         // Add Built-in Modules, order matters here
         ActiveGameModules.Add(ResourceProvider);
         ActiveGameModules.Add(SaveLoad);
         ActiveGameModules.Add(Localization);
-        ActiveGameModules.Add(GameEvents);
-        ActiveGameModules.Add(UIEvents);
+        ActiveGameModules.Add(GameCommands);
         ActiveGameModules.Add(Tween);
         ActiveGameModules.Add(Synchronization);
         ActiveGameModules.Add(Audio);

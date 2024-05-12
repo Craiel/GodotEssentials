@@ -216,8 +216,7 @@ public class ResourceMap<T> where T : class
 
     public IList<ResourceKey> GetLinkedTo(ResourceKey target)
     {
-        IList<ResourceKey> result;
-        if (this.linkedTo.TryGetValue(target, out result))
+        if (this.linkedTo.TryGetValue(target, out IList<ResourceKey> result))
         {
             return result;
         }
