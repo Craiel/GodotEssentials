@@ -1,21 +1,23 @@
 namespace Craiel.Essentials.Utils;
 
 using System;
+using System.Diagnostics;
 using System.Reflection;
 using Collections;
 
 public static class TypeLookup
 {
-    private static Assembly[] assemblyCache;
-    private static Type[] typeCache;
+    private static Assembly[]? assemblyCache;
+    private static Type[]? typeCache;
 
     // -------------------------------------------------------------------
     // Public
     // -------------------------------------------------------------------
-    public static Type FindType<T>(string value)
+    public static Type? FindType<T>(string value)
     {
         RefreshCache();
 
+        Debug.Assert(typeCache != null);
         for (var i = 0; i < typeCache.Length; i++)
         {
             var type = typeCache[i];
@@ -55,16 +57,9 @@ public static class TypeLookup
             {
                 foreach (Assembly assembly in assemblyCache)
                 {
-                    try
+                    foreach (Type type in assembly.GetTypes())
                     {
-                        foreach (Type type in assembly.GetTypes())
-                        {
-                            tempList.Add(type);
-                        }
-                    }
-                    catch (Exception)
-                    {
-                        throw;
+                        tempList.Add(type);
                     }
                 }
 

@@ -524,8 +524,13 @@ public class ObjectSet<T> : IEnumerable<T>
         return h;
     }
 
-    public override bool Equals(object obj)
+    public override bool Equals(object? obj)
     {
+        if (obj == null)
+        {
+            return false;
+        }
+        
         ObjectSet<T> other = obj as ObjectSet<T>;
         if (other == null || other.Size != this.Size)
         {

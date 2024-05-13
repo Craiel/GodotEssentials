@@ -27,7 +27,7 @@ public class BehaviorStream<T> : Task<T>
     /// Creates a empty <see cref="BehaviorStream{T}"/> object.
     /// </summary>
     public BehaviorStream() 
-        : this(default(T))
+        : this(default)
     {
     }
 
@@ -37,7 +37,7 @@ public class BehaviorStream<T> : Task<T>
     /// <param name="blackboard">the <see cref="IBlackboard"/>. It can be null</param>
     /// <param name="initialSize">initial size of the stream</param>
     /// <param name="growBy">the amount of elements to grow by if we exceed the size</param>
-    public BehaviorStream(T blackboard = default(T), int initialSize = 11, int growBy = 10)
+    public BehaviorStream(T blackboard = default, int initialSize = 11, int growBy = 10)
     {
         this.listeners = new List<IListener<T>>();
         this.stream = new Task<T>[initialSize];

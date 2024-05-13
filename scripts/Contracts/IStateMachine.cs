@@ -13,19 +13,19 @@ public interface IStateMachine<T, TS> : ITelegraph
     /// <summary>
     /// Returns the current state of this state machine
     /// </summary>
-    TS CurrentState { get; }
+    TS? CurrentState { get; }
 
     /// <summary>
     /// Gets or sets the global state of this state machine.
     /// Implementation classes should invoke the <see cref="Update"/> method of the global state every time the FSM is updated. 
     /// Also, they should never invoke its <see cref="IState{T}.Enter"/> and <see cref="IState{T}.Exit"/> method.
     /// </summary>
-    TS GlobalState { get; set; }
+    TS? GlobalState { get; set; }
 
     /// <summary>
     /// Returns the last state of this state machine
     /// </summary>
-    TS PreviousState { get; }
+    TS? PreviousState { get; }
 
     /// <summary>
     /// Updates the state machine

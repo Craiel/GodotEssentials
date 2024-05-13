@@ -4,15 +4,15 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 
-public struct TempDictionary<TK, TV> : IDisposable, IEnumerable<TK>
+public readonly struct TempDictionary<TK, TV> : IDisposable, IEnumerable<TK>
+    where TK: notnull
 {
     private const int DefaultCapacity = 100;
 
-    public static readonly TempDictionary<TK, TV> Invalid = new TempDictionary<TK, TV>();
+    public static readonly TempDictionary<TK, TV> Invalid = new();
+    private static readonly Queue<Dictionary<TK, TV>> ReadyQueue = new(2);
 
-    private static readonly Queue<Dictionary<TK, TV>> ReadyQueue = new Queue<Dictionary<TK, TV>>(2);
-
-    private Dictionary<TK, TV> inner;
+    private readonly Dictionary<TK, TV> inner;
 
     // -------------------------------------------------------------------
     // Constructor
@@ -47,7 +47,6 @@ public struct TempDictionary<TK, TV> : IDisposable, IEnumerable<TK>
             {
                 this.inner.Clear();
                 ReadyQueue.Enqueue(Dictionary);
-                this.inner = null;
             }
         }
     }

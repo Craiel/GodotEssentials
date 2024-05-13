@@ -23,7 +23,7 @@ public static class UIEvents
         ticket = DoSubscribe(actionDelegate, filterDelegate);
     }
     
-    public static void Unsubscribe(ref BaseEventSubscriptionTicket ticket)
+    public static void Unsubscribe(ref BaseEventSubscriptionTicket? ticket)
     {
         DoUnsubscribe(ref ticket);
     }
@@ -43,7 +43,7 @@ public static class UIEvents
         return Aggregate.Subscribe(actionDelegate, filterDelegate);
     }
 
-    private static void DoUnsubscribe(ref BaseEventSubscriptionTicket ticket)
+    private static void DoUnsubscribe(ref BaseEventSubscriptionTicket? ticket)
     {
         Aggregate.Unsubscribe(ref ticket);
     }

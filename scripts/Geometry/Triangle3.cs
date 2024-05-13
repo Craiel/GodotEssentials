@@ -12,6 +12,8 @@ using Godot;
 [StructLayout(LayoutKind.Sequential, Pack = 1)]
 public struct Triangle3 : IEquatable<Triangle3>
 {
+    const float OneThird = 1f / 3f;
+    
     /// <summary>
     /// The first point.
     /// </summary>
@@ -111,7 +113,6 @@ public struct Triangle3 : IEquatable<Triangle3>
     {
         get
         {
-            const float OneThird = 1f / 3f;
             return this.A * OneThird + this.B * OneThird + this.C * OneThird;
         }
     }
@@ -243,13 +244,11 @@ public struct Triangle3 : IEquatable<Triangle3>
     /// </summary>
     /// <param name="obj">The other object.</param>
     /// <returns>A value indicating whether other is equivalent to the triangle.</returns>
-    public override bool Equals(object obj)
+    public override bool Equals(object? obj)
     {
-        Triangle3? other = obj as Triangle3?;
-
-        if (other.HasValue)
+        if (obj is Triangle3 other)
         {
-            return this.Equals(other.Value);
+            return this.Equals(other);
         }
 
         return false;

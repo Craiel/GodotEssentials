@@ -16,7 +16,7 @@ public class TaskCloneException : Exception
     {
     }
 
-    public TaskCloneException(string message, Exception inner = null)
+    public TaskCloneException(string message, Exception? inner = null)
         : base(message, inner)
     {
     }

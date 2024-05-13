@@ -93,7 +93,7 @@ public class Telegram : IComparable, IComparable<Telegram>, IEquatable<Telegram>
     }
 
     [SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1126:PrefixCallsCorrectly", Justification = "Reviewed. Suppression is OK here.")]
-    public override bool Equals(object obj)
+    public override bool Equals(object? obj)
     {
         if (ReferenceEquals(null, obj))
         {

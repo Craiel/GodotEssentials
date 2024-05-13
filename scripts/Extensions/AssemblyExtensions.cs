@@ -37,7 +37,7 @@ public static class AssemblyExtensions
         return file == null ? null : file.GetDirectory();
     }
 
-    public static IList<ManagedFile> GetLoadedAssemblyFiles(AppDomain domain = null)
+    public static IList<ManagedFile> GetLoadedAssemblyFiles(AppDomain? domain = null)
     {
         if (domain == null)
         {
@@ -156,7 +156,7 @@ public static class AssemblyExtensions
         }
     }
 
-    public static IDictionary<string, byte[]> LoadResources(this Assembly assembly, string path = null)
+    public static IDictionary<string, byte[]> LoadResources(this Assembly assembly, string? path = null)
     {
         IDictionary<string, byte[]> results = new Dictionary<string, byte[]>();
 
@@ -191,7 +191,7 @@ public static class AssemblyExtensions
         return results;
     }
 
-    public static IList<ManagedFile> ExtractResources(this Assembly assembly, ManagedDirectory target, string path = null, bool replace = true)
+    public static IList<ManagedFile> ExtractResources(this Assembly assembly, ManagedDirectory target, string? path = null, bool replace = true)
     {
         ManagedDirectory location = assembly.GetDirectory();
         if (!location.Exists)

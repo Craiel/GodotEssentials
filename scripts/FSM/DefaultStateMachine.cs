@@ -19,7 +19,7 @@ public class DefaultStateMachine<T, TS> : IStateMachine<T, TS>
     /// <param name="owner">the owner of the state machine</param>
     /// <param name="initialState">the initial state</param>
     /// <param name="globalState">the global state</param>
-    public DefaultStateMachine(T owner = default(T), TS initialState = default(TS), TS globalState = default(TS))
+    public DefaultStateMachine(T owner = default, TS initialState = default, TS globalState = default)
     {
         this.Owner = owner;
         this.SetInitialState(initialState);
@@ -49,7 +49,7 @@ public class DefaultStateMachine<T, TS> : IStateMachine<T, TS>
 
     public virtual void SetInitialState(TS state)
     {
-        this.previousState = default(TS);
+        this.previousState = default;
         this.CurrentState = state;
     }
 
