@@ -1,5 +1,6 @@
 ﻿namespace Craiel.Essentials.Commands;
 
+using System;
 using Contracts;
 using Utils;
 

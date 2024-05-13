@@ -1,5 +1,6 @@
 namespace Craiel.Essentials.Commands;
 
+using System;
 using Craiel.Essentials.Contracts;
 
 public struct EnumPayload<T> : IGameCommandPayload
