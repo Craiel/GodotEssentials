@@ -11,7 +11,7 @@ public struct ResourceKey
     // -------------------------------------------------------------------
     // Constructor
     // -------------------------------------------------------------------
-    public ResourceKey(string path, Type type)
+    public ResourceKey(string path, Type type = null)
         : this()
     {
         this.Path = path;
