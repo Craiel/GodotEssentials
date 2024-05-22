@@ -35,7 +35,7 @@ public static class NodeExtensions
 		return node.GetNode<T>(".");
 	}
 
-	public static void Empty(this Node node)
+	public static void Empty(this Node node, bool queuedFree = true)
 	{
 		if (node.GetChildCount() == 0)
 		{
@@ -45,7 +45,14 @@ public static class NodeExtensions
 		var childNodes = node.GetChildren();
 		for (var i = 0; i < childNodes.Count; i++)
 		{
-			childNodes[i].QueueFree();
+			if (queuedFree)
+			{
+				childNodes[i].QueueFree();
+			}
+			else
+			{
+				childNodes[i].Free();
+			}
 		}
 	}
 }
