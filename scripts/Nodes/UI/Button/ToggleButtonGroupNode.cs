@@ -61,6 +61,10 @@ public partial class ToggleButtonGroupNode : Control
 
         Button previousActiveButton = this.activeButton;
         this.activeButton = button;
-        previousActiveButton.ButtonPressed = false;
+
+        if (previousActiveButton != null)
+        {
+            previousActiveButton.ButtonPressed = false;
+        }
     }
 }

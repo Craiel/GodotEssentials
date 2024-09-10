@@ -2,13 +2,13 @@ namespace Craiel.Essentials.Utils;
 
 using System;
 
-public static class EnumDef<T>
+public static class EnumDefLong<T>
     where T : Enum, IConvertible
 {
     // -------------------------------------------------------------------
     // Constructor
     // -------------------------------------------------------------------
-    static EnumDef()
+    static EnumDefLong()
     {
         Type = TypeDef<T>.Value;
         Values = (T[])Enum.GetValues(Type);
@@ -16,11 +16,11 @@ public static class EnumDef<T>
         
         Count = Values.Length;
 
-        MinValue = int.MaxValue;
-        MaxValue = int.MinValue;
+        MinValue = long.MaxValue;
+        MaxValue = long.MinValue;
         for (var i = 0; i < Count; i++)
         {
-            int value = (int)(object)Values[i];
+            long value = (long)(object)Values[i];
             if(value < MinValue)
             {
                 MinValue = value;
@@ -38,9 +38,9 @@ public static class EnumDef<T>
     // -------------------------------------------------------------------
     public static readonly Type Type;
 
-    public static readonly int Count;
-    public static readonly int MinValue;
-    public static readonly int MaxValue;
+    public static readonly long Count;
+    public static readonly long MinValue;
+    public static readonly long MaxValue;
 
     public static readonly T[] Values;
     public static readonly string[] Names;

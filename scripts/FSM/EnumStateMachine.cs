@@ -18,7 +18,7 @@ public class EnumStateMachine<T, TS, TE> : DefaultStateMachine<T, TS>
     public EnumStateMachine(T owner = default, TS initialState = default, TS globalState = default)
         : base(owner, initialState, globalState)
     {
-        int maxValues = EnumDef<TE>.Count;
+        int maxValues = EnumDefInt<TE>.Count;
 
         this.states = new TS[maxValues];
     }
