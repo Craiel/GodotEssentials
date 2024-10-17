@@ -1,5 +1,6 @@
 ﻿namespace Craiel.Essentials;
 
+using System;
 using Godot;
 
 public partial class DraggableSpriteNode : Sprite2D
@@ -7,13 +8,17 @@ public partial class DraggableSpriteNode : Sprite2D
     [Export]
     public float Speed = 1f;
 
-    private bool isDragging = false;
+    private bool isDragging;
     private Vector2 dragOffset;
 
     private Vector2 regionSize;
     private Vector2 regionOffset;
     private Vector2 textureSize;
     private Vector2 maxRegionOffset;
+
+    public event Action RegionChanged;
+    
+    public Vector2 RegionOffset => this.regionOffset;
 
     public override void _Ready()
     {
@@ -60,8 +65,11 @@ public partial class DraggableSpriteNode : Sprite2D
             this.regionOffset = new Vector2(
                 Mathf.Max(0, Mathf.Min(this.maxRegionOffset.X, this.regionOffset.X)),
                 Mathf.Max(0, Mathf.Min(this.maxRegionOffset.Y, this.regionOffset.Y)));
-            
+
+            var offsetDiff = this.RegionRect.Position - this.regionOffset;
             this.RegionRect = new Rect2(this.regionOffset, this.regionSize);
+            
+            this.RegionChanged?.Invoke();
         }
     }
 }
