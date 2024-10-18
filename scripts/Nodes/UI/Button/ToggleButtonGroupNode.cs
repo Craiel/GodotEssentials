@@ -1,5 +1,6 @@
 ﻿namespace Craiel.Essentials;
 
+using Extensions;
 using Godot;
 
 public partial class ToggleButtonGroupNode : Control
@@ -13,7 +14,7 @@ public partial class ToggleButtonGroupNode : Control
     {
         base._Ready();
 
-        if (this.Buttons.Length <= 0)
+        if (this.Buttons.IsNullOrEmpty())
         {
             EssentialCore.Logger.Error("Toggle Button Group without any buttons!");
             return;
