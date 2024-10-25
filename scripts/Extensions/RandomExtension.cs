@@ -65,7 +65,7 @@ public static class RandomExtension
     {
         if (values.Count != weights.Count)
         {
-            return default(T);
+            return default;
         }
 
         int rollIndex = WeightedRandom(weights);

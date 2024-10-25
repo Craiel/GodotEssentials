@@ -45,9 +45,9 @@ public partial class DraggableSpriteNode : Sprite2D
 
     public override void _Input(InputEvent @event)
     {
-        if (this.isAutoCentering && !this.isDragging)
+        if (!this.Visible || this.isAutoCentering)
         {
-            // Ignore any input while we are not dragging and centering
+            // Ignore any input while we are not visible or auto centering
             return;
         }
         
