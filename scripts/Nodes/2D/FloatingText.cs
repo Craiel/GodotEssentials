@@ -33,10 +33,10 @@ public abstract partial class FloatingText : Control
         }
     }
 
-    public void SetText(string text, Color color, TextFlags flags = TextFlags.None)
+    public void SetText(string text, LabelSettings settings, TextFlags flags = TextFlags.None)
     {
         this.Text.Text = text;
-        this.Text.LabelSettings.FontColor = color;
+        this.Text.LabelSettings = settings;
 
         if ((flags & TextFlags.Uppercase) != 0)
         {
