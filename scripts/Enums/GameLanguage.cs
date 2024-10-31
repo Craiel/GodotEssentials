@@ -2,10 +2,10 @@ namespace Craiel.Essentials.Enums;
 
 public enum GameLanguage
 {
-    Eng,
-    Fra,
-    Esp,
-    Deu,
-    Por,
-    Rus,
+    English,
+    French,
+    Spanish,
+    German,
+    Portugese,
+    Russian,
 }

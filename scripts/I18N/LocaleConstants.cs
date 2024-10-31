@@ -51,32 +51,32 @@ public static class LocaleConstants
     {
         switch (language)
         {
-            case GameLanguage.Eng:
+            case GameLanguage.English:
             {
                 return LocaleEnglish;
             }
 
-            case GameLanguage.Fra:
+            case GameLanguage.French:
             {
                 return LocaleFrench;
             }
 
-            case GameLanguage.Deu:
+            case GameLanguage.German:
             {
                 return LocaleGerman;
             }
 
-            case GameLanguage.Esp:
+            case GameLanguage.Spanish:
             {
                 return LocaleSpanish;
             }
 
-            case GameLanguage.Por:
+            case GameLanguage.Portugese:
             {
                 return LocalePortuguese;
             }
 
-            case GameLanguage.Rus:
+            case GameLanguage.Russian:
             {
                 return LocaleRussian;
             }
