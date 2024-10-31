@@ -44,7 +44,6 @@ public static class EssentialCore
     public static GameCommands GameCommands = new();
     public static TweenLiteSystem Tween = new();
     public static SynchronizationDispatcher Synchronization = new();
-    public static AudioSystem Audio = new();
     
     public static void Initialize()
     {
@@ -60,7 +59,6 @@ public static class EssentialCore
         ActiveGameModules.Add(GameCommands);
         ActiveGameModules.Add(Tween);
         ActiveGameModules.Add(Synchronization);
-        ActiveGameModules.Add(Audio);
         
         try
         {
