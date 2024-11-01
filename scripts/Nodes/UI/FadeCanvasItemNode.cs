@@ -2,12 +2,12 @@
 
 using Godot;
 
-public partial class FadeCanvasItemNode : Node
+public partial class FadeCanvasItemNode : ModulateCanvasItemNode
 {
-    private Color defaultTargetModulate;
+    private static readonly Color FadeOutColor = new Color(1, 1, 1, 0);
+    private static readonly Color FadeInColor = new Color(1, 1, 1);
+    
     private FadeMode currentMode;
-    private bool fadeInProgress;
-    private double currentFadeTime;
     
     // -------------------------------------------------------------------
     // Public
@@ -19,66 +19,24 @@ public partial class FadeCanvasItemNode : Node
         Alternate
     }
     
-    [Export] public CanvasItem Target;
-    [Export] public float Duration;
-    [Export] public bool Loop;
     [Export] public FadeMode Mode = FadeMode.FadeOut;
 
     public override void _Ready()
     {
         base._Ready();
 
-        this.defaultTargetModulate = this.Target.Modulate;
-        
-        this.BeginFade();
-    }
-
-    public override void _Process(double delta)
-    {
-        base._Process(delta);
-
-        if (this.fadeInProgress)
+        if (this.Mode == FadeMode.Alternate)
         {
-            this.currentFadeTime += delta;
-            this.ContinueFade();
-            return;
-        }
-
-        if (this.Loop)
-        {
-            // Start another round
-            this.BeginFade();
+            this.RestoreWhenFinished = false;
         }
     }
-    
+
     // -------------------------------------------------------------------
     // Private
     // -------------------------------------------------------------------
-    private void ContinueFade()
+    protected override void Begin()
     {
-        float progress = Mathf.Clamp((float)this.currentFadeTime / this.Duration, 0, 1);
-        if (this.currentMode == FadeMode.FadeIn)
-        {
-            progress = 1 - progress;
-        }
-        
-        this.Target.Modulate = new Color(1, 1, 1, progress);
-        
-        if (this.currentFadeTime >= this.Duration)
-        {
-            this.fadeInProgress = false;
-            if (this.Loop && this.Mode != FadeMode.Alternate)
-            {
-                // Restore the modulation, we are looping the mode but not alternating
-                this.Target.Modulate = this.defaultTargetModulate;
-            }
-        }
-    }
-
-    private void BeginFade()
-    {
-        this.fadeInProgress = true;
-        this.currentFadeTime = 0f;
+        base.Begin();
         
         switch (this.Mode)
         {
@@ -115,5 +73,7 @@ public partial class FadeCanvasItemNode : Node
                 break;
             }
         }
+
+        this.TargetColor = this.currentMode == FadeMode.FadeIn ? FadeInColor : FadeOutColor;
     }
 }
