@@ -153,10 +153,8 @@ public static class GameSettingsAudio
     // -------------------------------------------------------------------
     // Private
     // -------------------------------------------------------------------
-    private static void Apply()
+    public static void Apply()
     {
-        GameSettings.Save();
-        
         AudioController.SetVolume(AudioBus.Master, GetMasterVolume());
         AudioController.SetVolume(AudioBus.Music, GetMusicVolume());
         AudioController.SetVolume(AudioBus.SFX, GetSFXVolume());

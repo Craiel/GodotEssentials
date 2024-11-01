@@ -40,39 +40,8 @@ public static class InputController
             
             foreach (InputEvent inputEvent in InputMap.ActionGetEvents(mappingString))
             {
-                if (inputEvent is InputEventKey key)
+                if (inputEvent.GetInfo(out InputMappingInfo info))
                 {
-                    var info = new InputMappingInfo
-                    {
-                        Type = InputMappingType.Key,
-                        Key = key.PhysicalKeycode
-                    };
-                    
-                    infos.Add(info);
-                    continue;
-                }
-
-                if (inputEvent is InputEventJoypadButton joyButton)
-                {
-                    var info = new InputMappingInfo
-                    {
-                        Type = InputMappingType.JoyButton,
-                        JoyButton = joyButton.ButtonIndex
-                    };
-                    
-                    infos.Add(info);
-                    continue;
-                }
-
-                if (inputEvent is InputEventJoypadMotion joyMotion)
-                {
-                    var info = new InputMappingInfo
-                    {
-                        Type = InputMappingType.JoyMotion,
-                        Axis = joyMotion.Axis,
-                        AxisSign = Mathf.Sign(joyMotion.AxisValue)
-                    };
-                    
                     infos.Add(info);
                 }
             }

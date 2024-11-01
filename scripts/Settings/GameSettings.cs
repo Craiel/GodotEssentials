@@ -28,7 +28,13 @@ public static class GameSettings
             GameSettingsGeneral.SetDefaults();
             GameSettingsAudio.SetDefaults();
             GameSettingsVideo.SetDefaults();
+            GameSettingsInput.SetDefaults();
         }
+        
+        GameSettingsGeneral.Apply();
+        GameSettingsAudio.Apply();
+        GameSettingsVideo.Apply();
+        GameSettingsInput.Apply();
     }
 
     // -------------------------------------------------------------------
@@ -42,6 +48,11 @@ public static class GameSettings
     public static void Set(GameSettingsSection section, string key, Variant value)
     {
         Config.SetValue(section.ToString(), key, value);
+    }
+
+    public static void Erase(GameSettingsSection section)
+    {
+        Config.EraseSection(section.ToString());
     }
 
     public static Variant Get(GameSettingsSection section, string key, Variant defaultValue = default)
