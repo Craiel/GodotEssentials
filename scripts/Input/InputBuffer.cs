@@ -19,6 +19,12 @@ public partial class InputBuffer : Node
     {
         base._Input(eventData);
 
+        if (InputController.InputLocked)
+        {
+            // Won't buffer any input during lock
+            return;
+        }
+
         if (eventData is InputEventKey eventKey)
         {
             if (!eventKey.Pressed || eventKey.IsEcho())
