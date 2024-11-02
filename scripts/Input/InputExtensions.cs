@@ -36,6 +36,7 @@ public static class InputExtensions
         {
             info = new InputMappingInfo
             {
+                Device = InputDeviceType.Keyboard,
                 Type = InputMappingType.Key,
                 Key = key.PhysicalKeycode
             };
@@ -47,6 +48,7 @@ public static class InputExtensions
         {
             info = new InputMappingInfo
             {
+                Device = InputDeviceType.Controller,
                 Type = InputMappingType.JoyButton,
                 JoyButton = joyButton.ButtonIndex
             };
@@ -58,6 +60,7 @@ public static class InputExtensions
         {
             info = new InputMappingInfo
             {
+                Device = InputDeviceType.Controller,
                 Type = InputMappingType.JoyMotion,
                 Axis = joyMotion.Axis,
                 AxisSign = Mathf.Sign(joyMotion.AxisValue)
@@ -70,28 +73,23 @@ public static class InputExtensions
         return false;
     }
     
-    public static bool IsControllerEvent(this InputEvent eventData)
+    public static InputDeviceType GetDeviceType(this InputEvent eventData)
     {
-        if (eventData is InputEventJoypadButton buttonEvent)
+        if (eventData is InputEventKey)
         {
-            return true;
+            return InputDeviceType.Keyboard;
+        }
+        
+        if (eventData is InputEventJoypadButton)
+        {
+            return InputDeviceType.Controller;
         }
 
-        if (eventData is InputEventJoypadMotion motionEvent)
+        if (eventData is InputEventJoypadMotion)
         {
-            return true;
+            return InputDeviceType.Controller;
         }
 
-        return false;
-    }
-
-    public static bool IsKeyboardEvent(this InputEvent eventData)
-    {
-        if (eventData is InputEventKey keyEvent)
-        {
-            return true;
-        }
-
-        return false;
+        return InputDeviceType.Unknown;
     }
 }

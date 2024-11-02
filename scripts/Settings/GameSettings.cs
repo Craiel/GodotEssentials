@@ -5,7 +5,6 @@ using Godot;
 public static class GameSettings
 {
     private const string ConfigPath = "user://settings.cfg";
-    private const string SystemSection = "system";
     private const string FirstStartKey = "first_start";
 
     private static readonly ConfigFile Config;
@@ -28,13 +27,11 @@ public static class GameSettings
             GameSettingsGeneral.SetDefaults();
             GameSettingsAudio.SetDefaults();
             GameSettingsVideo.SetDefaults();
-            GameSettingsInput.SetDefaults();
         }
         
         GameSettingsGeneral.Apply();
         GameSettingsAudio.Apply();
         GameSettingsVideo.Apply();
-        GameSettingsInput.Apply();
     }
 
     // -------------------------------------------------------------------

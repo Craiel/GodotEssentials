@@ -2,6 +2,7 @@
 
 public enum InputDeviceType
 {
+    Unknown,
     Active,
     Keyboard,
     Controller
