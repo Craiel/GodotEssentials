@@ -26,17 +26,33 @@ public static class InputController
         return null;
     }
 
-    public static void SaveDefaultMappings<T>()
+    public static void SaveDefaultMappingsFromProjectSettings<T>()
         where T: Enum
     {
         defaultMappings.Clear();
         SaveMappings<T>(defaultMappings);
     }
 
+    public static void RegisterMapping(string action, InputMappingInfo info)
+    {
+        if (!defaultMappings.TryGetValue(action, out IList<InputMappingInfo> infos))
+        {
+            infos = new List<InputMappingInfo>();
+            defaultMappings.Add(action, infos);
+        }
+        
+        infos.Add(info);
+    }
+
     public static void RestoreDefaultMappings(InputDeviceType type)
     {
         foreach (string action in defaultMappings.Keys)
         {
+            if (!InputMap.HasAction(action))
+            {
+                InputMap.AddAction(action);
+            }
+            
             foreach (var inputEvent in InputMap.ActionGetEvents(action))
             {
                 if (inputEvent.GetDeviceType() != type)
@@ -54,6 +70,7 @@ public static class InputController
                 {
                     continue;
                 }
+                
                 
                 InputMap.ActionAddEvent(action, newEvent);
             }

@@ -51,7 +51,7 @@ public abstract partial class FloatingText : Control
     // -------------------------------------------------------------------
     protected virtual Tween DoBeginTween()
     {
-        var result = this.GetTree().CreateTween();
+        var result = this.CreateTween();
         result.SetParallel();
         result.TweenProperty(this, new NodePath("scale"), Vector2.Zero, this.Duration)
             .SetEase(Tween.EaseType.In).SetDelay(this.Duration);

@@ -5,12 +5,9 @@ using Godot;
 
 public partial class InputBuffer : Node
 {
-    private const double BufferWindow = 150;
-    private const float JoyDeadZone = 0.2f;
-
     private static readonly IDictionary<Key, ulong> keyActions = new Dictionary<Key, ulong>();
     private static readonly IDictionary<JoyButton, ulong> joyActions = new Dictionary<JoyButton, ulong>();
-    private static readonly IDictionary<string, ulong> joyMotions = new Dictionary<string, ulong>();
+    private static readonly IDictionary<string, ulong> joyAxisPress = new Dictionary<string, ulong>();
 
     // -------------------------------------------------------------------
     // Public
@@ -25,6 +22,7 @@ public partial class InputBuffer : Node
             return;
         }
 
+        ulong currentTime = Time.GetTicksMsec();
         if (eventData is InputEventKey eventKey)
         {
             if (!eventKey.Pressed || eventKey.IsEcho())
@@ -32,7 +30,7 @@ public partial class InputBuffer : Node
                 return;
             }
 
-            keyActions[eventKey.PhysicalKeycode] = Time.GetTicksMsec();
+            keyActions[eventKey.PhysicalKeycode] = currentTime;
             return;
         }
 
@@ -43,18 +41,25 @@ public partial class InputBuffer : Node
                 return;
             }
             
-            joyActions[eventJoypadButton.ButtonIndex] = Time.GetTicksMsec();
+            joyActions[eventJoypadButton.ButtonIndex] = currentTime;
             return;
         }
 
         if (eventData is InputEventJoypadMotion eventJoypadMotion)
         {
-            if (Mathf.Abs(eventJoypadMotion.AxisValue) < JoyDeadZone)
+            float absAxisValue = Mathf.Abs(eventJoypadMotion.AxisValue);
+            if (absAxisValue < InputConstants.DefaultDeadZone)
             {
                 return;
             }
 
-            joyMotions[$"{eventJoypadMotion.Axis}_{Mathf.Sign(eventJoypadMotion.AxisValue)}"] = Time.GetTicksMsec();
+            string motionKey = $"{eventJoypadMotion.Axis}_{Mathf.Sign(eventJoypadMotion.AxisValue)}";
+
+            if (absAxisValue >= InputConstants.MotionAsPressThreshold)
+            {
+                joyAxisPress[motionKey] = currentTime;
+            }
+            
             return;
         }
     }
@@ -79,7 +84,7 @@ public partial class InputBuffer : Node
                         break;
                     }
 
-                    if (time - lastActionTime < BufferWindow)
+                    if (time - lastActionTime < InputConstants.DefaultBufferWindow)
                     {
                         InvalidateAction(action);
                         return true;
@@ -95,7 +100,7 @@ public partial class InputBuffer : Node
                         break;
                     }
 
-                    if (time - lastActionTime < BufferWindow)
+                    if (time - lastActionTime < InputConstants.DefaultBufferWindow)
                     {
                         InvalidateAction(action);
                         return true;
@@ -107,12 +112,12 @@ public partial class InputBuffer : Node
                 case InputMappingType.JoyMotion:
                 {
                     string motionKey = $"{info.Axis}_{info.AxisSign}";
-                    if (!joyMotions.TryGetValue(motionKey, out ulong lastActionTime))
+                    if (!joyAxisPress.TryGetValue(motionKey, out ulong lastActionTime))
                     {
                         break;
                     }
 
-                    if (time - lastActionTime < BufferWindow)
+                    if (time - lastActionTime < InputConstants.DefaultBufferWindow)
                     {
                         InvalidateAction(action);
                         return true;
@@ -152,8 +157,9 @@ public partial class InputBuffer : Node
 
                 case InputMappingType.JoyMotion:
                 {
+                    // Motion resets all, we can either consume press or motion but not both at the same time
                     string motionKey = $"{info.Axis}_{info.AxisSign}";
-                    joyMotions[motionKey] = 0;
+                    joyAxisPress[motionKey] = 0;
                     break;
                 }
             }
