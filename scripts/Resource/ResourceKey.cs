@@ -48,6 +48,11 @@ public struct ResourceKey
 
     public override int GetHashCode()
     {
+        if (this.Path == null)
+        {
+            return 0;
+        }
+        
         return this.Path.GetHashCode();
     }
 
