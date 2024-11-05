@@ -12,12 +12,15 @@ public partial class PauseHandlerNode : Node
     // Public
     // -------------------------------------------------------------------
     [Export] public Node Target;
+    [Export] public Control PauseOverlayUI;
 
     public override void _EnterTree()
     {
         base._EnterTree();
         
         GameEvents.Subscribe<EventPauseRequest>(this.OnPauseRequest, out this.pauseRequestEventTicket);
+        
+        this.PauseOverlayUI?.SetVisible(false);
     }
 
     public override void _ExitTree()
@@ -33,5 +36,9 @@ public partial class PauseHandlerNode : Node
     private void OnPauseRequest(EventPauseRequest eventData)
     {
         this.Target.GetTree().Paused = eventData.RequestedState;
+        if (PauseOverlayUI != null)
+        {
+            this.PauseOverlayUI.SetVisible(eventData.RequestedState);
+        }
     }
 }
