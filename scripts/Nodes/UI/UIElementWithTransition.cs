@@ -1,5 +1,6 @@
 ﻿namespace CanineJRPG.godot.source.GodotEssentials.scripts.Nodes.UI;
 
+using System;
 using Craiel.Essentials.Enums;
 using Godot;
 
@@ -24,7 +25,7 @@ public abstract partial class UIElementWithTransition : Control
     {
         base._Process(delta);
 
-        if (!this.Visible || this.InTransition)
+        if (!this.AutoHide || !this.Visible || this.InTransition)
         {
             return;
         }
@@ -36,7 +37,7 @@ public abstract partial class UIElementWithTransition : Control
         }
     }
 
-    public void BeginTransition(UIElementTransition transition)
+    public void BeginTransition(UIElementTransition transition, Action completed = null)
     {
         if (this.InTransition && this.activeTransition == transition)
         {
@@ -56,7 +57,14 @@ public abstract partial class UIElementWithTransition : Control
         }
         
         this.activeTransitionTween = this.ExecuteTransition(transition);
-        this.activeTransitionTween.Finished += OnTransitionComplete;
+        this.activeTransitionTween.Finished += () =>
+        {
+            OnTransitionComplete();
+            if (completed != null)
+            {
+                completed.Invoke();
+            }
+        };
     }
 
     // -------------------------------------------------------------------
