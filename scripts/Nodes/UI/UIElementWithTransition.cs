@@ -57,6 +57,12 @@ public abstract partial class UIElementWithTransition : Control
         }
         
         this.activeTransitionTween = this.ExecuteTransition(transition);
+        if (this.activeTransitionTween == null)
+        {
+            // Did not produce at tween
+            return;
+        }
+        
         this.activeTransitionTween.Finished += () =>
         {
             OnTransitionComplete();
