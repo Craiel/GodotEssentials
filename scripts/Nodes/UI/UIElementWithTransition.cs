@@ -12,7 +12,7 @@ public abstract partial class UIElementWithTransition : Control
     // -------------------------------------------------------------------
     // Public
     // -------------------------------------------------------------------
-    [Export] public float TransitionDuration;
+    [Export] public float TransitionDuration = 0.2f;
 
     [ExportCategory("Auto Hide")]
     [Export] public bool AutoHide = false;
