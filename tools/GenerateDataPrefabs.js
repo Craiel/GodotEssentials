@@ -6,14 +6,19 @@ const EssentialsRoot = path.dirname(__dirname) +  "\\";
 const PrefabTemplateFile = __dirname + '\\LinkTemplate.tsc_';
 let PrefabTemplate = fs.readFileSync(PrefabTemplateFile).toString();
 
+let SourceFolder = process.argv[2];
+if(SourceFolder === undefined) {
+    SourceFolder = "..\\Project\\source\\Game\\";
+}
+
 class PrefabGenerator {
     constructor() {
         this.results = {};
         this.filesToIndex = [];
         this.extensionsToIndex = ['.cs'];
         this.targetFolder = "..\\Project\\prefabs\\database\\";
-        this.sourceFolder = "..\\Project\\source\\Game\\Database\\";
-        this.dataTypeFile = '..\\Project\\source\\Game\\Enums\\GameDataType.cs';
+        this.sourceFolder = SourceFolder + "Database\\";
+        this.dataTypeFile = SourceFolder + 'Enums\\GameDataType.cs';
         this.typeToIndex = {};
     }
 

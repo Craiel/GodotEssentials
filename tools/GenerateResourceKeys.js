@@ -4,12 +4,17 @@ const fs = require('fs');
 const path = require('path');
 const EssentialsRoot = path.dirname(__dirname) +  "\\";
 
+let SourceFolder = process.argv[2];
+if(SourceFolder === undefined) {
+    SourceFolder = "..\\Project\\source\\Game\\";
+}
+
 class ResourceIndexer {
     constructor() {
         this.results = {};
         this.filesToIndex = [];
         this.extensionsToIndex = ['.png'];
-        this.targetFolder = "..\\Project\\source\\Game\\Database\\";
+        this.targetFolder = SourceFolder + "Database\\";
         this.sourceFolder = "..\\Project\\art\\";
         this.targetFile = "ArtResources.cs";
         this.category = "art";
@@ -65,6 +70,10 @@ class ResourceIndexer {
     }
 
     findFiles(dir) {
+        if(!fs.existsSync(dir)) {
+            return;
+        }
+        
         let contents = fs.readdirSync(dir);
         for (let f = 0; f < contents.length; f++) {
             let fullPath = path.join(dir, contents[f]);
