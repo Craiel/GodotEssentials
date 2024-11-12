@@ -3,18 +3,24 @@
 using CanineJRPG.Core;
 using Godot;
 
-public partial class GameDatabaseLinkNode : Node
+[GlobalClass]
+public partial class GameDatabaseLinkNode : Resource
 {
+    private StringGameDataId dataId = StringGameDataId.Unset;
+    
     // -------------------------------------------------------------------
     // Public
     // -------------------------------------------------------------------
-    public StringGameDataId Id { get; private set; }
+    [Export] public string Id;
+    [Export] public GameDataType Type;
     
-    public override void _EnterTree()
+    public StringGameDataId GetId()
     {
-        base._EnterTree();
+        if (this.dataId == StringGameDataId.Unset)
+        {
+            this.dataId = new StringGameDataId(this.Id, this.Type);
+        }
 
-        var idLink = this.GetChild<GameDatabaseStringGameDataIdLinkNode>(0);
-        this.Id = new StringGameDataId(idLink.Id, idLink.Type);
+        return this.dataId;
     }
 }

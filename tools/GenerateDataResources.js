@@ -3,7 +3,7 @@
 const fs = require('fs');
 const path = require('path');
 const EssentialsRoot = path.dirname(__dirname) +  "\\";
-const PrefabTemplateFile = __dirname + '\\LinkTemplate.tsc_';
+const PrefabTemplateFile = __dirname + '\\LinkTemplate.tre_';
 let PrefabTemplate = fs.readFileSync(PrefabTemplateFile).toString();
 
 let SourceFolder = process.argv[2];
@@ -98,16 +98,31 @@ class PrefabGenerator {
         fs.rmSync(this.targetFolder, { recursive: true, force: true });
         fs.mkdirSync(this.targetFolder);
 
-        const idMatchRegex = /.*StringGameDataId(.+?)new\s*\((.+?)\);.*/gi;
+        const idMatchRegex = /\snew\s*\((.+?)\)/;
         for(let id in this.results) {
             let file = this.results[id];
-            let fileContents = fs.readFileSync(file).toString();
-            let match = idMatchRegex.exec(fileContents);
+            let fileContents = fs.readFileSync(file).toString().split("\n");
+            let match = null;
+            for(let i = 0; i < fileContents.length; i++) {
+                if(fileContents[i].indexOf('GameDataType.') < 0) {
+                    continue;
+                }
+                
+                let line = fileContents[i].replaceAll("\t", " ").replaceAll("\r", "");
+                match = idMatchRegex.exec(line);
+                if(match !== null) {
+                    break;
+                }
+                
+                console.log("NO_MATCH: " + line);
+            }
+            
             if(match === null) {
                 continue;
             }
-
-            let args = match[2].split(',');
+            
+            console.log(match[1]);
+            let args = match[1].split(',');
             for(let i = 0; i < args.length; i++) {
                 args[i] = args[i].trim().replaceAll('"', '');
             }
@@ -126,7 +141,7 @@ class PrefabGenerator {
                 fs.mkdirSync(prefabPath);
             }
 
-            let prefabFile = prefabPath + idString + '.tscn';
+            let prefabFile = prefabPath + idString + '.tres';
             // console.log(prefabFile + ' || ' + idString + ' -- ' + typeIndex);
 
             let prefab = PrefabTemplate

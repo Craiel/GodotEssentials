@@ -1,0 +1,8 @@
+[gd_resource type="Resource" script_class="GameDatabaseLinkNode" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://source/GodotEssentials/scripts/Database/GameDatabaseLinkNode.cs" id="1_eqftc"]
+
+[resource]
+script = ExtResource("1_eqftc")
+Id = "#ID_STRING#"
+Type = #TYPE_VAL#
