@@ -2,9 +2,10 @@
 
 public enum GameDataType
 {
-    Unset,
+    Unset = 0,
     
-    // Core
-    Character,
-    Zone
+    Character = 1,
+    Zone = 2,
+    Dialogue = 3,
+    Items = 4
 }

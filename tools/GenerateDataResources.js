@@ -18,7 +18,7 @@ class PrefabGenerator {
         this.extensionsToIndex = ['.cs'];
         this.targetFolder = "..\\Project\\prefabs\\database\\";
         this.sourceFolder = SourceFolder + "Database\\";
-        this.dataTypeFile = SourceFolder + 'Enums\\GameDataType.cs';
+        this.dataTypeFile = '..\\Project\\source\\GodotEssentials\\scripts\\Database\\GameDataType.cs';
         this.typeToIndex = {};
     }
 

@@ -72,8 +72,12 @@ public abstract partial class CollisionCheck2DNode : Node2D
             var result = this.physicsSpace.IntersectRay(this.physicsParams);
             if (result is { Count: > 0 })
             {
-                this.HitObjects.Add(result["collider"].As<CollisionObject2D>());
-                this.HitPointList.Add(result["position"].AsVector2() - from);
+                var foo = result["collider"].Obj;
+                if (foo is CollisionObject2D)
+                {
+                    this.HitObjects.Add(result["collider"].As<CollisionObject2D>());
+                    this.HitPointList.Add(result["position"].AsVector2() - from);
+                }
             }
             else
             {
