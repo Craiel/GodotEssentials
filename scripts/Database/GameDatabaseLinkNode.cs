@@ -1,6 +1,5 @@
 ﻿namespace Craiel.Essentials.DB;
 
-using CanineJRPG.Core;
 using Godot;
 
 [GlobalClass]

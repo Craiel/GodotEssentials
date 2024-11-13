@@ -1,4 +1,4 @@
-﻿namespace CanineJRPG.godot.source.GodotEssentials.scripts.Nodes.UI;
+﻿namespace Craiel.Essentials.Nodes;
 
 using System;
 using Craiel.Essentials.Enums;

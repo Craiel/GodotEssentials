@@ -1,7 +1,6 @@
 ﻿namespace Craiel.Essentials.Settings;
 
 using System;
-using CanineJRPG.Core;
 using Godot;
 using Input;
 using Utils;
@@ -58,7 +57,6 @@ public static class GameSettingsInput
         if (input != null)
         {
             InputMap.ActionAddEvent(action, input);
-            InputController.RebuildMappingCache<InputGameEvent>();
 
             if (save)
             {

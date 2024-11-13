@@ -1,4 +1,4 @@
-namespace Craiel.Essentials;
+namespace Craiel.Essentials.Nodes;
 
 using Godot;
 
