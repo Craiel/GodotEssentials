@@ -10,7 +10,7 @@ public static class LocaleConstants
 {
     private static readonly IDictionary<CultureInfo, ResourceKey> LocalizationMasterFiles = new Dictionary<CultureInfo, ResourceKey>();
 
-    private static readonly ResourceKey LocalizationFallbackMasterFile;
+    private static readonly ResourceKey LocalizationFallbackMasterFile = ResourceKey.Invalid;
     
     // -------------------------------------------------------------------
     // Public

@@ -23,7 +23,7 @@ public class BaseEventAggregate<T> : IEventAggregate
     public delegate void GameEventAction<in TSpecific>(TSpecific eventData)
         where TSpecific : T;
 
-    public BaseEventSubscriptionTicket Subscribe<TSpecific>(GameEventAction<TSpecific> actionDelegate, Func<TSpecific, bool>? filterDelegate = null)
+    public BaseEventSubscriptionTicket Subscribe<TSpecific>(GameEventAction<TSpecific> actionDelegate, Func<TSpecific, bool> filterDelegate = null)
         where TSpecific : T
     {
         var ticket = new BaseEventSubscriptionTicket(TypeDef<TSpecific>.Value, actionDelegate);
@@ -36,7 +36,7 @@ public class BaseEventAggregate<T> : IEventAggregate
         return ticket;
     }
 
-    public void Unsubscribe(ref BaseEventSubscriptionTicket? ticket)
+    public void Unsubscribe(ref BaseEventSubscriptionTicket ticket)
     {
         if (ticket == null)
         {

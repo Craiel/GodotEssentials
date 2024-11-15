@@ -158,7 +158,7 @@ public class BehaviorTreeBuilder<T>
         return this;
     }
 
-    public BehaviorTreeBuilder<T> AlwaysFail(Task<T>? child = null)
+    public BehaviorTreeBuilder<T> AlwaysFail(Task<T> child = null)
     {
         if (child == null)
         {
@@ -168,7 +168,7 @@ public class BehaviorTreeBuilder<T>
         return this.Decorator(new AlwaysFail<T>(this.stream.Add(child)));
     }
 
-    public BehaviorTreeBuilder<T> AlwaysSucceed(Task<T>? child = null)
+    public BehaviorTreeBuilder<T> AlwaysSucceed(Task<T> child = null)
     {
         if (child == null)
         {
@@ -183,7 +183,7 @@ public class BehaviorTreeBuilder<T>
         return this.Decorator(new Include<T>(subTree, lazy));
     }
 
-    public BehaviorTreeBuilder<T> Invert(Task<T>? child = null)
+    public BehaviorTreeBuilder<T> Invert(Task<T> child = null)
     {
         if (child != null)
         {
@@ -193,7 +193,7 @@ public class BehaviorTreeBuilder<T>
         return this.Decorator(new Invert<T>());
     }
 
-    public BehaviorTreeBuilder<T> Random(Task<T>? child = null)
+    public BehaviorTreeBuilder<T> Random(Task<T> child = null)
     {
         if (child != null)
         {
@@ -203,7 +203,7 @@ public class BehaviorTreeBuilder<T>
         return this.Decorator(new Random<T>());
     }
 
-    public BehaviorTreeBuilder<T> Repeat(IntegerDistribution times, Task<T>? child = null)
+    public BehaviorTreeBuilder<T> Repeat(IntegerDistribution times, Task<T> child = null)
     {
         if (child != null)
         {
@@ -213,7 +213,7 @@ public class BehaviorTreeBuilder<T>
         return this.Decorator(new Repeat<T> { Times = times });
     }
 
-    public BehaviorTreeBuilder<T> SemaphoreGuard(string name = "", Task<T>? child = null)
+    public BehaviorTreeBuilder<T> SemaphoreGuard(string name = "", Task<T> child = null)
     {
         if (child != null)
         {
@@ -223,7 +223,7 @@ public class BehaviorTreeBuilder<T>
         return this.Decorator(new SemaphoreGuard<T>(name));
     }
 
-    public BehaviorTreeBuilder<T> UntilFail(Task<T>? child = null)
+    public BehaviorTreeBuilder<T> UntilFail(Task<T> child = null)
     {
         if (child != null)
         {
@@ -233,7 +233,7 @@ public class BehaviorTreeBuilder<T>
         return this.Decorator(new UntilFail<T>());
     }
 
-    public BehaviorTreeBuilder<T> UntilSuccess(Task<T>? child = null)
+    public BehaviorTreeBuilder<T> UntilSuccess(Task<T> child = null)
     {
         if (child != null)
         {
@@ -243,7 +243,7 @@ public class BehaviorTreeBuilder<T>
         return this.Decorator(new UntilSuccess<T>());
     }
 
-    public BehaviorTreeBuilder<T> Interval(float seconds = 1.0f, Task<T>? child = null)
+    public BehaviorTreeBuilder<T> Interval(float seconds = 1.0f, Task<T> child = null)
     {
         if (child != null)
         {

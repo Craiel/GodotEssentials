@@ -524,7 +524,7 @@ public class ObjectSet<T> : IEnumerable<T>
         return h;
     }
 
-    public override bool Equals(object? obj)
+    public override bool Equals(object obj)
     {
         if (obj == null)
         {

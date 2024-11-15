@@ -27,7 +27,7 @@ public class GameCommands : IGameModule
 	
 	class QueuedCommand
 	{
-		public QueuedCommand(int typeHash, IGameCommand command, IGameCommandPayload? payload)
+		public QueuedCommand(int typeHash, IGameCommand command, IGameCommandPayload payload)
 		{
 			this.TypeHash = typeHash;
 			this.Command = command;
@@ -36,13 +36,13 @@ public class GameCommands : IGameModule
 
 		public readonly int TypeHash;
 		public readonly IGameCommand Command;
-		public readonly IGameCommandPayload? Payload;
+		public readonly IGameCommandPayload Payload;
 	}
 	
 	// -------------------------------------------------------------------
 	// Public
 	// -------------------------------------------------------------------
-	public delegate GameCommandStatus CommandHandlerDelegate(IGameCommandPayload? payload);
+	public delegate GameCommandStatus CommandHandlerDelegate(IGameCommandPayload payload);
 	
 	public void Initialize()
 	{
@@ -67,7 +67,7 @@ public class GameCommands : IGameModule
 	{
 	}
 	
-	public void Queue<T>(T command, IGameCommandPayload? payload = null)
+	public void Queue<T>(T command, IGameCommandPayload payload = null)
 		where T : IGameCommand
 	{
 		RegisterCommand<T>();
@@ -76,7 +76,7 @@ public class GameCommands : IGameModule
 		this.queuedCommands.Enqueue(entry);
 	}
 	
-	public void Queue<T>(IGameCommandPayload? payload = null)
+	public void Queue<T>(IGameCommandPayload payload = null)
 		where T: IGameCommand
 	{
 		Queue(Activator.CreateInstance<T>(), payload);
@@ -92,13 +92,13 @@ public class GameCommands : IGameModule
 		}
 	}
 
-	public void ExecuteImmediate<T>(IGameCommandPayload? payload = null)
+	public void ExecuteImmediate<T>(IGameCommandPayload payload = null)
 		where T : IGameCommand
 	{
 		ExecuteImmediate(Activator.CreateInstance<T>(), payload);
 	}
 
-	public void ExecuteImmediate<T>(T command, IGameCommandPayload? payload = null)
+	public void ExecuteImmediate<T>(T command, IGameCommandPayload payload = null)
 		where T : IGameCommand
 	{
 		if (!this.handlers.TryGetValue(TypeDef<T>.Hash, out var handler))
@@ -118,7 +118,7 @@ public class GameCommands : IGameModule
 		where T : IGameCommand
 	{
 		int typeHash = TypeDef<T>.Hash;
-		if (this.commandInfos.TryGetValue(typeHash, out CommandInfo? info))
+		if (this.commandInfos.TryGetValue(typeHash, out CommandInfo info))
 		{
 			return info;
 		}

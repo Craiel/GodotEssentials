@@ -244,7 +244,7 @@ public struct Triangle3 : IEquatable<Triangle3>
     /// </summary>
     /// <param name="obj">The other object.</param>
     /// <returns>A value indicating whether other is equivalent to the triangle.</returns>
-    public override bool Equals(object? obj)
+    public override bool Equals(object obj)
     {
         if (obj is Triangle3 other)
         {

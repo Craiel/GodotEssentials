@@ -8,7 +8,7 @@ public class TermKey : BaseTerm
     // -------------------------------------------------------------------
     // Constructor
     // -------------------------------------------------------------------
-    public TermKey(string name, string keyword, object? tag = null)
+    public TermKey(string name, string keyword, object tag = null)
         : base(name, tag)
     {
         this.Keyword = keyword;

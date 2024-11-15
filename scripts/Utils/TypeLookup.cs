@@ -7,13 +7,13 @@ using Collections;
 
 public static class TypeLookup
 {
-    private static Assembly[]? assemblyCache;
-    private static Type[]? typeCache;
+    private static Assembly[] assemblyCache;
+    private static Type[] typeCache;
 
     // -------------------------------------------------------------------
     // Public
     // -------------------------------------------------------------------
-    public static Type? FindType<T>(string value)
+    public static Type FindType<T>(string value)
     {
         RefreshCache();
 

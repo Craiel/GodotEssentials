@@ -20,7 +20,7 @@ public class TermNumber : BaseTerm
     // -------------------------------------------------------------------
     // Constructor
     // -------------------------------------------------------------------
-    public TermNumber(string name, char floatDelimiter = '.', object? tag = null)
+    public TermNumber(string name, char floatDelimiter = '.', object tag = null)
         : base(name, tag)
     {
         this.FloatDelimiter = floatDelimiter;

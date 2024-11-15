@@ -5,7 +5,7 @@ public class TermString : BaseTerm
     // -------------------------------------------------------------------
     // Constructor
     // -------------------------------------------------------------------
-    public TermString(string name, char character, char? escapeChar = null, object? tag = null)
+    public TermString(string name, char character, char? escapeChar = null, object tag = null)
         : base(name, tag)
     {
         this.Character = character;

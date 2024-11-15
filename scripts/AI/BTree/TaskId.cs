@@ -33,14 +33,14 @@ public struct TaskId
         return this.Value == other.Value;
     }
 
-    public override bool Equals(object? obj)
+    public override bool Equals(object obj)
     {
         if (ReferenceEquals(null, obj))
         {
             return false;
         }
 
-        return obj is TaskId && this.Equals((TaskId)obj);
+        return obj is TaskId id && this.Equals(id);
     }
 
     public override int GetHashCode()

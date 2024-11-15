@@ -1,8 +1,6 @@
 namespace Craiel.Essentials.Data.SBT.Nodes;
 
 using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.IO;
 using Enums;
 using SBT;
@@ -15,7 +13,6 @@ public abstract class SBTNodeArray<T> : ISBTNode, ISBTNodeCollection
     private const int SimpleTypeCapacityLimit = 1024 * 1024 * 10;
     private const int DefaultEntryCountLimit = 1000000;
     
-    private readonly byte dataEntrySize;
     private readonly SBTType baseType;
     
     private int capacityLimit;
@@ -31,7 +28,7 @@ public abstract class SBTNodeArray<T> : ISBTNode, ISBTNodeCollection
         this.Type = type;
         this.Flags = flags;
         this.Note = note;
-        this.data = new T[0];
+        this.data = Array.Empty<T>();
         
         this.baseType = type.GetArrayBaseType();
 
@@ -55,15 +52,9 @@ public abstract class SBTNodeArray<T> : ISBTNode, ISBTNodeCollection
     
     public string Note { get; }
 
-    public int Capacity
-    {
-        get { return this.capacityLimit; }
-    }
+    public int Capacity => this.capacityLimit;
 
-    public ushort Count
-    {
-        get { return (ushort)this.nextDataIndex; }
-    }
+    public ushort Count => (ushort)this.nextDataIndex;
 
     public void SetCapacityLimit(int newLimit)
     {

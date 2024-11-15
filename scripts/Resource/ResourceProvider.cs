@@ -424,7 +424,7 @@ public class ResourceProvider : IGameModule
         }
     }
 
-    private Resource? AcquireFallbackResource<T>()
+    private Resource AcquireFallbackResource<T>()
     {
         if (this.fallbackResources.TryGetValue(TypeDef<T>.Value, out ResourceKey fallbackKey))
         {

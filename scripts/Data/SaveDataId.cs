@@ -38,7 +38,7 @@ public struct SaveDataId
         return string.Equals(this.Id, other.Id, StringComparison.OrdinalIgnoreCase);
     }
 
-    public override bool Equals(object? obj)
+    public override bool Equals(object obj)
     {
         if (ReferenceEquals(null, obj))
         {

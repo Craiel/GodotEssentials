@@ -18,13 +18,13 @@ public static class GameEvents
 
     public static void Subscribe<TSpecific>(BaseEventAggregate<IGameEvent>.GameEventAction<TSpecific> actionDelegate, 
         out BaseEventSubscriptionTicket ticket, 
-        Func<TSpecific, bool>? filterDelegate = null)
+        Func<TSpecific, bool> filterDelegate = null)
         where TSpecific : IGameEvent
     {
         ticket = DoSubscribe(actionDelegate, filterDelegate);
     }
     
-    public static void Unsubscribe(ref BaseEventSubscriptionTicket? ticket)
+    public static void Unsubscribe(ref BaseEventSubscriptionTicket ticket)
     {
         DoUnsubscribe(ref ticket);
     }
@@ -38,13 +38,13 @@ public static class GameEvents
         Aggregate.Send(eventData);
     }
     
-    private static BaseEventSubscriptionTicket DoSubscribe<TSpecific>(BaseEventAggregate<IGameEvent>.GameEventAction<TSpecific> actionDelegate, Func<TSpecific, bool>? filterDelegate)
+    private static BaseEventSubscriptionTicket DoSubscribe<TSpecific>(BaseEventAggregate<IGameEvent>.GameEventAction<TSpecific> actionDelegate, Func<TSpecific, bool> filterDelegate)
         where TSpecific : IGameEvent
     {
         return Aggregate.Subscribe(actionDelegate, filterDelegate);
     }
 
-    private static void DoUnsubscribe(ref BaseEventSubscriptionTicket? ticket)
+    private static void DoUnsubscribe(ref BaseEventSubscriptionTicket ticket)
     {
         Aggregate.Unsubscribe(ref ticket);
     }

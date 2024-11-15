@@ -31,7 +31,7 @@ public readonly struct EnumGameDataId<T>
         return !(value1 == value2);
     }
 
-    public override bool Equals(object? obj)
+    public override bool Equals(object obj)
     {
         if (ReferenceEquals(null, obj))
         {

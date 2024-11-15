@@ -5,7 +5,7 @@ public class TermPunctuation : BaseTerm
     // -------------------------------------------------------------------
     // Constructor
     // -------------------------------------------------------------------
-    public TermPunctuation(object? tag = null, params char[] entries)
+    public TermPunctuation(object tag = null, params char[] entries)
         : base("Punctuation", tag)
     {
         this.Entries = entries;

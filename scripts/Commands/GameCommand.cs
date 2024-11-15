@@ -10,19 +10,19 @@ public static class GameCommand
         EssentialCore.GameCommands.Register<T>(handler);
     }
     
-    public static void Queue<T>(IGameCommandPayload? payload = null)
+    public static void Queue<T>(IGameCommandPayload payload = null)
         where T: IGameCommand
     {
         EssentialCore.GameCommands.Queue<T>(payload);
     }
     
-    public static void ExecuteImmediate<T>(IGameCommandPayload? payload = null)
+    public static void ExecuteImmediate<T>(IGameCommandPayload payload = null)
         where T: IGameCommand
     {
         EssentialCore.GameCommands.ExecuteImmediate<T>(payload);
     }
     
-    public static void ExecuteImmediate<T>(T command, IGameCommandPayload? payload = null)
+    public static void ExecuteImmediate<T>(T command, IGameCommandPayload payload = null)
         where T: IGameCommand
     {
         EssentialCore.GameCommands.ExecuteImmediate(command, payload);

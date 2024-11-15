@@ -239,7 +239,8 @@ public class OctreeNode<T>
         }*/
 
         // Check children if any
-        if (this.children != null)
+        
+        /*if (this.children != null)
         {
             for (int i = 0; i < this.children.Length; i++)
             {
@@ -261,7 +262,7 @@ public class OctreeNode<T>
             {
                 result.Add(new OctreeResult<T>(this.objects[i], this.objectPositions[i]));
             }
-        }
+        }*/
     }
 
     public bool Shrink(float minLength, ref OctreeNode<T> parentNode)
