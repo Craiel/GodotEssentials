@@ -4,7 +4,12 @@ const fs = require('fs');
 const path = require('path');
 const EssentialsRoot = path.dirname(__dirname) +  "\\";
 
-let SourceFolder = process.argv[2];
+let NameSpace = process.argv[2];
+if(NameSpace === undefined) {
+    NameSpace = "undefined";
+}
+
+let SourceFolder = process.argv[3];
 if(SourceFolder === undefined) {
     SourceFolder = "..\\Project\\source\\Game\\";
 }
@@ -97,7 +102,7 @@ class ResourceIndexer {
 
     writeResults() {
         let contents = [];
-        contents.push("namespace CanineJRPG.Core;\n");
+        contents.push("namespace " + NameSpace + ".Core;\n");
         contents.push("using Craiel.Essentials.Resource;");
         contents.push("using Craiel.Essentials.Utils;");
         contents.push("using Godot;\n");
