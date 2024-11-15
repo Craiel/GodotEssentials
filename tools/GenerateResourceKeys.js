@@ -38,12 +38,13 @@ class ResourceIndexer {
                 continue;
             }
 
+            let segmentFormatted = segments[i].replaceAll(/[^a-z0-9\.]/gi, " ").trim().replaceAll(/[\s]+/g, "_");
             if(i == segments.length - 1) {
-                id = id + "_" + segments[i];
+                id = id + "_" + segmentFormatted;
                 continue;
             }
 
-            id = id + "_" + segments[i].slice(0, 2);
+            id = id + "_" + segmentFormatted;
         }
 
         for(let i = 0; i < this.extensionsToIndex.length; i++) {
@@ -53,8 +54,11 @@ class ResourceIndexer {
         id = id.toUpperCase();
         path = this.getGodotResPath(path);
 
+        console.log(filePath);
         if(this.results[id] !== undefined) {
-            throw "Duplicate ID: " + id;
+            
+            console.log(segments);
+            throw "Duplicate ID: " + id + " -> " + this.results[id];
         }
 
         this.results[id] = path;
