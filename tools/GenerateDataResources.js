@@ -104,7 +104,7 @@ class PrefabGenerator {
             let fileContents = fs.readFileSync(file).toString().split("\n");
             let match = null;
             for(let i = 0; i < fileContents.length; i++) {
-                if(fileContents[i].indexOf('GameDataType.') < 0) {
+                if(fileContents[i].indexOf('GameDataType.') < 0 || fileContents[i].indexOf("StringGameDataId" < 0)) {
                     continue;
                 }
                 
