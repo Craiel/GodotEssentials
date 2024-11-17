@@ -5,11 +5,6 @@ using Godot;
 
 public partial class DraggableSpriteNode : Sprite2D
 {
-    [Export] public float DragSpeed = 0.5f;
-
-    [Export] public double AutoCenterTime = 5f;
-    [Export] public float AutoCenterMargin = 10f;
-
     private bool isDragging;
     private bool isAutoCentering;
     private double elapsedAutoCenterTime;
@@ -22,6 +17,14 @@ public partial class DraggableSpriteNode : Sprite2D
     private Vector2 maxRegionOffset;
     private Vector2 autoCenterTarget;
 
+    // -------------------------------------------------------------------
+    // Public
+    // -------------------------------------------------------------------
+    [Export] public float DragSpeed = 0.5f;
+
+    [Export] public double AutoCenterTime = 5f;
+    [Export] public float AutoCenterMargin = 10f;
+    
     public event Action RegionChanged;
     
     public Vector2 RegionOffset => this.regionOffset;
@@ -91,25 +94,6 @@ public partial class DraggableSpriteNode : Sprite2D
         }
     }
 
-    private bool TryMoveRegion(Vector2 newOffset)
-    {
-        // Clamp region offset to keep the image within the rect
-        newOffset = new Vector2(
-            Mathf.Max(0, Mathf.Min(this.maxRegionOffset.X, newOffset.X)),
-            Mathf.Max(0, Mathf.Min(this.maxRegionOffset.Y, newOffset.Y)));
-        
-        if (this.regionOffset == newOffset)
-        {
-            return false;
-        }
-
-        this.regionOffset = newOffset;
-        this.RegionRect = new Rect2(this.regionOffset, this.regionSize);
-            
-        this.RegionChanged?.Invoke();
-        return true;
-    }
-
     public override void _Process(double delta)
     {
         base._Process(delta);
@@ -134,6 +118,27 @@ public partial class DraggableSpriteNode : Sprite2D
         this.isAutoCentering = true;
     }
 
+    // -------------------------------------------------------------------
+    // Private
+    // -------------------------------------------------------------------
+    private bool TryMoveRegion(Vector2 newOffset)
+    {
+        // Clamp region offset to keep the image within the rect
+        newOffset = new Vector2(
+            Mathf.Max(0, Mathf.Min(this.maxRegionOffset.X, newOffset.X)),
+            Mathf.Max(0, Mathf.Min(this.maxRegionOffset.Y, newOffset.Y)));
+        
+        if (this.regionOffset == newOffset)
+        {
+            return false;
+        }
+
+        this.regionOffset = newOffset;
+        this.RegionRect = new Rect2(this.regionOffset, this.regionSize);
+            
+        this.RegionChanged?.Invoke();
+        return true;
+    }
     private void ContinueAutoCenter()
     {
         Vector2 newOffset = this.regionOffset.Lerp(this.autoCenterTarget, (float)Mathf.Min(this.elapsedAutoCenterTime / this.AutoCenterTime, 1f));

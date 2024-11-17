@@ -46,6 +46,30 @@ public static class ColorExtensions
         color.A = alpha;
         return color;
     }
+    
+    public static bool IsNearWhite(this Color color, float tolerance = 0.005f)
+    {
+        return Mathf.Abs(color.R - 1.0) <= tolerance 
+               && Mathf.Abs(color.G - 1.0) <= tolerance 
+               && Mathf.Abs(color.B - 1.0) <= tolerance 
+               && Math.Abs(color.A - 1.0) < Mathf.Epsilon;
+    }
+
+    public static Color Mix(this Color baseColor, Color overlay)
+    {
+        float alphaOverlay = overlay.A;
+        float alphaBase = baseColor.A * (1.0f - alphaOverlay);
+        float finalAlpha = alphaOverlay + alphaBase;
+        var finalColor = overlay * alphaOverlay + baseColor * alphaBase;
+
+        if (finalAlpha > 0)
+        {
+            finalColor /= finalAlpha;
+        }
+
+        finalColor.A = finalAlpha;
+        return finalColor;
+    }
 
     // Note: this is not a proper way to de-saturate, look at HSV implementations for proper ways
     public static Color DesaturateSimple(this Color color, float by)

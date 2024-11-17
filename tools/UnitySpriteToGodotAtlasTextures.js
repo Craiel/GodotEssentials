@@ -169,61 +169,7 @@ class UnitySpriteToTextureAtlas {
                 let prefabFile = path.join(targetFolder, sprite.name + ".tres");
                 fs.writeFileSync(prefabFile, prefab);
             }
-            /**/
         }
-
-        /*const idMatchRegex = /\snew\s*\((.+?)\)/;
-        for(let id in this.results) {
-            let file = this.results[id];
-            let fileContents = fs.readFileSync(file).toString().split("\n");
-            let match = null;
-            for(let i = 0; i < fileContents.length; i++) {
-                if(fileContents[i].indexOf('GameDataType.') < 0) {
-                    continue;
-                }
-                
-                let line = fileContents[i].replaceAll("\t", " ").replaceAll("\r", "");
-                match = idMatchRegex.exec(line);
-                if(match !== null) {
-                    break;
-                }
-                
-                console.log("NO_MATCH: " + line);
-            }
-            
-            if(match === null) {
-                continue;
-            }
-            
-            console.log(match[1]);
-            let args = match[1].split(',');
-            for(let i = 0; i < args.length; i++) {
-                args[i] = args[i].trim().replaceAll('"', '');
-            }
-
-            let dataType = args[1].replace('GameDataType.', '');
-            if(dataType === 'Unset') {
-                continue;
-            }
-
-            let category = id.split('_')[0];
-            let idString = args[0];
-            let typeIndex = this.typeToIndex[dataType];
-
-            let prefabPath = this.targetFolder + category.toLowerCase() + '\\';
-            if(!fs.existsSync(prefabPath)) {
-                fs.mkdirSync(prefabPath);
-            }
-
-            let prefabFile = prefabPath + idString + '.tres';
-            // console.log(prefabFile + ' || ' + idString + ' -- ' + typeIndex);
-
-            let prefab = PrefabTemplate
-                .replace('#ID_STRING#', idString)
-                .replace('#TYPE_VAL#', typeIndex)
-                .replace('#LINK_NAME#', 'LINK_' + idString);
-            fs.writeFileSync(prefabFile, prefab);
-        }*/
     }
 }
 
