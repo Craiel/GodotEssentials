@@ -2,16 +2,16 @@
 
 const fs = require('fs');
 const path = require('path');
-const EssentialsRoot = path.dirname(__dirname) +  "\\";
+const EssentialsRoot = path.dirname(__dirname);
 
-let NameSpace = process.argv[2];
-if(NameSpace === undefined) {
-    NameSpace = "undefined";
+let SourceFolder = process.argv[2];
+if(SourceFolder === undefined) {
+    SourceFolder = "..\\Project\\source\\Game";
 }
 
-let SourceFolder = process.argv[3];
-if(SourceFolder === undefined) {
-    SourceFolder = "..\\Project\\source\\Game\\";
+let NameSpace = process.argv[3];
+if(NameSpace === undefined) {
+    NameSpace = "undefined";
 }
 
 class ResourceIndexer {
@@ -19,7 +19,7 @@ class ResourceIndexer {
         this.results = {};
         this.filesToIndex = [];
         this.extensionsToIndex = ['.png'];
-        this.targetFolder = SourceFolder + "Database\\";
+        this.targetFolder = SourceFolder + "\\Database\\";
         this.sourceFolder = "..\\Project\\art\\";
         this.targetFile = "ArtResources.cs";
         this.category = "art";
@@ -59,7 +59,6 @@ class ResourceIndexer {
         id = id.toUpperCase();
         path = this.getGodotResPath(path);
 
-        console.log(filePath);
         if(this.results[id] !== undefined) {
             
             console.log(segments);
@@ -136,7 +135,7 @@ class ResourceIndexer {
 }
 
 var essArtClass = new ResourceIndexer();
-essArtClass.sourceFolder = EssentialsRoot + "data\\art\\";
+essArtClass.sourceFolder = EssentialsRoot + "\\data\\art\\";
 essArtClass.targetFile = "EssentialArtResources.cs";
 essArtClass.className = "EssentialArtResources";
 essArtClass.resourcePrefixPath = "source/GodotEssentials/data/";

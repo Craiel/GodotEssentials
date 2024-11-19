@@ -2,13 +2,16 @@
 
 const fs = require('fs');
 const path = require('path');
-const EssentialsRoot = path.dirname(__dirname) +  "\\";
-const PrefabTemplateFile = __dirname + '\\LinkTemplate.tre_';
-let PrefabTemplate = fs.readFileSync(PrefabTemplateFile).toString();
+const EssentialsRoot = path.dirname(__dirname);
 
-let SourceFolder = process.argv[2];
+let ProjectFolder = process.argv[2];
+if(ProjectFolder === undefined) {
+    ProjectFolder = "..\\Project";
+}
+
+let SourceFolder = process.argv[3];
 if(SourceFolder === undefined) {
-    SourceFolder = "..\\Project\\source\\Game\\";
+    SourceFolder = ProjectFolder + "\\source\\Game";
 }
 
 class PrefabGenerator {
@@ -16,16 +19,23 @@ class PrefabGenerator {
         this.results = {};
         this.filesToIndex = [];
         this.extensionsToIndex = ['.cs'];
-        this.targetFolder = "..\\Project\\prefabs\\database\\";
-        this.sourceFolder = SourceFolder + "Database\\";
-        this.dataTypeFile = '..\\Project\\source\\GodotEssentials\\scripts\\Database\\GameDataType.cs';
+        this.targetFolder = ProjectFolder + "\\prefabs\\database\\";
+        this.sourceFolder = SourceFolder + "\\Database\\";
+        this.dataTypeFile = EssentialsRoot + '\\scripts\\Database\\GameDataType.cs';
         this.typeToIndex = {};
     }
 
+    getRelativeAssetPath(filePath) {
+        let pathRootIndex = filePath.indexOf('\\Database\\');
+        return filePath.substring(pathRootIndex + 10, filePath.length);
+    }
+
     indexFile(filePath) {
-        let path = filePath.replace(this.sourceFolder, "");
+
+        let path = this.getRelativeAssetPath(filePath);
         let segments = path.split('\\');
         let id = "";
+
         for(let i = 0; i < segments.length; i++) {
             if(i === 0 && segments.length > 1) {
                 id = segments[i];
@@ -94,6 +104,29 @@ class PrefabGenerator {
         } while(match != null);
     }
 
+    buildGodotFile(idString, typeIndex){
+        let resourceFile = require('./tools_src/godot_file.js').createNew('tres');
+
+        let mainSection = resourceFile.addSection('gd_resource');
+        mainSection.addParam('type', 'Resource');
+        mainSection.addParam('script_class', 'GameDatabaseLinkNode');
+        mainSection.addParam('load_steps', '2', 2);
+        mainSection.addParam('format', '3', 2);
+
+        let scriptId = resourceFile.getNewLocalId();
+        let extResource = resourceFile.addSection('ext_resource');
+        extResource.addParam('type', 'Script');
+        extResource.addParam('path', 'res://source/GodotEssentials/scripts/Database/GameDatabaseLinkNode.cs');
+        extResource.addParam('id', scriptId);
+
+        let resource = resourceFile.addSection('resource');
+        resource.addContent('script', 'ExtResource("' + scriptId + '")');
+        resource.addContent('Id', '"' + idString + '"');
+        resource.addContent('Type', typeIndex.toString());
+
+        return resourceFile;
+    }
+
     writeResults() {
         fs.rmSync(this.targetFolder, { recursive: true, force: true });
         fs.mkdirSync(this.targetFolder);
@@ -104,13 +137,14 @@ class PrefabGenerator {
             let fileContents = fs.readFileSync(file).toString().split("\n");
             let match = null;
             for(let i = 0; i < fileContents.length; i++) {
-                if(fileContents[i].indexOf('GameDataType.') < 0 || fileContents[i].indexOf("StringGameDataId" < 0)) {
+                if(fileContents[i].indexOf('GameDataType.') < 0 || fileContents[i].indexOf("StringGameDataId") < 0) {
                     continue;
                 }
-                
+
                 let line = fileContents[i].replaceAll("\t", " ").replaceAll("\r", "");
                 match = idMatchRegex.exec(line);
                 if(match !== null) {
+
                     break;
                 }
                 
@@ -120,8 +154,7 @@ class PrefabGenerator {
             if(match === null) {
                 continue;
             }
-            
-            console.log(match[1]);
+
             let args = match[1].split(',');
             for(let i = 0; i < args.length; i++) {
                 args[i] = args[i].trim().replaceAll('"', '');
@@ -141,14 +174,9 @@ class PrefabGenerator {
                 fs.mkdirSync(prefabPath);
             }
 
-            let prefabFile = prefabPath + idString + '.tres';
-            // console.log(prefabFile + ' || ' + idString + ' -- ' + typeIndex);
-
-            let prefab = PrefabTemplate
-                .replace('#ID_STRING#', idString)
-                .replace('#TYPE_VAL#', typeIndex)
-                .replace('#LINK_NAME#', 'LINK_' + idString);
-            fs.writeFileSync(prefabFile, prefab);
+            let resourceFilePath = prefabPath + idString + '.tres';
+            let resourceFile = this.buildGodotFile(idString, typeIndex);
+            resourceFile.saveAs(resourceFilePath);
         }
     }
 }
