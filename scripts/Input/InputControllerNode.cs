@@ -13,7 +13,7 @@ public partial class InputControllerNode : Node
     // -------------------------------------------------------------------
     public override void _EnterTree()
     {
-        GameEvents.Subscribe<EventToggleInputLock>(OnToggleInputLock, out this.eventInputLockToggle);
+        GameEvents.Subscribe<EventSetInputLock>(OnToggleInputLock, out this.eventInputLockToggle);
 		
         base._EnterTree();
     }
@@ -28,8 +28,8 @@ public partial class InputControllerNode : Node
     // -------------------------------------------------------------------
     // Private
     // -------------------------------------------------------------------
-    private void OnToggleInputLock(EventToggleInputLock eventData)
+    private void OnToggleInputLock(EventSetInputLock eventData)
     {
-        InputController.InputLocked = eventData.IsLocked;
+        InputController.InputLock = eventData.State;
     }
 }

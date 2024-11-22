@@ -16,9 +16,9 @@ public partial class InputBuffer : Node
     {
         base._Input(eventData);
 
-        if (InputController.InputLocked)
+        if (InputController.InputLock != InputLockState.None)
         {
-            // Won't buffer any input during lock
+            // Won't buffer any input during any lock
             return;
         }
 
