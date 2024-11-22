@@ -11,12 +11,14 @@ public partial class ModulateCanvasItemNode : Node
     private bool inProgress;
     private bool isReverse;
     private double currentTime;
+    private double currentDelay;
     
     // -------------------------------------------------------------------
     // Public
     // -------------------------------------------------------------------
     [Export] public CanvasItem Target;
     [Export] public float Duration;
+    [Export] public float Delay;
     [Export] public bool Loop;
     [Export] public bool BlendAlpha = true;
     [Export] public bool BlendColor = true;
@@ -37,6 +39,17 @@ public partial class ModulateCanvasItemNode : Node
     public override void _Process(double delta)
     {
         base._Process(delta);
+
+        if (!this.Target.IsVisibleInTree())
+        {
+            return;
+        }
+
+        if (this.currentDelay > 0)
+        {
+            this.currentDelay -= delta;
+            return;
+        }
 
         if (this.inProgress)
         {
@@ -62,7 +75,9 @@ public partial class ModulateCanvasItemNode : Node
     {
         this.inProgress = true;
         this.currentTime = 0f;
+        this.currentDelay = this.Delay;
 
+        this.currentColor = this.Target.Modulate;
         this.startColor = this.currentColor;
         this.TargetColor = this.isReverse ? this.originalColor : this.Color;
     }

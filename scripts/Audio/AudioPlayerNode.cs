@@ -86,6 +86,12 @@ public partial class AudioPlayerNode : Node
     // -------------------------------------------------------------------
     private void Play(AudioStreamPlayer player, ResourceKey key)
     {
+        if (key == ResourceKey.Invalid)
+        {
+            EssentialCore.Logger.Warn("Tried to play invalid sound!");
+            return;
+        }
+        
         var stream = key.LoadManaged<AudioStream>();
         if (stream == null)
         {

@@ -4,8 +4,8 @@ using Godot;
 
 public partial class FadeCanvasItemNode : ModulateCanvasItemNode
 {
-    private static readonly Color FadeOutColor = new Color(1, 1, 1, 0);
-    private static readonly Color FadeInColor = new Color(1, 1, 1);
+    private static readonly Color FadeOutColor = new(1, 1, 1, 0);
+    private static readonly Color FadeInColor = new(1, 1, 1);
     
     private FadeMode currentMode;
     
@@ -36,17 +36,8 @@ public partial class FadeCanvasItemNode : ModulateCanvasItemNode
     // -------------------------------------------------------------------
     protected override void Begin()
     {
-        base.Begin();
-        
         switch (this.Mode)
         {
-            case FadeMode.FadeIn:
-            case FadeMode.FadeOut:
-            {
-                this.currentMode = this.Mode;
-                break;
-            }
-
             case FadeMode.Alternate:
             {
                 switch (this.currentMode)
@@ -72,8 +63,17 @@ public partial class FadeCanvasItemNode : ModulateCanvasItemNode
                 
                 break;
             }
+
+            default:
+            {
+                this.currentMode = this.Mode;
+                break;
+            }
         }
 
+        // First reset the modulate, then call begin and let it know which target color we want to go to
+        this.Target.Modulate = this.currentMode == FadeMode.FadeIn ? FadeOutColor : FadeInColor;
+        base.Begin();
         this.TargetColor = this.currentMode == FadeMode.FadeIn ? FadeInColor : FadeOutColor;
     }
 }
