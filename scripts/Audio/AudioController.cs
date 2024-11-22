@@ -33,4 +33,9 @@ public static class AudioController
     {
         Player?.Play(bus, resourceKey);
     }
+    
+    public static void Stop(AudioBus bus)
+    {
+        Player?.Stop(bus);
+    }
 }

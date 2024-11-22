@@ -50,6 +50,36 @@ public partial class AudioPlayerNode : Node
             }
         }
     }
+    
+    public void Stop(AudioBus bus)
+    {
+        switch (bus)
+        {
+            case AudioBus.Music:
+            {
+                Stop(this.MusicStatic);
+                break;
+            }
+
+            case AudioBus.SFX:
+            {
+                this.Stop(this.SFXStatic);
+                break;
+            }
+
+            case AudioBus.Ambient:
+            {
+                this.Stop(this.AmbienceStatic);
+                break;
+            }
+
+            case AudioBus.UI:
+            {
+                this.Stop(this.UIStatic);
+                break;
+            }
+        }
+    }
 
     // -------------------------------------------------------------------
     // Private
@@ -65,5 +95,10 @@ public partial class AudioPlayerNode : Node
         player.Stop();
         player.Stream = stream;
         player.Play();
+    }
+
+    private void Stop(AudioStreamPlayer player)
+    {
+        player.Stop();
     }
 }
