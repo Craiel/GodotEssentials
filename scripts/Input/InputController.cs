@@ -11,7 +11,7 @@ public static class InputController
     private static readonly IDictionary<string, IList<InputMappingInfo>> mappingCache = new Dictionary<string, IList<InputMappingInfo>>();
     private static readonly IDictionary<string, IList<InputMappingInfo>> defaultMappings = new Dictionary<string, IList<InputMappingInfo>>();
     
-    internal static bool InputLocked;
+    internal static InputLockState InputLock;
 
     // -------------------------------------------------------------------
     // Public
@@ -108,9 +108,22 @@ public static class InputController
     
     public static void Process(IInputReceiver receiver)
     {
-        if (InputLocked && !receiver.InputIgnoreLock)
+        switch (InputLock)
         {
-            return;
+            case InputLockState.HardLock:
+            {
+                return;
+            }
+
+            case InputLockState.SoftLock:
+            {
+                if (!receiver.InputIgnoreLock)
+                {
+                    return;
+                }
+                
+                break;
+            }
         }
         
         receiver.ProcessInput();
