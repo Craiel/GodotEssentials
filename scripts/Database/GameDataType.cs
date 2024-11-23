@@ -6,6 +6,6 @@ public enum GameDataType
     
     Character = 1,
     Zone = 2,
-    Dialogue = 3,
+    Dialog = 3,
     Items = 4
 }

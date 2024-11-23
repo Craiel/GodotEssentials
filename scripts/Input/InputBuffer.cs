@@ -16,10 +16,13 @@ public partial class InputBuffer : Node
     {
         base._Input(eventData);
 
-        if (InputController.InputLock != InputLockState.None)
+        switch (InputController.InputLock)
         {
-            // Won't buffer any input during any lock
-            return;
+            // Won't buffer any input during specific locks
+            case InputLockState.HardLock:
+            {
+                return;
+            }
         }
 
         ulong currentTime = Time.GetTicksMsec();
