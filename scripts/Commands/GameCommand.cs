@@ -4,27 +4,27 @@ using Contracts;
 
 public static class GameCommand
 {
-    public static void RegisterHandler<T>(GameCommands.CommandHandlerDelegate handler)
+    public static void Queue<T>()
         where T: IGameCommand
     {
-        EssentialCore.GameCommands.Register<T>(handler);
+        EssentialCore.GameCommands.Queue<T>();
     }
     
-    public static void Queue<T>(IGameCommandPayload payload = null)
+    public static void Queue<T>(T command)
         where T: IGameCommand
     {
-        EssentialCore.GameCommands.Queue<T>(payload);
+        EssentialCore.GameCommands.Queue(command);
     }
     
-    public static void ExecuteImmediate<T>(IGameCommandPayload payload = null)
+    public static void ExecuteImmediate<T>(T command)
         where T: IGameCommand
     {
-        EssentialCore.GameCommands.ExecuteImmediate<T>(payload);
+        EssentialCore.GameCommands.ExecuteImmediate<T>(command);
     }
     
-    public static void ExecuteImmediate<T>(T command, IGameCommandPayload payload = null)
+    public static void ExecuteImmediate<T>()
         where T: IGameCommand
     {
-        EssentialCore.GameCommands.ExecuteImmediate(command, payload);
+        EssentialCore.GameCommands.ExecuteImmediate<T>();
     }
 }

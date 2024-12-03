@@ -2,15 +2,20 @@
 
 using Contracts;
 
-public abstract class GameCommandBase : IGameCommand
+public abstract class GameCommandBase<T> : IGameCommand
+    where T : IGameCommandPayload
 {
-    private GameCommandStatus status = GameCommandStatus.NotRun;
-    
-    public GameCommandStatus Status
+    // -------------------------------------------------------------------
+    // Public
+    // -------------------------------------------------------------------
+    protected GameCommandBase(T payload)
     {
-        get => this.status;
-        set => this.status = value;
+        this.Payload = payload;
     }
+    
+    public GameCommandStatus Status { get; set; } = GameCommandStatus.NotRun;
+    
+    public abstract void Execute();
 
-    public abstract string Id { get; }
+    protected readonly T Payload;
 }

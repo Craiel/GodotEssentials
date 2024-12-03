@@ -6,5 +6,5 @@ public interface IGameCommand
 {
     GameCommandStatus Status { get; set; }
 
-    string Id { get; }
+    void Execute();
 }

@@ -27,11 +27,13 @@ public static class GameSettings
             GameSettingsGeneral.SetDefaults();
             GameSettingsAudio.SetDefaults();
             GameSettingsVideo.SetDefaults();
+            GameSettingsSaveLoad.SetDefaults();
         }
         
         GameSettingsGeneral.Apply();
         GameSettingsAudio.Apply();
         GameSettingsVideo.Apply();
+        GameSettingsSaveLoad.Apply();
     }
 
     // -------------------------------------------------------------------

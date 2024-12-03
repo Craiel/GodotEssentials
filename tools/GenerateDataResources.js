@@ -131,7 +131,7 @@ class PrefabGenerator {
         fs.rmSync(this.targetFolder, { recursive: true, force: true });
         fs.mkdirSync(this.targetFolder);
 
-        const idMatchRegex = /\snew\s*\((.+?)\)/;
+        const idMatchRegex = /\snew\s*\((.+?)\);/;
         for(let id in this.results) {
             let file = this.results[id];
             let fileContents = fs.readFileSync(file).toString().split("\n");
@@ -166,7 +166,7 @@ class PrefabGenerator {
             }
 
             let category = id.split('_')[0];
-            let idString = args[0];
+            let idString = args[0].replace('nameof(', '').replace(')', '');
             let typeIndex = this.typeToIndex[dataType];
 
             let prefabPath = this.targetFolder + category.toLowerCase() + '\\';

@@ -4,5 +4,6 @@ public enum GameCommandStatus
 {
     NotRun,
     Success,
-    Failure
+    Failure,
+    Incomplete
 }
