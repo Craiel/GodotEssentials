@@ -46,6 +46,11 @@ public partial class DraggableSpriteNode : Sprite2D
             Mathf.Max(0, this.textureSize.Y - rectSize.Y));
     }
 
+    public void StopDragging()
+    {
+        this.isDragging = false;
+    }
+
     public override void _Input(InputEvent @event)
     {
         if (!this.Visible || this.isAutoCentering)
@@ -78,8 +83,7 @@ public partial class DraggableSpriteNode : Sprite2D
             }
             else if (!mouseEvent.Pressed)
             {
-                // Stop dragging
-                this.isDragging = false;
+                this.StopDragging();
             }
         }
 
