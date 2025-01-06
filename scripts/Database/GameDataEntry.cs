@@ -1,5 +1,6 @@
 ﻿namespace Craiel.Essentials.DB;
 
+using Data;
 using Resource;
 
 public abstract class GameDataEntry<T>
@@ -18,8 +19,8 @@ public abstract class GameDataEntry<T>
     // -------------------------------------------------------------------
     public readonly T Id;
     
-    public string DisplayName;
-    public string Description;
+    public DataText DisplayName;
+    public DataText Description;
     
     public ResourceKey IconSmall;
     public ResourceKey IconLarge;
