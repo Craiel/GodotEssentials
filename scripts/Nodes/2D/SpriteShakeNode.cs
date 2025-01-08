@@ -22,9 +22,8 @@ public partial class SpriteShakeNode : Node
     public override void _EnterTree()
     {
         base._EnterTree();
-        
-        this.spriteDefaultPosition = this.Target.Position;
-        this.spriteDefaultModulate = this.Target.Modulate;
+
+        this.ResetPositions();
     }
 
     public override void _Process(double delta)
@@ -46,6 +45,12 @@ public partial class SpriteShakeNode : Node
         this.isShaking = false;
         this.Target.Position = this.spriteDefaultPosition;
         this.Target.Modulate = this.spriteDefaultModulate;
+    }
+
+    public void ResetPositions()
+    {
+        this.spriteDefaultPosition = this.Target.Position;
+        this.spriteDefaultModulate = this.Target.Modulate;
     }
 
     public void Shake(float newIntensity)
