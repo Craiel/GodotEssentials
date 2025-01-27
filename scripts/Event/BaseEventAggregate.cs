@@ -74,13 +74,13 @@ public class BaseEventAggregate<T> : IEventAggregate
     {
         lock (this.subscribers)
         {
-            if (this.subscribers.TryGetValue(ticket.TargetType, out var targets))
+            if (this.subscribers.TryGetValue(ticket.TargetType, out var targets)
+                && targets.Remove(ticket))
             {
-                if (!targets.Remove(ticket))
-                {
-                    throw new InvalidOperationException("Unsubscribe coult not find the given target");
-                }
+                return;
             }
+            
+            throw new InvalidOperationException("Unsubscribe could not find the given target");
         }
     }
 
