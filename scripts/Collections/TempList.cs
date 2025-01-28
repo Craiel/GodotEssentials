@@ -8,9 +8,9 @@ public struct TempList<T> : IDisposable, IEnumerable<T>
 {
     private const int DefaultCapacity = 100;
 
-    public static readonly TempList<T> Invalid = new TempList<T>();
+    public static readonly TempList<T> Invalid = new();
 
-    private static readonly Queue<List<T>> ReadyQueue = new Queue<List<T>>(2);
+    private static readonly Queue<List<T>> ReadyQueue = new(2);
 
     private List<T> inner;
 
@@ -28,6 +28,12 @@ public struct TempList<T> : IDisposable, IEnumerable<T>
     public List<T> List => this.inner;
 
     public int Count => this.inner.Count;
+    
+    public T this[int index]
+    {
+        get => this.inner[index];
+        set => this.inner[index] = value;
+    }
 
     public static TempList<T> Allocate()
     {
