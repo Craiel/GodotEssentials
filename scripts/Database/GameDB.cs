@@ -31,7 +31,7 @@ public class GameDB<T, TI>
     {
         if (!this.lookup.TryGetValue(id, out T result))
         {
-            return default;
+            throw new InvalidDataException("No such DB entry: " + id + " (" + typeof(T) + ")");
         }
 
         return result;
