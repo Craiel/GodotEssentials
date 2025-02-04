@@ -17,5 +17,6 @@ public enum GameDataType
     Currency = 10,
     LootTable = 11,
     Rarity = 12,
-    Stat = 13
+    Stat = 13,
+    SpellEffect = 14
 }
