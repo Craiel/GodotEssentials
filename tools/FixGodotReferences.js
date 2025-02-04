@@ -2,6 +2,8 @@
 
 const fs = require('fs');
 const path = require('path');
+const gf = require('./tools_src/godot_file.js');
+const EssentialsRoot = path.dirname(__dirname);
 
 const Root = '../Project/';
 
@@ -14,45 +16,30 @@ let fileNameRemap = {
 
 let fileRegister = {};
 
-function getGodotResPath(filePath) {
-    let result = filePath.replace('..\\Project\\', 'res://');
-    result = result.replaceAll("\\", '/');
-    return result;
-}
-
 function scanFile(filePath) {
-    let contents = fs.readFileSync(filePath, 'UTF8');
-    let lines = contents.split('\n');
-    let newLines = [];
-    let fileNeededCorrections = false;
-    for(let l = 0; l < lines.length; l++) {
-        let line = lines[l];
-        let match = line.match(/\[\s*ext_resource\s.*?path=\"([^\"]+)\".*?\]/);
-        if(match === null){
-            newLines.push(line);
-            continue;
-        }
+    let file = gf.createFromFile(filePath);
+    
+    let scriptReferences = file.getSections('ext_resource', 'type', 'Script');
 
-        let resourceRef = match[1];
-        let resourcePath = path.join(Root, resourceRef.replace("res://", ""));
-        if(fs.existsSync(resourcePath) === true) {
-            newLines.push(line);
+    let fileNeededCorrections = false;
+    for(let i = 0; i < scriptReferences.length; i++) {
+        let godotPath = scriptReferences[i].parameters.path.replace("res://", "");
+        let filePath = path.join(Root, godotPath);
+        if(fs.existsSync(filePath) === true) {
             continue;
         }
 
         fileNeededCorrections = true;
-
-        let resourceFileName = path.basename(resourceRef);
+        let resourceFileName = path.basename(godotPath);
         if(fileNameRemap[resourceFileName] !== undefined) {
             console.log("REMAP: " + resourceFileName + " -> " + fileNameRemap[resourceFileName]);
-            resourceFileName = fileNameRemap[resourceFileName];
         }
-
+        
         if(fileRegister[resourceFileName] !== undefined) {
             let registeredPaths = fileRegister[resourceFileName];
             if(registeredPaths.length === 1) {
-                let newPath = getGodotResPath(registeredPaths[0]);
-                newLines.push(match[0].replace(match[1], newPath));
+                // console.log(scriptReferences[i].parameters.path + " -> " + gf.getResPath(registeredPaths[0]));
+                scriptReferences[i].parameters.path = gf.getResPath(registeredPaths[0]);
                 continue;
             }
 
@@ -61,7 +48,6 @@ function scanFile(filePath) {
         }
 
         console.warn("MISSING_REF: " + resourceRef);
-        newLines.push(line);
     }
 
     if(fileNeededCorrections !== true) {
@@ -69,7 +55,8 @@ function scanFile(filePath) {
     }
 
     // fs.renameSync(filePath, filePath + ".bak");
-    fs.writeFileSync(filePath, newLines.join("\n"), 'UTF8');
+    // fs.writeFileSync(filePath, newLines.join("\n"), 'UTF8');
+    file.save();
 }
 
 let foldersScanned = 0;
@@ -83,18 +70,26 @@ function findFiles(dir) {
         if(pathLStat.isDirectory() === true || pathLStat.isSymbolicLink() === true) {
             findFiles(fullPath);
         } else {
-            if(fileRegister[fileName] === undefined) {
-                fileRegister[fileName] = [fullPath];
-            } else {
-                fileRegister[fileName].push(fullPath);
-            }
+            if(fullPath.indexOf('\\GodotEssentials\\') >= 0) {
+                continue;
+            }    
 
             for(let i = 0; i < extensionsToScan.length; i++){
                 if(fullPath.endsWith(extensionsToScan[i])){
                     filesToScan.push(fullPath);
                     break;
                 }
+            }                   
+
+            if(!fullPath.endsWith('.cs')) {
+                continue;
             }
+
+            if(fileRegister[fileName] === undefined) {
+                fileRegister[fileName] = [fullPath];
+            } else {
+                fileRegister[fileName].push(fullPath);
+            }            
         }
     }
 }

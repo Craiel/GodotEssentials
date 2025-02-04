@@ -66,7 +66,7 @@ class GodotFile {
                 continue;
             }
 
-            console.warn("Unhandled line: " + line);
+            console.warn("Unhandled line: " + line + ' (' + this.fileName + ')');
         }
 
         if(activeSection !== null) {
@@ -155,6 +155,15 @@ class GodotFile {
 
 module.exports = {
     createNew: function(type) { return new GodotFile(undefined, type); },
-    createFromFile: function(path) { return new GodotFile(path); },
+    createFromFile: function(path) { 
+        var file = new GodotFile(path);
+        file.load();
+        return file;
+    },
+    getResPath(filePath) {
+        let result = filePath.replace('..\\Project\\', 'res://');
+        result = result.replaceAll("\\", '/');
+        return result;
+    },
     GodotFile: GodotFile
 };

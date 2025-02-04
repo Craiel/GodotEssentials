@@ -1,11 +1,15 @@
 'use strict';
 
-const SectionParamRegex = new RegExp('(\\w+)[\\s]*=[\\s]*((?:[^"\'\\s]+)|\'(?:[^\']*)\'|"(?:[^"]*)")', 'g');
 const SectionBrackets = ['[', ']'];
 
 const ParameterType = Object.freeze({
     Quoted: 1,
     Unquoted: 2
+});
+
+const ParameterParseMode = Object.freeze({
+    Key: 1,
+    Value: 2
 });
 
 class GodotFileSection {
@@ -42,29 +46,69 @@ class GodotFileSection {
 
         let paramEnd = data.endsWith(SectionBrackets[1]) ? data.length - 1 : data.length;
         let paramContent = data.substring(idLength + 1, paramEnd);
-        let paramMatch;
-        while(paramMatch = SectionParamRegex.exec(paramContent))
-        {
-            let id = paramMatch[1].trim();
-            let value = paramMatch[2].trim();
 
-            // console.log(this.id + '.' + id + ' -> ' + value);
-            if(id === undefined || value === undefined) {
-                throw "Invalid Section Arguments: " + paramMatch[0];
-            }
+        let currKey = '';
+        let currVal = '';
+        let inQuotes = false;
+        let inBrackets = false;
+        let m = ParameterParseMode.Key;
+        for(let ip = 0; ip < paramContent.length; ip++) {
+            let c = paramContent[ip];
+            switch(m){
+                case ParameterParseMode.Key: {
+                    if(c === '=') {
+                        m = ParameterParseMode.Value;
+                    } else {
+                        currKey += c;
+                    }
 
-            if(value.startsWith('"')) {
-                value = value.replaceAll('"', '');
-                this.parameterType[id] = ParameterType.Quoted;
-            } else {
-                this.parameterType[id] = ParameterType.Unquoted;
+                    break
+                }
+
+                case ParameterParseMode.Value: {
+                    currVal += c;
+                    if(c === '"') {
+                        if(inQuotes === true) {
+                            inQuotes = false;
+                        } else {
+                            inQuotes = true;
+                        }
+
+                        continue;
+                    }
+
+                    if(c === '(') { inBrackets = true; }
+
+                    if(c === ')') { inBrackets = false; }
+
+                    if(c === ' ' && inQuotes === false && inBrackets === false) {
+                        m = ParameterParseMode.Key;
+                        this.addParam(currKey, currVal);
+                        currKey = '';
+                        currVal = '';
+                    }
+
+                    break
+                }
             }
-            this.parameters[id] = value;
-            this.parameterOrder.push(id);
+        }
+
+        if(currKey !== '') {
+            this.addParam(currKey, currVal);
         }
     }
 
     addParam(id, value, type) {
+        value = value.trim();
+        if(type === undefined) {
+            if(value.charAt(0) === '"' && value.charAt(value.length -1) === '"'){
+                type = ParameterType.Quoted;
+                value = value.substr(1,value.length -2);
+            } else {
+                type = ParameterType.Unquoted;
+            }
+        }
+
         this.parameterType[id] = type ?? ParameterType.Quoted;
         this.parameters[id] = value;
         this.parameterOrder.push(id);
