@@ -59,12 +59,18 @@ public static class TypeExtension
 
     public static Type GetActualType(this Type type)
     {
-        if (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(Nullable<>))
+        if (!type.IsGenericType)
         {
-            return type.GetGenericArguments()[0];
+            return type;
         }
 
-        return type;
+        var genericArgs = type.GetGenericArguments();
+        if (genericArgs.Length != 1)
+        {
+            throw new InvalidOperationException("Multiple candidates, can not return a single actual type");
+        }
+
+        return genericArgs[0];
     }
 
     public static object ConvertValue(this Type type, object source)

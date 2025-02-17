@@ -13,16 +13,20 @@ public class EventDebugTracker<T>
     public int TotalSent;
     public int TotalReceived;
     public double TotalTime;
-    
+
     public void Track<TSpecific>(int sends, int receives, double time)
         where TSpecific : T
+    {
+        this.Track(typeof(TSpecific), sends, receives, time);
+    }
+    
+    public void Track(Type type, int sends, int receives, double time)
     {
 #if DEBUG
         this.TotalReceived += receives;
         this.TotalSent += sends;
         this.TotalTime += time;
         
-        var type = typeof(TSpecific);
         if (this.Sends.TryAdd(type, 0))
         {
             this.Receives.Add(type, 0);

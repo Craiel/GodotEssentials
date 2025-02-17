@@ -55,8 +55,8 @@ public class GameCommands : IGameModule
 		ExecuteImmediate(command);
 	}
 
-	public void ExecuteImmediate<T>(T command)
-		where T : IGameCommand
+	public void ExecuteImmediate<TSpecific>(TSpecific command)
+		where TSpecific : IGameCommand
 	{
 #if DEBUG
 		var sw = new Stopwatch();
@@ -67,7 +67,7 @@ public class GameCommands : IGameModule
 		
 #if DEBUG
 		sw.Stop();
-		this.DebugTracker.Track<T>(1, 1, sw.Elapsed.TotalSeconds);
+		this.DebugTracker.Track(command.GetType(), 1, 1, sw.Elapsed.TotalSeconds);
 #endif
 	}
 
