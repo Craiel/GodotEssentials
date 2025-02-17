@@ -2,8 +2,9 @@ namespace Craiel.Essentials.Commands;
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using Contracts;
-using Utils;
+using DebugTools;
 
 public class GameCommands : IGameModule
 {
@@ -12,6 +13,10 @@ public class GameCommands : IGameModule
 	// -------------------------------------------------------------------
 	// Public
 	// -------------------------------------------------------------------
+#if DEBUG
+	public EventDebugTracker<IGameCommand> DebugTracker = new();
+#endif
+	
 	public delegate GameCommandStatus CommandHandlerDelegate(IGameCommandPayload payload);
 	
 	public void Initialize()
@@ -52,6 +57,22 @@ public class GameCommands : IGameModule
 
 	public void ExecuteImmediate<T>(T command)
 		where T : IGameCommand
+	{
+#if DEBUG
+		var sw = new Stopwatch();
+		sw.Start();
+#endif
+		
+		this.DoExecute(command);
+		
+#if DEBUG
+		sw.Stop();
+		this.DebugTracker.Track<T>(1, 1, sw.Elapsed.TotalSeconds);
+#endif
+	}
+
+	private void DoExecute<T>(T command)
+		where T: IGameCommand
 	{
 		switch (command.Status)
 		{

@@ -1,9 +1,17 @@
 ﻿namespace Craiel.Essentials.Commands;
 
 using Contracts;
+using DebugTools;
 
 public static class GameCommand
 {
+    // -------------------------------------------------------------------
+    // Public
+    // -------------------------------------------------------------------
+#if DEBUG
+    public static EventDebugTracker<IGameCommand> DebugTracker = EssentialCore.GameCommands.DebugTracker;
+#endif
+    
     public static void Queue<T>()
         where T: IGameCommand
     {

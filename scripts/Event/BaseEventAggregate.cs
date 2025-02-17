@@ -2,6 +2,8 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using DebugTools;
 using Utils;
 
 public class BaseEventAggregate<T> : IEventAggregate
@@ -20,6 +22,10 @@ public class BaseEventAggregate<T> : IEventAggregate
     // -------------------------------------------------------------------
     // Public
     // -------------------------------------------------------------------
+#if DEBUG
+    public readonly EventDebugTracker<T> DebugTracker = new();
+#endif
+    
     public delegate void GameEventAction<in TSpecific>(TSpecific eventData)
         where TSpecific : T;
 
@@ -89,10 +95,25 @@ public class BaseEventAggregate<T> : IEventAggregate
     {
         lock (this.subscribers)
         {
+#if DEBUG
+            var sw = new Stopwatch();
+            sw.Start();
+            int receives = 0;
+#endif
+            
             if (this.subscribers.TryGetValue(TypeDef<TSpecific>.Value, out var targets))
             {
+#if DEBUG
+                receives++;
+#endif
+                
                 targets.Send(eventData);
             }
+            
+#if DEBUG
+            sw.Stop();
+            this.DebugTracker.Track<TSpecific>(1, receives, sw.Elapsed.TotalSeconds);
+#endif
         }
     }
 }

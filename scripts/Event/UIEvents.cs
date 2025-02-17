@@ -1,6 +1,7 @@
 namespace Craiel.Essentials.Event;
 
 using System;
+using DebugTools;
 
 public static class UIEvents
 {
@@ -9,6 +10,10 @@ public static class UIEvents
     // -------------------------------------------------------------------
     // Public
     // -------------------------------------------------------------------
+#if DEBUG
+    public static EventDebugTracker<IUIEvent> DebugTracker = Aggregate.DebugTracker;
+#endif
+    
     public static void Send<T>(T eventData)
         where T : IUIEvent
     {

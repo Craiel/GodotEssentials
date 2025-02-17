@@ -2,6 +2,7 @@
 
 using System;
 using Contracts;
+using DebugTools;
 
 public static class GameEvents
 {
@@ -10,6 +11,10 @@ public static class GameEvents
     // -------------------------------------------------------------------
     // Public
     // -------------------------------------------------------------------
+#if DEBUG
+    public static EventDebugTracker<IGameEvent> DebugTracker = Aggregate.DebugTracker;
+#endif
+    
     public static void Send<T>(T eventData)
         where T : IGameEvent
     {
