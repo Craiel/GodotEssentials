@@ -31,6 +31,13 @@ public partial class FadeCanvasItemNode : ModulateCanvasItemNode
         }
     }
 
+    public override void _ResetSynchronized()
+    {
+        this.currentMode = FadeMode.FadeOut;
+        
+        base._ResetSynchronized();
+    }
+
     // -------------------------------------------------------------------
     // Private
     // -------------------------------------------------------------------

@@ -3,7 +3,7 @@
 using Godot;
 using Colors = Extensions.Colors;
 
-public partial class ModulateCanvasItemNode : Node
+public partial class ModulateCanvasItemNode : Node, ISynchronizedNode
 {
     private Color originalColor;
     private Color startColor;
@@ -12,6 +12,8 @@ public partial class ModulateCanvasItemNode : Node
     private bool isReverse;
     private double currentTime;
     private double currentDelay;
+
+    private bool resyncRequired;
     
     // -------------------------------------------------------------------
     // Public
@@ -20,11 +22,33 @@ public partial class ModulateCanvasItemNode : Node
     [Export] public float Duration;
     [Export] public float Delay;
     [Export] public bool Loop;
+    [Export] public bool Synchronized;
     [Export] public bool BlendAlpha = true;
     [Export] public bool BlendColor = true;
     [Export] public bool RestoreWhenFinished = true;
     [Export] public Color Color = Colors.White;
     
+
+    public override void _EnterTree()
+    {
+        base._EnterTree();
+
+        if (this.Synchronized)
+        {
+            SynchronizerNode.Instance?.Register(this);
+        }
+    }
+
+    public override void _ExitTree()
+    {
+        if (this.Synchronized)
+        {
+            SynchronizerNode.Instance?.Unregister(this);
+        }
+
+        base._ExitTree();
+    }
+
     public override void _Ready()
     {
         base._Ready();
@@ -42,7 +66,15 @@ public partial class ModulateCanvasItemNode : Node
 
         if (!this.Target.IsVisibleInTree())
         {
+            this.resyncRequired = true;
             return;
+        }
+
+        if (this.resyncRequired && this.Synchronized)
+        {
+            this.resyncRequired = false;
+            SynchronizerNode.Instance?.Unregister(this);
+            SynchronizerNode.Instance?.Register(this);
         }
 
         if (this.currentDelay > 0)
@@ -64,6 +96,15 @@ public partial class ModulateCanvasItemNode : Node
             this.isReverse = !this.isReverse;
             this.Begin();
         }
+    }
+    
+    public void _ProcessSynchronized(double delta)
+    {
+    }
+
+    public virtual void _ResetSynchronized()
+    {
+        this.Begin();
     }
 
     // -------------------------------------------------------------------
