@@ -118,4 +118,14 @@ public static class ColorExtensions
             }
         }
     }
+
+    public static Color Random(float alpha = 1.0f)
+    {
+        return new Color(
+            EssentialCore.Random.Randf(),
+            EssentialCore.Random.Randf(),
+            EssentialCore.Random.Randf(),
+            alpha
+        );
+    }
 }
