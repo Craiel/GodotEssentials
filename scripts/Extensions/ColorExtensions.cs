@@ -118,13 +118,13 @@ public static class ColorExtensions
             }
         }
     }
-
-    public static Color Random(float alpha = 1.0f)
+    
+    public static Color Random(float min = 0, float max = 1f, float alpha = 1.0f)
     {
         return new Color(
-            EssentialCore.Random.Randf(),
-            EssentialCore.Random.Randf(),
-            EssentialCore.Random.Randf(),
+            EssentialCore.Random.RandfRange(min, max),
+            EssentialCore.Random.RandfRange(min, max),
+            EssentialCore.Random.RandfRange(min, max),
             alpha
         );
     }
