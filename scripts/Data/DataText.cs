@@ -10,4 +10,9 @@ public struct DataText
     
     public readonly string Value;
     public DataTextVariable[] Variables;
+
+    public bool IsEmpty()
+    {
+        return string.IsNullOrEmpty(this.Value);
+    }
 }
