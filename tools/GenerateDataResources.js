@@ -22,6 +22,8 @@ class PrefabGenerator {
         this.targetFolder = ProjectFolder + "\\prefabs\\database\\";
         this.sourceFolder = SourceFolder + "\\Database\\";
         this.dataTypeFile = EssentialsRoot + '\\scripts\\Database\\GameDataType.cs';
+        this.linkScriptUID = "uid://djka00sky8fkr";
+        this.linkScript = 'res://source/GodotEssentials/scripts/Database/GameDatabaseLinkNode.cs';
         this.typeToIndex = {};
     }
 
@@ -104,20 +106,22 @@ class PrefabGenerator {
         } while(match != null);
     }
 
+
     buildGodotFile(idString, typeIndex){
         let resourceFile = require('./tools_src/godot_file.js').createNew('tres');
 
         let mainSection = resourceFile.addSection('gd_resource');
-        mainSection.addParam('type', 'Resource');
-        mainSection.addParam('script_class', 'GameDatabaseLinkNode');
+        mainSection.addQuotedParam('type', 'Resource');
+        mainSection.addQuotedParam('script_class', 'GameDatabaseLinkNode');
         mainSection.addParam('load_steps', '2', 2);
         mainSection.addParam('format', '3', 2);
 
         let scriptId = resourceFile.getNewLocalId();
         let extResource = resourceFile.addSection('ext_resource');
-        extResource.addParam('type', 'Script');
-        extResource.addParam('path', 'res://source/GodotEssentials/scripts/Database/GameDatabaseLinkNode.cs');
-        extResource.addParam('id', scriptId);
+        extResource.addQuotedParam('type', 'Script');
+        extResource.addQuotedParam('uid', this.linkScriptUID);
+        extResource.addQuotedParam('path', this.linkScript);
+        extResource.addQuotedParam('id', scriptId);
 
         let resource = resourceFile.addSection('resource');
         resource.addContent('script', 'ExtResource("' + scriptId + '")');

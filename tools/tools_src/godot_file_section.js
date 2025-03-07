@@ -98,6 +98,10 @@ class GodotFileSection {
         }
     }
 
+    addQuotedParam(id, value) {
+        this.addParam(id, value, ParameterType.Quoted);
+    }
+
     addParam(id, value, type) {
         value = value.trim();
         if(type === undefined) {
