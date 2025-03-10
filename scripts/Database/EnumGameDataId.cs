@@ -2,7 +2,7 @@
 
 using System;
 
-public readonly struct EnumGameDataId<T>
+public readonly struct EnumGameDataId<T> : IGameDataId
     where T: System.Enum
 {
     // -------------------------------------------------------------------
@@ -20,6 +20,8 @@ public readonly struct EnumGameDataId<T>
     public readonly T Value;
 
     public readonly GameDataType Type;
+    
+    public GameDataIdType IDType => GameDataIdType.Enum;
     
     public static bool operator ==(EnumGameDataId<T> value1, EnumGameDataId<T> value2)
     {

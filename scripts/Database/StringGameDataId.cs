@@ -4,7 +4,7 @@ using System;
 using System.Diagnostics;
 
 [DebuggerDisplay("{Type}.{Value}")]
-public readonly struct StringGameDataId
+public readonly struct StringGameDataId : IGameDataId
 {
     const string UnsetIdValue = "__INTERNAL__UNSET__";
     
@@ -25,6 +25,8 @@ public readonly struct StringGameDataId
     public readonly string Value;
 
     public readonly GameDataType Type;
+    
+    public GameDataIdType IDType => GameDataIdType.String;
 
     public static bool operator ==(StringGameDataId value1, StringGameDataId value2)
     {

@@ -3,8 +3,8 @@
 using Data;
 using Resource;
 
-public abstract class GameDataEntry<T>
-    where T: struct
+public abstract class GameDataEntry<T> : IGameDataEntry
+    where T: IGameDataId
 {
     // -------------------------------------------------------------------
     // Constructor
@@ -19,9 +19,9 @@ public abstract class GameDataEntry<T>
     // -------------------------------------------------------------------
     public readonly T Id;
     
-    public DataText DisplayName;
-    public DataText Description;
+    public DataText DisplayName { get; set; }
+    public DataText Description { get; set; }
     
-    public ResourceKey IconSmall;
-    public ResourceKey IconLarge;
+    public ResourceKey IconSmall { get; set; }
+    public ResourceKey IconLarge { get; set; }
 }

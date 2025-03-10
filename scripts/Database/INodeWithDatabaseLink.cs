@@ -5,5 +5,5 @@ public interface INodeWithDatabaseLink
     // -------------------------------------------------------------------
     // Public
     // -------------------------------------------------------------------
-    public StringGameDataId GetId();
+    public IGameDataId GetId();
 }

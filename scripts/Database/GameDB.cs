@@ -5,7 +5,7 @@ using System.IO;
 
 public class GameDB<T, TI>
     where T: GameDataEntry<TI>
-    where TI: struct
+    where TI: IGameDataId
 {
     private readonly IDictionary<TI, T> lookup = new Dictionary<TI, T>();
 
@@ -46,5 +46,7 @@ public class GameDB<T, TI>
         
         this.Entries.Add(data);
         this.lookup.Add(data.Id, data);
+        
+        CrossDBLookup.Register(data.Id, data);
     }
 }
