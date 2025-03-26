@@ -18,5 +18,8 @@ public enum GameDataType
     LootTable = 11,
     Rarity = 12,
     Stat = 13,
-    SpellEffect = 14
+    SpellEffect = 14,
+    Passive = 15,
+    PassiveTree = 16,
+    PassiveTreeNode = 17
 }
