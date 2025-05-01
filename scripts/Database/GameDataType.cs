@@ -20,5 +20,6 @@ public enum GameDataType
     Stat = 13,
     SpellEffect = 14,
     Passive = 15,
-    PassiveTree = 16
+    PassiveTree = 16,
+    SpellTrigger = 17,
 }
