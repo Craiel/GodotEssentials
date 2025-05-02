@@ -2,35 +2,42 @@
 
 using System;
 using System.Collections.Generic;
+using Godot;
 
 public static class RandomExtension
 {
     // -------------------------------------------------------------------
     // Public
     // -------------------------------------------------------------------
-    public static long NextLong(this Random rand)
+    public static long NextLong(this RandomNumberGenerator rand)
     {
         return rand.NextLong(long.MinValue, long.MaxValue);
     }
 
-    public static long NextLong(this Random rand, long min)
+    public static long NextLong(this RandomNumberGenerator rand, long min)
     {
         return rand.NextLong(min, long.MaxValue);
     }
 
-    public static long NextLong(this Random rand, long min, long max)
+    public static long NextLong(this RandomNumberGenerator rand, long min, long max)
     {
 #pragma warning disable CS0675
-        long result = rand.Next((int)min >> 32, (int)max >> 32);
+        long result = rand.RandiRange((int)min >> 32, (int)max >> 32);
         result = result << 32;
-        result = result | rand.Next((int)min, (int)max);
+        result = result | rand.RandiRange((int)min, (int)max);
         return result;
 #pragma warning restore CS0675 
     }
 
-    public static float Range(this Random rand, float min, float max)
+    public static float RangeAndSign(this RandomNumberGenerator rand, float min, float max)
     {
-        return (float)(min + (rand.NextDouble() * (max - min)));
+        var result = rand.RandfRange(min, max);
+        if (rand.Randf() < 0.5f)
+        {
+            return -result;
+        }
+
+        return result;
     }
 
     public static int WeightedRandom(IList<float> weights)
@@ -72,7 +79,7 @@ public static class RandomExtension
         return values[rollIndex];
     }
 
-    public static int WeightedRandom(this Random rand, IList<float> weights)
+    public static int WeightedRandom(this RandomNumberGenerator rand, IList<float> weights)
     {
         // sum the weights
         float total = 0;
@@ -82,7 +89,7 @@ public static class RandomExtension
         }
 
         // select a random value between 0 and our total
-        float random = rand.Range(0, total);
+        float random = rand.RandfRange(0, total);
 
         // loop thru our weights until we arrive at the correct one
         float current = 0;
@@ -99,7 +106,7 @@ public static class RandomExtension
         throw new InvalidOperationException("WeightedRandom has reached an unknown outcome");
     }
 
-    public static T WeightedRandom<T>(this Random rand, IList<T> values, IList<float> weights)
+    public static T WeightedRandom<T>(this RandomNumberGenerator rand, IList<T> values, IList<float> weights)
     {
         if (values.Count != weights.Count)
         {
