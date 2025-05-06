@@ -87,6 +87,24 @@ public struct TempList<T> : IDisposable, IEnumerable<T>
         this.inner.Add(entry);
     }
 
+    public void AddRange(IEnumerable<T> entries)
+    {
+        this.inner.AddRange(entries);
+    }
+    
+    public void AddRangeInclusive(IEnumerable<T> entries)
+    {
+        foreach (T entry in entries)
+        {
+            if (this.inner.Contains(entry))
+            {
+                continue;
+            }
+            
+            this.inner.Add(entry);
+        }
+    }
+
     public void Clear()
     {
         this.inner.Clear();
