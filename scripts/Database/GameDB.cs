@@ -27,6 +27,11 @@ public class GameDB<T, TI>
         return this.lookup.ContainsKey(id);
     }
 
+    public bool TryGet(TI id, out T entry)
+    {
+        return this.lookup.TryGetValue(id, out entry);
+    }
+
     public T Get(TI id)
     {
         if (!this.lookup.TryGetValue(id, out T result))
