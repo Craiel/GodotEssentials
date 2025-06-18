@@ -1,6 +1,7 @@
 namespace Craiel.Essentials.I18N;
 
 using System;
+using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 using IO;
@@ -153,10 +154,12 @@ public class LocalizationProvider : ILocalizationProvider
 
     public string LoadDictionaryResource(CultureInfo customCulture = null)
     {
+        EssentialCore.Logger.Warn("Load Asset not implemented for Language Dictionary");
+        return string.Empty;
+        
+        /*
         ResourceKey key = LocaleConstants.GetLocalizationMasterFile(customCulture ?? Localization.CurrentCulture);
-
-        throw new NotImplementedException("Load Asset not implemented for Language Dictionary");
-        /*var textAsset = key.LoadManaged<TextAsset>();
+        var textAsset = key.LoadManaged<TextAsset>();
         if (textAsset == null)
         {
             EssentialsCore.Logger.Warn("Could not load dictionary for {0}, file not found", customCulture ?? Localization.CurrentCulture);
