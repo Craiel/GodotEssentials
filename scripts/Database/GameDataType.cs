@@ -23,5 +23,6 @@ public enum GameDataType
     PassiveTree = 16,
     SpellTrigger = 17,
     Feature = 18,
-    Blueprint = 19
+    Blueprint = 19,
+    Resource = 20
 }
