@@ -161,8 +161,8 @@ module.exports = {
         return file;
     },
     getResPath(filePath) {
-        let result = filePath.replace('..\\Project\\', 'res://');
-        result = result.replaceAll("\\", '/');
+        let result = filePath.replace(path.join('..', 'Project') + path.sep, 'res://');
+        result = result.replaceAll(path.sep, '/');
         return result;
     },
     GodotFile: GodotFile

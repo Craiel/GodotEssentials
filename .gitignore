@@ -4,5 +4,8 @@
 # IntelliJ / Resharper
 .idea/
 
+# claude
+.claude
+
 obj/
 bin/

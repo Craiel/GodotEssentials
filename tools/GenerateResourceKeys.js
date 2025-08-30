@@ -6,7 +6,7 @@ const EssentialsRoot = path.dirname(__dirname);
 
 let SourceFolder = process.argv[2];
 if(SourceFolder === undefined) {
-    SourceFolder = "..\\Project\\source\\Game";
+    SourceFolder = path.join("..", "Project", "source", "Game");
 }
 
 let NameSpace = process.argv[3];
@@ -19,8 +19,8 @@ class ResourceIndexer {
         this.results = {};
         this.filesToIndex = [];
         this.extensionsToIndex = ['.png'];
-        this.targetFolder = SourceFolder + "\\Database\\";
-        this.sourceFolder = "..\\Project\\art\\";
+        this.targetFolder = path.join(SourceFolder, "Database") + path.sep;
+        this.sourceFolder = path.join("..", "Project", "art") + path.sep;
         this.targetFile = "ArtResources.cs";
         this.category = "art";
         this.className = "ArtResources";
@@ -29,13 +29,13 @@ class ResourceIndexer {
     }
 
     getGodotResPath(filePath) {
-        let result = "res://" + this.resourcePrefixPath + this.category + "/" + filePath.replaceAll("\\", "/");
+        let result = "res://" + this.resourcePrefixPath + this.category + "/" + filePath.replaceAll(path.sep, "/");
         return result;
     }
 
     indexFile(filePath) {
-        let path = filePath.replace(this.sourceFolder, "");
-        let segments = path.split('\\');
+        let pathStr = filePath.replace(this.sourceFolder, "");
+        let segments = pathStr.split(path.sep);
         let id = "";
         for(let i = 0; i < segments.length; i++) {
             if(i === 0 && segments.length > 1) {
@@ -57,7 +57,7 @@ class ResourceIndexer {
         }
 
         id = id.toUpperCase();
-        path = this.getGodotResPath(path);
+        pathStr = this.getGodotResPath(pathStr);
 
         if(this.results[id] !== undefined) {
             
@@ -65,7 +65,7 @@ class ResourceIndexer {
             throw "Duplicate ID: " + id + " -> " + this.results[id];
         }
 
-        this.results[id] = path;
+        this.results[id] = pathStr;
     }
     
     execute() {
@@ -135,7 +135,7 @@ class ResourceIndexer {
 }
 
 var essArtClass = new ResourceIndexer();
-essArtClass.sourceFolder = EssentialsRoot + "\\data\\art\\";
+essArtClass.sourceFolder = path.join(EssentialsRoot, "data", "art") + path.sep;
 essArtClass.targetFile = "EssentialArtResources.cs";
 essArtClass.className = "EssentialArtResources";
 essArtClass.resourcePrefixPath = "source/GodotEssentials/data/";
@@ -146,7 +146,7 @@ artClass.execute();
 
 var soundClass = new ResourceIndexer();
 soundClass.extensionsToIndex = ['.wav', '.ogg', '.mp3'];
-soundClass.sourceFolder = "..\\Project\\sound\\";
+soundClass.sourceFolder = path.join("..", "Project", "sound") + path.sep;
 soundClass.targetFile = "SoundResources.cs";
 soundClass.category = "sound";
 soundClass.className = "SoundResources";

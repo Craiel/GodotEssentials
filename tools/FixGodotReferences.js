@@ -5,7 +5,7 @@ const path = require('path');
 const gf = require('./tools_src/godot_file.js');
 const EssentialsRoot = path.dirname(__dirname);
 
-const Root = '../Project/';
+const Root = path.join('..', 'Project') + path.sep;
 
 let extensionsToScan = ['.tscn', '.tres']
 let filesToScan = [];
@@ -70,7 +70,7 @@ function findFiles(dir) {
         if(pathLStat.isDirectory() === true || pathLStat.isSymbolicLink() === true) {
             findFiles(fullPath);
         } else {
-            if(fullPath.indexOf('\\GodotEssentials\\') >= 0) {
+            if(fullPath.indexOf(path.sep + 'GodotEssentials' + path.sep) >= 0) {
                 continue;
             }    
 

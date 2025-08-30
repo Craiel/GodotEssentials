@@ -6,7 +6,7 @@ const EssentialsRoot = path.dirname(__dirname);
 
 let SourceFolder = process.argv[2];
 if(SourceFolder === undefined) {
-    SourceFolder = "..\\Project\\source\\Game";
+    SourceFolder = path.join("..", "Project", "source", "Game");
 }
 
 class ProjectCleaner {

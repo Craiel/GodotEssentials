@@ -6,12 +6,12 @@ const EssentialsRoot = path.dirname(__dirname);
 
 let ProjectFolder = process.argv[2];
 if(ProjectFolder === undefined) {
-    ProjectFolder = "..\\Project";
+    ProjectFolder = path.join("..", "Project");
 }
 
 let SourceFolder = process.argv[3];
 if(SourceFolder === undefined) {
-    SourceFolder = ProjectFolder + "\\source\\Game";
+    SourceFolder = path.join(ProjectFolder, "source", "Game");
 }
 
 class PrefabGenerator {
@@ -19,23 +19,23 @@ class PrefabGenerator {
         this.results = {};
         this.filesToIndex = [];
         this.extensionsToIndex = ['.cs'];
-        this.targetFolder = ProjectFolder + "\\prefabs\\database\\";
-        this.sourceFolder = SourceFolder + "\\Database\\";
-        this.dataTypeFile = EssentialsRoot + '\\scripts\\Database\\GameDataType.cs';
+        this.targetFolder = path.join(ProjectFolder, "prefabs", "database") + path.sep;
+        this.sourceFolder = path.join(SourceFolder, "Database") + path.sep;
+        this.dataTypeFile = path.join(EssentialsRoot, 'scripts', 'Database', 'GameDataType.cs');
         this.linkScriptUID = "uid://djka00sky8fkr";
         this.linkScript = 'res://source/GodotEssentials/scripts/Database/GameDatabaseLinkNode.cs';
         this.typeToIndex = {};
     }
 
     getRelativeAssetPath(filePath) {
-        let pathRootIndex = filePath.indexOf('\\Database\\');
+        let pathRootIndex = filePath.indexOf(path.sep + 'Database' + path.sep);
         return filePath.substring(pathRootIndex + 10, filePath.length);
     }
 
     indexFile(filePath) {
 
-        let path = this.getRelativeAssetPath(filePath);
-        let segments = path.split('\\');
+        let pathStr = this.getRelativeAssetPath(filePath);
+        let segments = pathStr.split(path.sep);
         let id = "";
 
         for(let i = 0; i < segments.length; i++) {
@@ -173,7 +173,7 @@ class PrefabGenerator {
             let idString = args[0].replace('nameof(', '').replace(')', '');
             let typeIndex = this.typeToIndex[dataType];
 
-            let prefabPath = this.targetFolder + category.toLowerCase() + '\\';
+            let prefabPath = path.join(this.targetFolder, category.toLowerCase()) + path.sep;
             if(!fs.existsSync(prefabPath)) {
                 fs.mkdirSync(prefabPath);
             }

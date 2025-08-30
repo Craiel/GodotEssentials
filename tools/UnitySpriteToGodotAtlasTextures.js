@@ -3,9 +3,9 @@
 const fs = require('fs');
 const path = require('path');
 const sharp = require('sharp');
-const EssentialsRoot = path.dirname(__dirname) +  "\\";
-const PrefabTemplateFile = __dirname + '\\AtlasTextureTemplate.tre_';
-const ProjectBasePath = "Project\\";
+const EssentialsRoot = path.dirname(__dirname) + path.sep;
+const PrefabTemplateFile = path.join(__dirname, 'AtlasTextureTemplate.tre_');
+const ProjectBasePath = "Project" + path.sep;
 let PrefabTemplate = fs.readFileSync(PrefabTemplateFile).toString();
 
 let MetaFolder = process.argv[2];
@@ -65,7 +65,7 @@ class UnitySpriteToTextureAtlas {
     getProjectBasePath(assetPath) {
         let basePathIndex = assetPath.indexOf(ProjectBasePath) + ProjectBasePath.length;
         let result = assetPath.substring(basePathIndex, assetPath.length);
-        result = 'res://' + result.replaceAll('\\', '/');
+        result = 'res://' + result.replaceAll(path.sep, '/');
         return result;
     }
 
