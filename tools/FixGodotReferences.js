@@ -62,7 +62,7 @@ function scanFile(filePath) {
 let foldersScanned = 0;
 function findFiles(dir) {
     foldersScanned++;
-    let contents = fs.readdirSync(dir);
+    let contents = fs.readdirSync(dir).sort();
     for (let f = 0; f < contents.length; f++) {
         let fileName = contents[f];
         let fullPath = path.join(dir, contents[f]);

@@ -82,7 +82,7 @@ class ResourceIndexer {
             return;
         }
         
-        let contents = fs.readdirSync(dir);
+        let contents = fs.readdirSync(dir).sort();
         for (let f = 0; f < contents.length; f++) {
             let fullPath = path.join(dir, contents[f]);
             let pathLStat = fs.lstatSync(fullPath);
@@ -108,7 +108,9 @@ class ResourceIndexer {
         contents.push("// ReSharper disable InconsistentNaming");
         contents.push("public static class "+ this.className + "\n{");
         let currentCategory = undefined;
-        for(let id in this.results) {
+        let sortedIds = Object.keys(this.results).sort();
+        for(let i = 0; i < sortedIds.length; i++) {
+            let id = sortedIds[i];
             let segments = id.split('_');
             let category = segments[0];
 

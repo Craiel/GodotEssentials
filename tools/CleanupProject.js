@@ -27,7 +27,7 @@ class ProjectCleaner {
             return 0;
         }
 
-        let contents = fs.readdirSync(dir);
+        let contents = fs.readdirSync(dir).sort();
         for (let f = 0; f < contents.length; f++) {
             checked++;
             let fullPath = path.join(dir, contents[f]);

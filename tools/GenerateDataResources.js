@@ -76,7 +76,7 @@ class PrefabGenerator {
     }
 
     findFiles(dir) {
-        let contents = fs.readdirSync(dir);
+        let contents = fs.readdirSync(dir).sort();
         for (let f = 0; f < contents.length; f++) {
             let fullPath = path.join(dir, contents[f]);
             let pathLStat = fs.lstatSync(fullPath);
@@ -136,7 +136,9 @@ class PrefabGenerator {
         fs.mkdirSync(this.targetFolder);
 
         const idMatchRegex = /\snew\s*\((.+?)\);/;
-        for(let id in this.results) {
+        let sortedIds = Object.keys(this.results).sort();
+        for(let i = 0; i < sortedIds.length; i++) {
+            let id = sortedIds[i];
             let file = this.results[id];
             let fileContents = fs.readFileSync(file).toString().split("\n");
             let match = null;

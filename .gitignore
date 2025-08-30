@@ -7,5 +7,8 @@
 # claude
 .claude
 
+# Mac
+.DS_Store
+
 obj/
 bin/

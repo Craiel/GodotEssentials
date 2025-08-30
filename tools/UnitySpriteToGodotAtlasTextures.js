@@ -28,7 +28,7 @@ class UnitySpriteToTextureAtlas {
     }
 
     findFiles(dir) {
-        let contents = fs.readdirSync(dir);
+        let contents = fs.readdirSync(dir).sort();
         for (let f = 0; f < contents.length; f++) {
             let fullPath = path.join(dir, contents[f]);
             let pathLStat = fs.lstatSync(fullPath);
