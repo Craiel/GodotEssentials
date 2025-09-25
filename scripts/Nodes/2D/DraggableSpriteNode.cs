@@ -1,6 +1,7 @@
-﻿namespace Craiel.Essentials.Nodes;
+namespace Craiel.Essentials.Nodes;
 
 using System;
+using Craiel.Essentials.Data;
 using Godot;
 
 public partial class DraggableSpriteNode : Sprite2D
@@ -10,40 +11,55 @@ public partial class DraggableSpriteNode : Sprite2D
     private double elapsedAutoCenterTime;
     private Vector2 dragOffset;
 
+    private Vector2 baseRegionSize;
     private Vector2 regionSize;
     private Vector2 regionHalfSize;
     private Vector2 regionOffset;
     private Vector2 textureSize;
     private Vector2 maxRegionOffset;
     private Vector2 autoCenterTarget;
+    private float zoomLevel = 1.0f;
+
+    private DraggableSpriteViewport currentViewport;
 
     // -------------------------------------------------------------------
     // Public
     // -------------------------------------------------------------------
+    [ExportCategory("Dragging")]
     [Export] public float DragSpeed = 0.5f;
 
+    [ExportCategory("Auto Centering")]
     [Export] public double AutoCenterTime = 5f;
     [Export] public float AutoCenterMargin = 10f;
+    
+    [ExportCategory("Zoom")]
+    [Export] public bool EnableScrollWheelZoom;
+    [Export] public float ZoomDefault = 1.0f;
+    [Export] public float MinZoom = 0.5f;
+    [Export] public float MaxZoom = 3.0f;
+    [Export] public float ZoomStep = 0.5f;
     
     public event Action RegionChanged;
     
     public Vector2 RegionOffset => this.regionOffset;
+
+    public DraggableSpriteViewport GetCurrentViewport() => this.currentViewport;
 
     public override void _Ready()
     {
         base._Ready();
 
         // Store the initial Region Rect position
-        this.regionSize = this.RegionRect.Size;
-        this.regionHalfSize = new Vector2(this.regionSize.X / 2f, this.regionSize.Y / 2f);
+        this.baseRegionSize = this.RegionRect.Size;
         this.regionOffset = this.RegionRect.Position;
 
         this.textureSize = new Vector2(this.Texture.GetWidth(), this.Texture.GetHeight());
 
-        var rectSize = this.GetRect().Size;
-        this.maxRegionOffset = new Vector2(
-            Mathf.Max(0, this.textureSize.X - rectSize.X),
-            Mathf.Max(0, this.textureSize.Y - rectSize.Y));
+        this.zoomLevel = this.ZoomDefault;
+        
+        this.UpdateRegionForZoom();
+        this.UpdateMaxRegionOffset();
+        this.UpdateViewport();
     }
 
     public void StopDragging()
@@ -61,6 +77,18 @@ public partial class DraggableSpriteNode : Sprite2D
         
         if (@event is InputEventMouseButton mouseEvent)
         {
+            if (this.EnableScrollWheelZoom && mouseEvent.ButtonIndex == MouseButton.WheelUp && mouseEvent.Pressed)
+            {
+                this.ZoomIn();
+                return;
+            }
+
+            if (this.EnableScrollWheelZoom && mouseEvent.ButtonIndex == MouseButton.WheelDown && mouseEvent.Pressed)
+            {
+                this.ZoomOut();
+                return;
+            }
+
             if (mouseEvent.ButtonIndex != MouseButton.Left && !this.isDragging)
             {
                 // No longer interested in this event
@@ -121,25 +149,41 @@ public partial class DraggableSpriteNode : Sprite2D
         this.autoCenterTarget = newTarget - this.regionHalfSize;
         this.isAutoCentering = true;
     }
+    
+    public void ZoomIn()
+    {
+        this.SetZoom(this.zoomLevel + this.ZoomStep);
+    }
+
+    public void ZoomOut()
+    {
+        this.SetZoom(this.zoomLevel - this.ZoomStep);
+    }
 
     // -------------------------------------------------------------------
     // Private
     // -------------------------------------------------------------------
     private bool TryMoveRegion(Vector2 newOffset)
     {
-        // Clamp region offset to keep the image within the rect
-        newOffset = new Vector2(
-            Mathf.Max(0, Mathf.Min(this.maxRegionOffset.X, newOffset.X)),
-            Mathf.Max(0, Mathf.Min(this.maxRegionOffset.Y, newOffset.Y)));
-        
-        if (this.regionOffset == newOffset)
+        // Calculate the valid range for region offset
+        float minX = Mathf.Min(0, this.textureSize.X - this.regionSize.X);
+        float maxX = Mathf.Max(0, this.textureSize.X - this.regionSize.X);
+        float minY = Mathf.Min(0, this.textureSize.Y - this.regionSize.Y);
+        float maxY = Mathf.Max(0, this.textureSize.Y - this.regionSize.Y);
+
+        Vector2 clampedOffset = new Vector2(
+            Mathf.Clamp(newOffset.X, minX, maxX),
+            Mathf.Clamp(newOffset.Y, minY, maxY));
+
+        if (this.regionOffset == clampedOffset)
         {
             return false;
         }
 
-        this.regionOffset = newOffset;
+        this.regionOffset = clampedOffset;
         this.RegionRect = new Rect2(this.regionOffset, this.regionSize);
-            
+
+        this.UpdateViewport();
         this.RegionChanged?.Invoke();
         return true;
     }
@@ -152,5 +196,48 @@ public partial class DraggableSpriteNode : Sprite2D
             // We could not move, abort any further updates
             this.isAutoCentering = false;
         }
+    }
+
+    private void UpdateViewport()
+    {
+        this.currentViewport = new DraggableSpriteViewport(this.regionOffset, this.zoomLevel);
+    }
+
+    private void SetZoom(float newZoom)
+    {
+        float clampedZoom = Mathf.Clamp(newZoom, this.MinZoom, this.MaxZoom);
+        if (Mathf.IsEqualApprox(this.zoomLevel, clampedZoom))
+        {
+            return;
+        }
+
+        // Store current center before zoom change
+        Vector2 currentCenter = this.regionOffset + (this.regionSize / 2f);
+
+        this.zoomLevel = clampedZoom;
+        this.Scale = new Vector2(this.zoomLevel, this.zoomLevel);
+        this.UpdateRegionForZoom();
+        this.UpdateMaxRegionOffset();
+
+        // Use auto-center to smoothly move to the previous center
+        this.CenterOn(currentCenter);
+
+        // Update viewport immediately for new zoom
+        this.UpdateViewport();
+        this.RegionChanged?.Invoke();
+    }
+
+    private void UpdateRegionForZoom()
+    {
+        this.regionSize = this.baseRegionSize / this.zoomLevel;
+        this.regionHalfSize = new Vector2(this.regionSize.X / 2f, this.regionSize.Y / 2f);
+        this.RegionRect = new Rect2(this.regionOffset, this.regionSize);
+    }
+
+    private void UpdateMaxRegionOffset()
+    {
+        this.maxRegionOffset = new Vector2(
+            Mathf.Max(0, this.textureSize.X - this.regionSize.X),
+            Mathf.Max(0, this.textureSize.Y - this.regionSize.Y));
     }
 }
