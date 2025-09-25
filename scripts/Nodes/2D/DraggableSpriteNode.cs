@@ -16,7 +16,6 @@ public partial class DraggableSpriteNode : Sprite2D
     private Vector2 regionHalfSize;
     private Vector2 regionOffset;
     private Vector2 textureSize;
-    private Vector2 maxRegionOffset;
     private Vector2 autoCenterTarget;
     private float zoomLevel = 1.0f;
 
@@ -58,7 +57,6 @@ public partial class DraggableSpriteNode : Sprite2D
         this.zoomLevel = this.ZoomDefault;
         
         this.UpdateRegionForZoom();
-        this.UpdateMaxRegionOffset();
         this.UpdateViewport();
     }
 
@@ -117,8 +115,8 @@ public partial class DraggableSpriteNode : Sprite2D
 
         if (this.isDragging && @event is InputEventMouseMotion motionEvent)
         {
-            // Continue dragging
-            Vector2 diff = (this.dragOffset - motionEvent.GlobalPosition) * this.DragSpeed;
+            // Continue dragging with zoom-adjusted speed
+            Vector2 diff = (this.dragOffset - motionEvent.GlobalPosition) * this.DragSpeed / this.zoomLevel;
             this.dragOffset = motionEvent.GlobalPosition;
 
             // We don't care if this fails during drag
@@ -165,15 +163,7 @@ public partial class DraggableSpriteNode : Sprite2D
     // -------------------------------------------------------------------
     private bool TryMoveRegion(Vector2 newOffset)
     {
-        // Calculate the valid range for region offset
-        float minX = Mathf.Min(0, this.textureSize.X - this.regionSize.X);
-        float maxX = Mathf.Max(0, this.textureSize.X - this.regionSize.X);
-        float minY = Mathf.Min(0, this.textureSize.Y - this.regionSize.Y);
-        float maxY = Mathf.Max(0, this.textureSize.Y - this.regionSize.Y);
-
-        Vector2 clampedOffset = new Vector2(
-            Mathf.Clamp(newOffset.X, minX, maxX),
-            Mathf.Clamp(newOffset.Y, minY, maxY));
+        Vector2 clampedOffset = this.ClampRegionOffset(newOffset);
 
         if (this.regionOffset == clampedOffset)
         {
@@ -181,7 +171,7 @@ public partial class DraggableSpriteNode : Sprite2D
         }
 
         this.regionOffset = clampedOffset;
-        this.RegionRect = new Rect2(this.regionOffset, this.regionSize);
+        this.UpdateRegionRect();
 
         this.UpdateViewport();
         this.RegionChanged?.Invoke();
@@ -211,33 +201,44 @@ public partial class DraggableSpriteNode : Sprite2D
             return;
         }
 
-        // Store current center before zoom change
-        Vector2 currentCenter = this.regionOffset + (this.regionSize / 2f);
-
         this.zoomLevel = clampedZoom;
         this.Scale = new Vector2(this.zoomLevel, this.zoomLevel);
         this.UpdateRegionForZoom();
-        this.UpdateMaxRegionOffset();
 
-        // Use auto-center to smoothly move to the previous center
-        this.CenterOn(currentCenter);
-
-        // Update viewport immediately for new zoom
         this.UpdateViewport();
         this.RegionChanged?.Invoke();
     }
 
     private void UpdateRegionForZoom()
     {
+        // Calculate current center of the region before changing size
+        Vector2 currentCenter = this.regionOffset + this.regionHalfSize;
+
+        // Update region size based on zoom level
         this.regionSize = this.baseRegionSize / this.zoomLevel;
         this.regionHalfSize = new Vector2(this.regionSize.X / 2f, this.regionSize.Y / 2f);
-        this.RegionRect = new Rect2(this.regionOffset, this.regionSize);
+
+        // Adjust region offset to maintain the same center point and clamp to boundaries
+        Vector2 newRegionOffset = currentCenter - this.regionHalfSize;
+        this.regionOffset = this.ClampRegionOffset(newRegionOffset);
+
+        this.UpdateRegionRect();
     }
 
-    private void UpdateMaxRegionOffset()
+    private Vector2 ClampRegionOffset(Vector2 offset)
     {
-        this.maxRegionOffset = new Vector2(
-            Mathf.Max(0, this.textureSize.X - this.regionSize.X),
-            Mathf.Max(0, this.textureSize.Y - this.regionSize.Y));
+        float minX = Mathf.Min(0, this.textureSize.X - this.regionSize.X);
+        float maxX = Mathf.Max(0, this.textureSize.X - this.regionSize.X);
+        float minY = Mathf.Min(0, this.textureSize.Y - this.regionSize.Y);
+        float maxY = Mathf.Max(0, this.textureSize.Y - this.regionSize.Y);
+
+        return new Vector2(
+            Mathf.Clamp(offset.X, minX, maxX),
+            Mathf.Clamp(offset.Y, minY, maxY));
+    }
+
+    private void UpdateRegionRect()
+    {
+        this.RegionRect = new Rect2(this.regionOffset, this.regionSize);
     }
 }
