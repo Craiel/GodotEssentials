@@ -18,10 +18,12 @@ public abstract class GameDataEntry<T> : IGameDataEntry
     // Public
     // -------------------------------------------------------------------
     public readonly T Id;
+
+    public GameDataState State { get; set; } = GameDataState.Development;
     
     public DataText DisplayName { get; set; }
     public DataText Description { get; set; }
-    
+
     public ResourceKey IconSmall { get; set; }
     public ResourceKey IconLarge { get; set; }
 }

@@ -24,7 +24,7 @@ public readonly struct StringGameDataId : IGameDataId
     // -------------------------------------------------------------------
     public readonly string Value;
 
-    public readonly GameDataType Type;
+    public GameDataType Type { get; }
     
     public GameDataIdType IDType => GameDataIdType.String;
 

@@ -19,7 +19,7 @@ public readonly struct EnumGameDataId<T> : IGameDataId
     // -------------------------------------------------------------------
     public readonly T Value;
 
-    public readonly GameDataType Type;
+    public GameDataType Type { get; }
     
     public GameDataIdType IDType => GameDataIdType.Enum;
     
