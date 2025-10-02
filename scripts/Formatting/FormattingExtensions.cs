@@ -64,6 +64,11 @@ public static class FormattingExtensions
     // -------------------------------------------------------------------
     public static string DefaultFormatPrefix;
     
+    public static string Format(this ulong value, byte decimalDigits = 0, NumberFormattingType type = NumberFormattingType.ShortName, string customPrefix = null)
+    {
+        return ((double) value).Format(decimalDigits, type);
+    }
+    
     public static string Format(this float value, byte decimalDigits = 0, NumberFormattingType type = NumberFormattingType.ShortName, string customPrefix = null)
     {
         return ((double) value).Format(decimalDigits, type);
