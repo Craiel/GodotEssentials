@@ -4,6 +4,9 @@ using Godot;
 
 public partial class ToggleDisplayButtonNode : Button
 {
+    // -------------------------------------------------------------------
+    // Public
+    // -------------------------------------------------------------------
     [Export] public Control Target;
     
     public override void _Ready()
@@ -21,6 +24,9 @@ public partial class ToggleDisplayButtonNode : Button
         this.OnToggle(this.ButtonPressed);
     }
 
+    // -------------------------------------------------------------------
+    // Private
+    // -------------------------------------------------------------------
     private void OnToggle(bool value)
     {
         if (value)
