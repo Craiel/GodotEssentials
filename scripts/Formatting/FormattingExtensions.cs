@@ -91,7 +91,7 @@ public static class FormattingExtensions
 
         if (value < NumberDefinitions[0].value)
         {
-            return $"{prefix}{value:0,##.##}";
+            return $"{prefix}{value:#,##0.##}";
         }
 
         if (definition != null)
