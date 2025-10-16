@@ -81,7 +81,7 @@ public static class FormattingExtensions
         NumberDefinition? definition = null;
         if (type != NumberFormattingType.Raw)
         {
-            definition = GetNumberDefintion(value);
+            definition = GetNumberDefinition(value);
         }
 
         if (decimalDigits != byte.MaxValue)
@@ -91,12 +91,12 @@ public static class FormattingExtensions
 
         if (value < NumberDefinitions[0].value)
         {
-            return string.Format("{0}{1:#,##.##}", prefix, value);
+            return $"{prefix}{value:#,##0.##}";
         }
 
         if (definition != null)
         {
-            value = value / definition.Value.value;
+            value /= definition.Value.value;
             if (value >= 100)
             {
                 value = Math.Round(value, 1);
@@ -113,19 +113,19 @@ public static class FormattingExtensions
 
         if (definition == null)
         {
-            return string.Format("{0}{1}", prefix, value);
+            return $"{prefix}{value}";
         }
 
         switch (type)
         {
             case NumberFormattingType.ShortName:
             {
-                return string.Format("{0}{1} {2}", prefix, value, definition.Value.ShortName);
+                return $"{prefix}{value} {definition.Value.ShortName}";
             }
 
             case NumberFormattingType.FullName:
             {
-                return string.Format("{0}{1} {2}", prefix, value, definition.Value.FullName);
+                return $"{prefix}{value} {definition.Value.FullName}";
             }
 
             default:
@@ -138,7 +138,7 @@ public static class FormattingExtensions
     // -------------------------------------------------------------------
     // Private
     // -------------------------------------------------------------------
-    private static NumberDefinition? GetNumberDefintion(double value)
+    private static NumberDefinition? GetNumberDefinition(double value)
     {
         uint exponents = (uint)Math.Floor(Math.Log10(value));
         if (exponents >= 6)
@@ -146,7 +146,7 @@ public static class FormattingExtensions
             uint formatIndex = (uint)Mathf.Floor((exponents - 6) / 3f);
             if (formatIndex >= NumberDefinitions.Length)
             {
-                return NumberDefinitions[NumberDefinitions.Length - 1];
+                return NumberDefinitions[^1];
             }
             
             return NumberDefinitions[formatIndex];
