@@ -1,10 +1,19 @@
-<Project Sdk="Godot.NET.Sdk/4.2.2">
+<Project Sdk="Godot.NET.Sdk/4.3.0">
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <LangVersion>10</LangVersion>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <GenerateTargetFrameworkAttribute>false</GenerateTargetFrameworkAttribute>
+    <OutputPath>bin/$(Configuration)/</OutputPath>
+    <BaseOutputPath>bin/</BaseOutputPath>
   </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Godot.SourceGenerators" Version="4.3.0" />
+    <PackageReference Include="GodotSharp" Version="4.3.0" />
+  </ItemGroup>
 
 </Project>
