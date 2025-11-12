@@ -19,17 +19,18 @@ public static class GameSettings
         {
             Config.Load(ConfigPath);
         }
-        
+
         bool isFirstStart = Get(GameSettingsSection.SaveLoad, FirstStartKey, true).AsBool();
-        if (!isFirstStart)
+        if (isFirstStart)
         {
             Set(GameSettingsSection.SaveLoad, FirstStartKey, false);
             GameSettingsGeneral.SetDefaults();
             GameSettingsAudio.SetDefaults();
             GameSettingsVideo.SetDefaults();
             GameSettingsSaveLoad.SetDefaults();
+            Save();
         }
-        
+
         GameSettingsGeneral.Apply();
         GameSettingsAudio.Apply();
         GameSettingsVideo.Apply();

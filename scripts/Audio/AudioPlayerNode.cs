@@ -1,81 +1,103 @@
-﻿namespace Craiel.Essentials.Audio;
+namespace Craiel.Essentials.Audio;
 
-using System.IO;
+using System.Collections.Generic;
 using Craiel.Essentials.Resource;
 using Godot;
 
 public partial class AudioPlayerNode : Node
 {
+    private const int SfxPoolSize = 8;
+    private const int AmbientPoolSize = 2;
+    private const int UiPoolSize = 4;
+    private const float MusicCrossfadeDuration = 1.0f;
+    private const string PropertyVolumeDb = "volume_db";
+
+    private readonly List<AudioStreamPlayer> sfxPool = new();
+    private readonly List<AudioStreamPlayer> ambientPool = new();
+    private readonly List<AudioStreamPlayer> uiPool = new();
+
+    private AudioStreamPlayer musicPlayer1;
+    private AudioStreamPlayer musicPlayer2;
+    private bool musicUsePlayer1 = true;
+    
     // -------------------------------------------------------------------
     // Public
     // -------------------------------------------------------------------
-    [Export] private AudioStreamPlayer MusicStatic;
-    [Export] private AudioStreamPlayer SFXStatic;
-    [Export] private AudioStreamPlayer AmbienceStatic;
-    [Export] private AudioStreamPlayer UIStatic;
-
     public override void _EnterTree()
     {
         base._EnterTree();
-
         AudioController.Player = this;
+        this.InitializePools();
     }
 
     public void Play(AudioBus bus, ResourceKey audioResource)
     {
+        if (audioResource == ResourceKey.Invalid)
+        {
+            EssentialCore.Logger.Warn("Tried to play invalid sound!");
+            return;
+        }
+
+        var stream = audioResource.LoadManaged<AudioStream>();
+        if (stream == null)
+        {
+            EssentialCore.Logger.Error("Could not load audio stream: " + audioResource);
+            return;
+        }
+
         switch (bus)
         {
             case AudioBus.Music:
             {
-                Play(this.MusicStatic, audioResource);
+                this.PlayMusic(stream);
                 break;
             }
 
             case AudioBus.SFX:
             {
-                Play(this.SFXStatic, audioResource);
+                this.PlayFromPool(this.sfxPool, stream);
                 break;
             }
 
             case AudioBus.Ambient:
             {
-                Play(this.AmbienceStatic, audioResource);
+                this.PlayFromPool(this.ambientPool, stream);
                 break;
             }
 
             case AudioBus.UI:
             {
-                Play(this.UIStatic, audioResource);
+                this.PlayFromPool(this.uiPool, stream);
                 break;
             }
         }
     }
-    
+
     public void Stop(AudioBus bus)
     {
         switch (bus)
         {
             case AudioBus.Music:
             {
-                Stop(this.MusicStatic);
+                this.StopMusic();
                 break;
             }
 
             case AudioBus.SFX:
             {
-                this.Stop(this.SFXStatic);
+                this.StopPool(this.sfxPool);
                 break;
             }
 
             case AudioBus.Ambient:
             {
-                this.Stop(this.AmbienceStatic);
+                this.StopPool(this.ambientPool);
                 break;
             }
 
             case AudioBus.UI:
             {
-                this.Stop(this.UIStatic);
+                this.StopPool(this.uiPool);
                 break;
             }
         }
@@ -84,27 +106,109 @@ public partial class AudioPlayerNode : Node
     // -------------------------------------------------------------------
     // Private
     // -------------------------------------------------------------------
-    private void Play(AudioStreamPlayer player, ResourceKey key)
+    
+
+    private void InitializePools()
     {
-        if (key == ResourceKey.Invalid)
+        this.CreatePool(this.sfxPool, AudioBus.SFX, SfxPoolSize);
+        this.CreatePool(this.ambientPool, AudioBus.Ambient, AmbientPoolSize);
+        this.CreatePool(this.uiPool, AudioBus.UI, UiPoolSize);
+        this.CreateMusicPlayers();
+    }
+
+    private void CreatePool(List<AudioStreamPlayer> pool, AudioBus bus, int size)
+    {
+        for (int i = 0; i < size; i++)
         {
-            EssentialCore.Logger.Warn("Tried to play invalid sound!");
+            var player = new AudioStreamPlayer();
+            player.Bus = bus.ToString();
+            this.AddChild(player);
+            pool.Add(player);
+        }
+    }
+
+    private void CreateMusicPlayers()
+    {
+        this.musicPlayer1 = new();
+        this.musicPlayer1.Bus = nameof(AudioBus.Music);
+        this.AddChild(this.musicPlayer1);
+
+        this.musicPlayer2 = new();
+        this.musicPlayer2.Bus = nameof(AudioBus.Music);
+        this.AddChild(this.musicPlayer2);
+    }
+
+    private void PlayFromPool(List<AudioStreamPlayer> pool, AudioStream stream)
+    {
+        if (pool.Count == 0)
+        {
             return;
         }
-        
-        var stream = key.LoadManaged<AudioStream>();
-        if (stream == null)
+
+        // Find first non-playing player
+        AudioStreamPlayer player = null;
+        foreach (var p in pool)
         {
-            throw new InvalidDataException("Could not load audio stream: " + key);
+            if (!p.Playing)
+            {
+                player = p;
+                break;
+            }
         }
+
+        // If all playing, reuse first one
+        player ??= pool[0];
 
         player.Stop();
         player.Stream = stream;
         player.Play();
     }
 
-    private void Stop(AudioStreamPlayer player)
+    private void StopPool(List<AudioStreamPlayer> pool)
     {
-        player.Stop();
+        foreach (var player in pool)
+        {
+            player.Stop();
+        }
+    }
+
+    private void PlayMusic(AudioStream stream)
+    {
+        var currentPlayer = this.musicUsePlayer1 ? this.musicPlayer1 : this.musicPlayer2;
+        var nextPlayer = this.musicUsePlayer1 ? this.musicPlayer2 : this.musicPlayer1;
+
+        nextPlayer.Stream = stream;
+        nextPlayer.VolumeDb = currentPlayer.VolumeDb;
+        nextPlayer.Play();
+
+        var tween = this.CreateTween();
+        tween.SetTrans(Tween.TransitionType.Linear);
+        tween.SetEase(Tween.EaseType.InOut);
+        tween.SetParallel(true);
+        tween.TweenProperty(currentPlayer, PropertyVolumeDb, -80f, MusicCrossfadeDuration);
+        tween.TweenProperty(nextPlayer, PropertyVolumeDb, 0f, MusicCrossfadeDuration);
+        tween.SetParallel(false);
+        tween.TweenCallback(Callable.From(() =>
+        {
+            currentPlayer.Stop();
+            this.musicUsePlayer1 = !this.musicUsePlayer1;
+        }));
+    }
+
+    private void StopMusic()
+    {
+        var tween = this.CreateTween();
+        tween.SetTrans(Tween.TransitionType.Linear);
+        tween.SetEase(Tween.EaseType.InOut);
+        tween.TweenProperty(
+            this.musicUsePlayer1 ? this.musicPlayer1 : this.musicPlayer2,
+            PropertyVolumeDb,
+            -80f,
+            MusicCrossfadeDuration);
+        tween.TweenCallback(Callable.From(() =>
+        {
+            this.musicPlayer1.Stop();
+            this.musicPlayer2.Stop();
+        }));
     }
 }
