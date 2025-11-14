@@ -18,7 +18,7 @@ public static class GameSettingsAudio
     public static void SetDefaults()
     {
         SetMasterVolume(1.0f, false, false);
-        SetMusicVolume(0.85f, false, false);
+        SetMusicVolume(0.7f, false, false);
         SetAmbientVolume(0.80f, false, false);
         SetSFXVolume(0.65f, false, false);
         SetUIVolume(0.55f, false, false);
