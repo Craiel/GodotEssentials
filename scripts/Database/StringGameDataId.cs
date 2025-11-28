@@ -3,29 +3,33 @@
 using System;
 using System.Diagnostics;
 using SaveLoad;
+using Godot.Collections;
 
 [DebuggerDisplay("{Type}.{Value}")]
-public struct StringGameDataId : IGameDataId
+public struct StringGameDataId : IGameDataId, ISaveLoadDataBlock
 {
     const string UnsetIdValue = "__INTERNAL__UNSET__";
 
     public static readonly StringGameDataId Unset = new(UnsetIdValue, GameDataType.Unset);
+
+    private string value;
+    private GameDataType dataType;
 
     // -------------------------------------------------------------------
     // Constructor
     // -------------------------------------------------------------------
     public StringGameDataId(string id, GameDataType type)
     {
-        this.Value = id;
-        this.Type = type;
+        this.value = id;
+        this.dataType = type;
     }
 
     // -------------------------------------------------------------------
     // Public
     // -------------------------------------------------------------------
-    [PersistentField("sgdi_v")] public string Value;
-    [PersistentField("sgdi_t")] public GameDataType Type;
-
+    public readonly string Value => this.value;
+    public GameDataType Type => this.dataType;
+    
     public GameDataIdType IDType => GameDataIdType.String;
 
     public static bool operator ==(StringGameDataId value1, StringGameDataId value2)
@@ -50,16 +54,28 @@ public struct StringGameDataId : IGameDataId
 
     public bool Equals(StringGameDataId other)
     {
-        return this.Value == other.Value && this.Type == other.Type;
+        return this.value == other.Value && this.dataType == other.Type;
     }
 
     public override int GetHashCode()
     {
-        return HashCode.Combine(this.Value, (int)this.Type);
+        return HashCode.Combine(this.value, (int)this.dataType);
     }
 
     public override string ToString()
     {
-        return $"{this.Type}.{this.Value}";
+        return $"{this.dataType}.{this.value}";
+    }
+
+    public void SaveTo(Dictionary target)
+    {
+        target["sgdi_v"] = this.value;
+        target["sgdi_t"] = (int)this.dataType;
+    }
+
+    public void LoadFrom(Dictionary source)
+    {
+        this.value = source["sgdi_v"].AsString();
+        this.dataType = (GameDataType)source["sgdi_t"].AsInt32();
     }
 }
