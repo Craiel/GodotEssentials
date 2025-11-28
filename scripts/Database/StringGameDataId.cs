@@ -2,12 +2,13 @@
 
 using System;
 using System.Diagnostics;
+using SaveLoad;
 
 [DebuggerDisplay("{Type}.{Value}")]
-public readonly struct StringGameDataId : IGameDataId
+public struct StringGameDataId : IGameDataId
 {
     const string UnsetIdValue = "__INTERNAL__UNSET__";
-    
+
     public static readonly StringGameDataId Unset = new(UnsetIdValue, GameDataType.Unset);
 
     // -------------------------------------------------------------------
@@ -22,10 +23,9 @@ public readonly struct StringGameDataId : IGameDataId
     // -------------------------------------------------------------------
     // Public
     // -------------------------------------------------------------------
-    public readonly string Value;
+    [PersistentField("sgdi_v")] public string Value;
+    [PersistentField("sgdi_t")] public GameDataType Type;
 
-    public GameDataType Type { get; }
-    
     public GameDataIdType IDType => GameDataIdType.String;
 
     public static bool operator ==(StringGameDataId value1, StringGameDataId value2)
