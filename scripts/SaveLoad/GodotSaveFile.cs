@@ -86,6 +86,14 @@ public class GodotSaveFile
         this.upgrades.Add(version, upgrade);
     }
 
+    public void Delete()
+    {
+        if (FileAccess.FileExists(FilePath))
+        {
+            DirAccess.RemoveAbsolute(FilePath);
+        }
+    }
+
     // -------------------------------------------------------------------
     // Private
     // -------------------------------------------------------------------
