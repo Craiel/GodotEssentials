@@ -64,6 +64,9 @@ public class GodotSaveFile
     {
         try
         {
+            // Set the version
+            data[VersionKey] = CurrentVersion;
+            
             using var file = FileAccess.Open(FilePath, FileAccess.ModeFlags.Write);
             if (file == null)
             {

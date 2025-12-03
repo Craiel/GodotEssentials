@@ -67,15 +67,28 @@ public struct StringGameDataId : IGameDataId, ISaveLoadDataBlock
         return $"{this.dataType}.{this.value}";
     }
 
-    public void SaveTo(Dictionary target)
+    public void SaveTo(Dictionary target, string prefix)
     {
-        target["sgdi_v"] = this.value;
-        target["sgdi_t"] = (int)this.dataType;
+        var idData = new Dictionary();
+        
+        idData["v"] = this.value;
+        idData["t"] = (int)this.dataType;
+        
+        target.Add(prefix + "sgdi", idData);
     }
 
-    public void LoadFrom(Dictionary source)
+    public void LoadFrom(Dictionary source, string prefix)
     {
-        this.value = source["sgdi_v"].AsString();
-        this.dataType = (GameDataType)source["sgdi_t"].AsInt32();
+        this = Load(source, prefix);
+    }
+    
+    public static StringGameDataId Load(Dictionary source, string prefix)
+    {
+        var idData = source[prefix + "sgdi"].AsGodotDictionary();
+        
+        return new StringGameDataId(
+            idData["v"].AsString(),
+            (GameDataType)idData["t"].AsInt32()
+        );
     }
 }
