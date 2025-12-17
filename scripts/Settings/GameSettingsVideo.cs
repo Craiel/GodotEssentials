@@ -234,8 +234,13 @@ public static class GameSettingsVideo
     public static void Apply()
     {
         lockSetOperations = true;
-        
-        switch (GetDisplayMode())
+
+        var mode = GetDisplayMode();
+
+        // Set mode first before adjusting size/position
+        DisplayServer.WindowSetMode(mode);
+
+        switch (mode)
         {
             case DisplayServer.WindowMode.ExclusiveFullscreen:
             case DisplayServer.WindowMode.Fullscreen:
@@ -257,12 +262,11 @@ public static class GameSettingsVideo
                 break;
             }
         }
-        
-        DisplayServer.WindowSetMode(GetDisplayMode());
+
         DisplayServer.WindowSetVsyncMode(GetVSyncMode());
 
         UIEvents.Send(new UIEventScaleFactorChangeRequest((float)GetContentScale()));
-        
+
         lockSetOperations = false;
     }
 }

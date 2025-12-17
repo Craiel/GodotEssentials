@@ -9,7 +9,7 @@ public partial class GameSettingsScreenStateSaverNode : Node
     // -------------------------------------------------------------------
     // Public
     // -------------------------------------------------------------------
-    [Export] public float SaveInterval = 60;
+    [Export] public float SaveInterval = 30;
     
     public override void _Ready()
     {

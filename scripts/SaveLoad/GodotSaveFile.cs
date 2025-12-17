@@ -35,7 +35,6 @@ public class GodotSaveFile
             using var file = FileAccess.Open(FilePath, FileAccess.ModeFlags.Read);
             if (file == null)
             {
-                EssentialCore.Logger.Warn($"Save file not found: {FilePath}");
                 data = null;
                 return false;
             }
