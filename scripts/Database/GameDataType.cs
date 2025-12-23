@@ -24,5 +24,6 @@ public enum GameDataType
     SpellTrigger = 17,
     Feature = 18,
     Blueprint = 19,
-    Ingredient = 20
+    Ingredient = 20,
+    Augment = 21
 }

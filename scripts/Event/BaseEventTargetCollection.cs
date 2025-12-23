@@ -15,7 +15,7 @@ internal class BaseEventTargetCollection<T>
     // -------------------------------------------------------------------
     public BaseEventTargetCollection()
     {
-        this.Targets = new BaseEventSubscriptionTicket[0];
+        this.Targets = [];
 
         // Do one increase to set the initial size
         this.IncreaseSize();
