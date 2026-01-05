@@ -17,6 +17,17 @@ public static class CollectionExtensions
         }
     }
     
+    public static void Shuffle<T>(this IList<T> list)
+    {
+        int n = list.Count;
+        while (n > 1)
+        {
+            n--;
+            int k = EssentialCore.Random.RandiRange(0, n);
+            (list[k], list[n]) = (list[n], list[k]);
+        }
+    }
+    
     public static T RandomEntry<T>(this T[] array)
     {
         return array.Length > 0
