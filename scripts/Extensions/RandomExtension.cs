@@ -2,6 +2,7 @@
 
 using System;
 using System.Collections.Generic;
+using Craiel.Essentials.Mathematics;
 using Godot;
 
 public static class RandomExtension
@@ -115,5 +116,25 @@ public static class RandomExtension
 
         int rollIndex = rand.WeightedRandom(weights);
         return values[rollIndex];
+    }
+
+    /// <summary>
+    /// Returns a random Magnum value between min (inclusive) and max (inclusive).
+    /// </summary>
+    public static Magnum RandMagnumRange(this RandomNumberGenerator rand, Magnum min, Magnum max)
+    {
+        if (min == max)
+        {
+            return min;
+        }
+
+        if (min > max)
+        {
+            (min, max) = (max, min);
+        }
+
+        Magnum range = max - min;
+        Magnum randomFactor = new Magnum(rand.Randf());
+        return min + range * randomFactor;
     }
 }
