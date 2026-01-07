@@ -10,8 +10,18 @@ public struct Magnum : IComparable<Magnum>, IEquatable<Magnum>
     /// Beyond this exponent difference, smaller values are lost to precision.
     /// </summary>
     const int DoublePrecisionDigits = 15;
-    
-    const double Tolerance = 1e-9;
+
+    /// <summary>
+    /// Maximum exponent that can be represented by a double (~1.8e308).
+    /// </summary>
+    const int DoubleMaxExponent = 308;
+
+    /// <summary>
+    /// Maximum exponent that can be represented by a float (~3.4e38).
+    /// </summary>
+    const int FloatMaxExponent = 38;
+
+    public const double Tolerance = 1e-9;
 
     public static Magnum Zero => new(0, 0);
     public static Magnum One => new(1, 0);
@@ -261,7 +271,26 @@ public struct Magnum : IComparable<Magnum>, IEquatable<Magnum>
     
     public double ToDouble()
     {
+#if DEBUG
+        if (this.Exponent > DoubleMaxExponent)
+        {
+            throw new OverflowException($"Magnum value {this} exceeds double.MaxValue (exponent {this.Exponent} > {DoubleMaxExponent})");
+        }
+#endif
+        
         return this.Mantissa * Math.Pow(10, this.Exponent);
+    }
+
+    public float ToFloat()
+    {
+#if DEBUG
+        if (this.Exponent > FloatMaxExponent)
+        {
+            throw new OverflowException($"Magnum value {this} exceeds float.MaxValue (exponent {this.Exponent} > {FloatMaxExponent})");
+        }
+#endif
+        
+        return (float)this.ToDouble();
     }
 
     public string ToString(string format)
