@@ -1,4 +1,5 @@
 using System;
+using Craiel.Essentials.Mathematics;
 
 namespace Craiel.Essentials.CSV
 {
@@ -84,6 +85,11 @@ namespace Craiel.Essentials.CSV
         public static CSVColumn<ulong> ULong(string key, string displayName = null)
         {
             return new CSVColumn<ulong>(key, displayName ?? key);
+        }
+
+        public static CSVColumn<Magnum> Magnum(string key, string displayName = null)
+        {
+            return new CSVColumn<Magnum>(key, displayName ?? key);
         }
     }
 }

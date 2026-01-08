@@ -173,19 +173,79 @@ public struct Magnum : IComparable<Magnum>, IEquatable<Magnum>
 
     public static bool operator >(Magnum a, Magnum b)
     {
+        // Handle zero cases
+        if (Math.Abs(a.Mantissa) < Tolerance && Math.Abs(b.Mantissa) < Tolerance)
+        {
+            return false;
+        }
+
+        if (Math.Abs(a.Mantissa) < Tolerance)
+        {
+            return b.Mantissa < 0;
+        }
+
+        if (Math.Abs(b.Mantissa) < Tolerance)
+        {
+            return a.Mantissa > 0;
+        }
+
+        // Handle different signs
+        if (a.Mantissa > 0 && b.Mantissa < 0)
+        {
+            return true;
+        }
+
+        if (a.Mantissa < 0 && b.Mantissa > 0)
+        {
+            return false;
+        }
+
+        // Same sign - compare by exponent first, then mantissa
+        bool bothPositive = a.Mantissa > 0;
         if (a.Exponent != b.Exponent)
         {
-            return a.Exponent > b.Exponent;
+            return bothPositive ? a.Exponent > b.Exponent : a.Exponent < b.Exponent;
         }
+
         return a.Mantissa > b.Mantissa;
     }
 
     public static bool operator <(Magnum a, Magnum b)
     {
+        // Handle zero cases
+        if (Math.Abs(a.Mantissa) < Tolerance && Math.Abs(b.Mantissa) < Tolerance)
+        {
+            return false;
+        }
+
+        if (Math.Abs(a.Mantissa) < Tolerance)
+        {
+            return b.Mantissa > 0;
+        }
+
+        if (Math.Abs(b.Mantissa) < Tolerance)
+        {
+            return a.Mantissa < 0;
+        }
+
+        // Handle different signs
+        if (a.Mantissa < 0 && b.Mantissa > 0)
+        {
+            return true;
+        }
+
+        if (a.Mantissa > 0 && b.Mantissa < 0)
+        {
+            return false;
+        }
+
+        // Same sign - compare by exponent first, then mantissa
+        bool bothPositive = a.Mantissa > 0;
         if (a.Exponent != b.Exponent)
         {
-            return a.Exponent < b.Exponent;
+            return bothPositive ? a.Exponent < b.Exponent : a.Exponent > b.Exponent;
         }
+
         return a.Mantissa < b.Mantissa;
     }
 
@@ -342,6 +402,45 @@ public struct Magnum : IComparable<Magnum>, IEquatable<Magnum>
     public static Magnum Abs(Magnum value)
     {
         return new Magnum(Math.Abs(value.Mantissa), value.Exponent);
+    }
+
+    /// <summary>
+    /// Raises a Magnum value to a power.
+    /// For large exponents, uses logarithmic calculation to avoid overflow.
+    /// </summary>
+    public static Magnum Pow(Magnum baseValue, double exponent)
+    {
+        if (baseValue.Mantissa == 0)
+        {
+            return Zero;
+        }
+
+        if (Math.Abs(exponent) < Tolerance)
+        {
+            return One;
+        }
+
+        if (Math.Abs(exponent - 1.0) < Tolerance)
+        {
+            return baseValue;
+        }
+
+        // For Magnum: (m * 10^e)^p = m^p * 10^(e*p)
+        double newMantissa = Math.Pow(baseValue.Mantissa, exponent);
+        double newExponent = baseValue.Exponent * exponent;
+
+        // Handle potential overflow in exponent
+        if (newExponent > long.MaxValue)
+        {
+            return MaxValue;
+        }
+
+        if (newExponent < long.MinValue)
+        {
+            return Zero;
+        }
+
+        return new Magnum(newMantissa, (long)newExponent);
     }
     
     public Magnum Round()
