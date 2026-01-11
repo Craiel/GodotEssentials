@@ -31,7 +31,17 @@ public struct Magnum : IComparable<Magnum>, IEquatable<Magnum>
     {
         return new Magnum(-a.Mantissa, a.Exponent);
     }
-    
+
+    public static Magnum operator ++(Magnum a)
+    {
+        return a + One;
+    }
+
+    public static Magnum operator --(Magnum a)
+    {
+        return a - One;
+    }
+
     // -------------------------------------------------------------------
     // Constructor
     // -------------------------------------------------------------------
